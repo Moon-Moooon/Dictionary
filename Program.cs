@@ -11,6 +11,7 @@ namespace LearnMsSql
     {
         public static int ShowMenu()
         {//brrrrung
+            // Больше коментариев
             Console.WriteLine("1.Добавить слово");
             Console.WriteLine("2.Тренировка");
             Console.WriteLine("3.Редактировать "); // Подумать как !
