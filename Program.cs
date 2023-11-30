@@ -108,7 +108,7 @@ namespace LearnMsSql
         public static void ToExit ()
         {
             sqlConnection.Close();
-            Environment.Exit();
+            Environment.Exit(0);
 
         }
 
