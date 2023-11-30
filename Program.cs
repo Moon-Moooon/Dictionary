@@ -15,6 +15,10 @@ namespace LearnMsSql
     { // Добавленная ветка TestCommand
         public static int ShowMenu()
         {
+=======
+        {//brrrrung
+            // Больше коментариев
+>>>>>>> 1f0f690 (Больше коментрариев в braaandghh)
             Console.WriteLine("1.Добавить слово");
             Console.WriteLine("2.Тренировка");
             Console.WriteLine("3.Редактировать "); // Подумать как !
