@@ -7,6 +7,10 @@ using Microsoft.IdentityModel.Protocols;
 
 namespace LearnMsSql
 {
+    // контейнерезация подключения к БД, прочтитать как это правильно делать
+    // Ругается среда когда в public методе есть у переменной private static string connectionString  = ConfigurationManager.ConnectionStrings["DT"].ConnectionString;
+    // private static SqlConnection sqlConnection = null;
+
     internal class Program
     {
         public static int ShowMenu()
@@ -38,17 +42,32 @@ namespace LearnMsSql
 
         private static SqlConnection sqlConnection = null;
 
+        public static void SqlConnect()
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["DT"].ConnectionString;
+
+            SqlConnection sqlConnection = null;
+
+            sqlConnection = new SqlConnection(connectionString);
+            sqlConnection.Open();
+
+
+            // addWord();
+
+
+            sqlConnection.Close();
+        }
 
         static void Main(string[] args)
         {
-            sqlConnection = new SqlConnection(connectionString);
-            sqlConnection.Open();
+            // sqlConnection = new SqlConnection(connectionString);
+           // sqlConnection.Open();
 
 
              // addWord();
 
 
-            sqlConnection.Close();
+          // sqlConnection.Close();
 
 
         }
