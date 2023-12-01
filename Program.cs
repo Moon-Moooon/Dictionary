@@ -12,7 +12,7 @@ namespace LearnMsSql
     // private static SqlConnection sqlConnection = null;
 
     internal class Program
-    {
+    { // Добавленная ветка TestCommand
         public static int ShowMenu()
         {
             Console.WriteLine("1.Добавить слово");
@@ -46,13 +46,9 @@ namespace LearnMsSql
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DT"].ConnectionString;
 
-            SqlConnection sqlConnection = null;
+            SqlConnection sqlConnection = new SqlConnection(connectionString);
 
-            sqlConnection = new SqlConnection(connectionString);
             sqlConnection.Open();
-
-
-            // addWord();
 
 
             sqlConnection.Close();
