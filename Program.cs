@@ -12,7 +12,7 @@ namespace LearnMsSql
     // private static SqlConnection sqlConnection = null;
 
     internal class Program
-    { // Добавленная ветка TestCommand
+    {
         public static int ShowMenu()
         {
        
@@ -39,24 +39,36 @@ namespace LearnMsSql
             return intChoise;
         }
 
-        private static string connectionString  = ConfigurationManager.ConnectionStrings["DT"].ConnectionString;
+        // private static string connectionString  = ConfigurationManager.ConnectionStrings["DT"].ConnectionString;
 
-        private static SqlConnection sqlConnection = null;
+       // private static SqlConnection sqlConnection = null;
 
-        public static void SqlConnect()
+        private static void SqlConnect()
         {
+            // В Ado net пока понятно что придется создавать большой класс где будет происходить подключение к БД и реализация комманд с работой в БД
             string connectionString = ConfigurationManager.ConnectionStrings["DT"].ConnectionString;
 
             SqlConnection sqlConnection = new SqlConnection(connectionString);
 
             sqlConnection.Open();
 
+             static void WriteWordInDB(SqlConnection sqlConnection, string rusWord, string polWord)
+            {
+                SqlCommand sqlCommand = new SqlCommand($"INSERT INTO [Table] (Rus_Name, Pol_Name) VALUES (N'{rusWord}', '{polWord}')", sqlConnection);
+                Console.WriteLine(sqlCommand.ExecuteNonQuery());
+
+
+            }
 
             sqlConnection.Close();
+
+            // sqlConnection.Close();
         }
 
         static void Main(string[] args)
         {
+            SqlConnect();
+            addWord();
             // sqlConnection = new SqlConnection(connectionString);
            // sqlConnection.Open();
 
@@ -70,7 +82,8 @@ namespace LearnMsSql
         }
 
         public static void addWord()
-        {  
+        {
+            #region 
             Console.WriteLine("Для добавления нового слова в словарь вам необходимо ввести слова на русском и на польском");
             Console.WriteLine("Введите слово на русском");
             Console.Write(">");
@@ -81,21 +94,12 @@ namespace LearnMsSql
             Console.WriteLine($"Добавить новую пару слов: {rusWord} с переводом {polWord}?");
             Console.Write(">");
             string anwer = Console.ReadLine(); // добавить обработку набуквы y и n 
+            #endregion
 
 
-            if (true)
-            {
+           // SqlCommand sqlCommand = new SqlCommand($"INSERT INTO [Table] (Rus_Name, Pol_Name) VALUES (N'{rusWord}', '{polWord}')" ,sqlConnection);
 
-            }
-
-            SqlCommand sqlCommand = new SqlCommand($"INSERT INTO [Table] (Rus_Name, Pol_Name) VALUES (N'{rusWord}', '{polWord}')" ,sqlConnection);
-
-            Console.WriteLine(sqlCommand.ExecuteNonQuery());
-
-            static void add()
-            {
-
-            }
+            // Console.WriteLine(sqlCommand.ExecuteNonQuery());
 
         }
 
@@ -121,7 +125,7 @@ namespace LearnMsSql
 
         public static void ToExit ()
         {
-            sqlConnection.Close();
+            //sqlConnection.Close();
             Environment.Exit(0); 
 
         }
