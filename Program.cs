@@ -12,7 +12,13 @@ namespace LearnMsSql
     // private static SqlConnection sqlConnection = null;
     // какой подход лучше? запись базы в код или лучше напрямую делать запросы в sql ? В ado.net Есть классы которые напрямую работают // Пока буду делать через отдлеьные запросы sql запросы :)
     // Необходимо обрабатывать на входе слова, что бы точно быть уверенным что используется русский и польский языки
+    // Прикольно можно сделать что значения в консоли не цифрами дрочить А ! перкход нажатием клавиши что автоматом лишает проблемы связанной с ошибкой ввода некорректных данных
+    // Нужно разрешить пробел ставить в словах
 
+    #region // Что надо сделать
+    // надо написать проверку на польские слова )) 
+    // Надо будет переписать ReadWord
+    #endregion
 
     internal class Program
     {
@@ -28,49 +34,94 @@ namespace LearnMsSql
             Console.Write(">");
 
             string choise = Console.ReadLine();
-            // Тут можно попытаться реализовать как в примерах с обобщеннем 
-            //int intChoise = 0;
+            ParceInputMenuCHoise(choise);
 
-            //if (int.TryParse(choise, out intChoise)) { }
-            //else
-            //{
-            //    Console.WriteLine("Неккоретно введенное значение! Необходимо ввести чесло соответствующее одному из пунктов меню");
-            //}
-
-            //GetСhoiceMenu(intChoise);
-            // return intChoise;
         }
 
-        public static void ParceInputMenuCHoise(string choise)
+        public static int ParceInputMenuCHoise(string choise)
         {
 
             int intChoise = 0;
 
-            if (int.TryParse(choise, out intChoise))
+            if (int.TryParse(choise, out intChoise))   // Метод должен как то сам выбирать точку переход
             {
-                GetСhoiceMenu(intChoise);
+                return (intChoise);
             }
             else
             {
                 Console.WriteLine("Неккоретно введенное значение! Необходимо ввести чесло соответствующее одному из пунктов меню");
+
+                ShowMenu();
+
             }
 
+            return 0;
         }
 
 
         static void Main(string[] args)
         {
+            int j = 1;
+            string a = "ąćęłńóśźż";
+            string ff = "ąćęłńóśźż";
+            string str = "ąćęłńóśźż abcdefghijklmnopqrstuvwxyz";
+            string ba = "ę";
+            string warningString;
+            byte [] warningByte;
+            byte[] listUtf8 = Encoding.Default.GetBytes(str);
+            // 97 - 122
+            byte[] ErroneousChar;
+
+            foreach ( char item in str)
+            {
+                char[] massivItem = { item };
+
+                byte[] simvol = Encoding.Default.GetBytes(massivItem);
+
+                if (massivItem.Length < 2)
+                {
+                    if ((massivItem[0] >= 97) && (massivItem[0] <= 122) && (massivItem[0] == 32))
+                    {
+
+                    }
+                    else
+                    {
+                        ErroneousChar = new byte[Convert.ToByte(massivItem[0])]; // Надо будет проветить работы этой херни
+                        warningString = Encoding.UTF8.GetString(ErroneousChar);
+                        getAfterBedCHois(warningString);
+                    }
+                }
+                else
+                {
+                     // Обязательно надо убдет переделать но это позже
+                    if (
+                        (massivItem[0] >= 195) && (massivItem[0] <= 197) || 
+                        ((massivItem[1] == 133) && (massivItem[1] == 135) && (massivItem[1] == 153) && (massivItem[1] == 130) && (massivItem[1] == 132) && (massivItem[1] == 179) && (massivItem[1] == 155) && (massivItem[1] == 186) && (massivItem[1] == 188))
+                        )
+                    {
+
+                    }
+                    else
+                    {
+
+                        ErroneousChar = new byte[Convert.ToByte(massivItem[0])]; // Надо будет проветить работы этой херни
+                        warningString = Encoding.UTF8.GetString(ErroneousChar);
+                        getAfterBedCHois(warningString);
+                    }
+
+                }
+
+
+
+
+
+            }
+
 
             // ShowMenu();
 
-           // Console.WriteLine(s.ToLower());   
+            // Console.WriteLine(s.ToLower());   
 
-        }
-
-        public static bool AnalysisRussianWord(string rusWord)
-        {
-
-            return true;
         }
 
         public static void ReadWord() // нужна обработка входных значений слов что бы туда попадали только слова
@@ -80,7 +131,7 @@ namespace LearnMsSql
             Console.WriteLine("Введите слово на русском");
             Console.Write(">");
             string rusWord = Console.ReadLine();
-            ExeminationRusWord(rusWord, out rusWord);
+            ExeminationRusWord(rusWord, out rusWord); // Тут мы и остановились !!!!
             Console.WriteLine("Введите слово на польском");
             Console.Write(">");
             string polWord = Console.ReadLine();
@@ -92,7 +143,7 @@ namespace LearnMsSql
             DBModificatet.WriteWordInDB(rusWord, polWord);
         }
 
-        public static string ExeminationRusWord(string rusWord, out string warningChar)
+        public static string ExeminationRusWord(string rusWord, out string warningChar) // Наличие 2 параметра вообще на какой то кал похоже 
         {
             string word = rusWord.ToLower();
 
@@ -112,7 +163,9 @@ namespace LearnMsSql
 
                 else
                 {
-                    return null;
+                    byte[] warningByte = { listUtf8[i], listUtf8[j] };  // Надо будет проветить работы этой херни 
+                    warningChar = Encoding.UTF8.GetString(listUtf8);
+                    getAfterBedCHois(warningChar);
                 }
 
                 i++;
@@ -122,12 +175,37 @@ namespace LearnMsSql
             return word;
         }
 
+
+
+
         public static void getAfterBedCHois (string warningChar)
         {
             Console.WriteLine($"Символ {warningChar} - является некорректным");
-            Console.WriteLine("Хотите добавить слово еще раз ?");
-            string anwer = Console.ReadLine();  
 
+            Console.WriteLine("Хотите добавить слово еще раз ?");
+            Console.WriteLine("1.Да");
+            Console.WriteLine("2.Нет");
+
+            string choise = Console.ReadLine(); 
+
+            int menuChoise = ParceInputMenuCHoise(choise);
+            
+            switch(menuChoise)
+            {
+                case 1:
+                    GetСhoiceMenu(menuChoise);
+                    break;
+                case 2:
+                    ShowMenu();
+                    break;
+                default:
+                    Console.WriteLine("Неверно выбранные пункты меню!");
+
+                    getAfterBedCHois(warningChar);
+
+                    break;
+
+            }
         }
 
 
