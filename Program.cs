@@ -27,6 +27,7 @@ namespace LearnMsSql
 
         // Добавили тест руссВорд
         // что то для ветки русс
+        //хочу зайти в матера
         public static void ShowMenu()
         {
             Console.WriteLine("1.Добавить слово");
