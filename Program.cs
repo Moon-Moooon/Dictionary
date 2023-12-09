@@ -22,6 +22,7 @@ namespace LearnMsSql
 
     internal class Program
     {
+        //вслитие контейнера в мастера
         public static void ShowMenu()
         {
 
