@@ -22,12 +22,7 @@ namespace LearnMsSql
 
     internal class Program
     {
-        //вслитие контейнера в мастера
-        //Test
-
-        // Добавили тест руссВорд
-        // что то для ветки русс
-        //хочу зайти в матера
+        // килир фича
         public static void ShowMenu()
         {
             Console.WriteLine("1.Добавить слово");
