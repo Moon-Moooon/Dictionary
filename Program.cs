@@ -24,6 +24,7 @@ namespace LearnMsSql
     {
         //вслитие контейнера в мастера
         //Test
+        //Добавили что то для мастер ветки 
         public static void ShowMenu()
         {
             Console.WriteLine("1.Добавить слово");
