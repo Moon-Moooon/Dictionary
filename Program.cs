@@ -24,6 +24,7 @@ namespace LearnMsSql
     { 
         // килир фича
         //клирФича 2
+        //килирФича3
         public static void ShowMenu()
         {
             Console.WriteLine("1.Добавить слово");
