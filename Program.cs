@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Protocols;
 
 namespace LearnMsSql
 {
+
     // контейнерезация подключения к БД, прочтитать как это правильно делать
     // Ругается среда когда в public методе есть у переменной private static string connectionString  = ConfigurationManager.ConnectionStrings["DT"].ConnectionString;
     // private static SqlConnection sqlConnection = null;
