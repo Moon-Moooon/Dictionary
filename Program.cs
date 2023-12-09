@@ -39,7 +39,7 @@ namespace LearnMsSql
             ParceInputMenuCHoise(choise);
 
         }
-        //фикст его то
+        //фикст чего то 
 
 
         public static int ParceInputMenuCHoise(string choise)
