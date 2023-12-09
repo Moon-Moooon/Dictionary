@@ -15,6 +15,7 @@ namespace LearnMsSql
     // Необходимо обрабатывать на входе слова, что бы точно быть уверенным что используется русский и польский языки
     // Прикольно можно сделать что значения в консоли не цифрами дрочить А ! перкход нажатием клавиши что автоматом лишает проблемы связанной с ошибкой ввода некорректных данных
     // Нужно разрешить пробел ставить в словах
+    // Можно попытаться подключить модуль для Авто опреда  яыкуа, При выводу неккоректного символа
 
     #region // Что надо сделать
     
@@ -22,10 +23,6 @@ namespace LearnMsSql
 
     internal class Program
     {
-        // килир фича
-        //клирФича 2
-        //килирФича3
-        //килирФича4
         public static void ShowMenu()
         {
             Console.WriteLine("1.Добавить слово");
@@ -64,7 +61,9 @@ namespace LearnMsSql
 
         static void Main(string[] args)
         {
-         
+
+            string strr = "поedd";
+            Console.WriteLine(ExeminationRusWord(strr));
         }
 
         public static void ExeminationPolWord (string item)
@@ -124,7 +123,7 @@ namespace LearnMsSql
             Console.WriteLine("Введите слово на русском");
             Console.Write(">");
             string rusWord = Console.ReadLine();
-            ExeminationRusWord(rusWord, out rusWord); // Тут мы и остановились !!!!
+            ExeminationRusWord(rusWord); // Тут мы и остановились !!!!
             Console.WriteLine("Введите слово на польском");
             Console.Write(">");
             string polWord = Console.ReadLine();
@@ -137,27 +136,27 @@ namespace LearnMsSql
             DBModificatet.WriteWordInDB(rusWord, polWord);
         }
 
-        public static string ExeminationRusWord(string rusWord, out string warningChar) // Наличие 2 параметра вообще на какой то кал похоже 
+        public static string ExeminationRusWord(string rusWord) // Наличие 2 параметра вообще на какой то кал похоже 
         {
             string word = rusWord.ToLower();
 
-            warningChar = string.Empty;
+            // byte[] listUtf8 = Encoding.Default.GetBytes(rusWord);
 
-            byte[] listUtf8 = Encoding.Default.GetBytes(rusWord);
-
-            char[] bak;
-
+            char[] bak = new char[1];
+            int i = 0;
             int j = 1;
 
             foreach (char item in word)
             {
-                bak = new char[item];
+                bak[i] = item;
 
                 byte[] wordAsByteMass = Encoding.Default.GetBytes(bak);
 
+                int f = wordAsByteMass.Length;
+
                 if (wordAsByteMass.Length < 2)
                 {
-                    if (wordAsByteMass[0] == 32)
+                    if (wordAsByteMass[i] == 32)
                     {
 
                     }
@@ -168,25 +167,21 @@ namespace LearnMsSql
                 }
                 else
                 {
-                    for (int i = 0; i < listUtf8.Length; i++)
+
+                    if (
+                       (wordAsByteMass[i] >= 208 && wordAsByteMass[i] <= 209) &&
+                       ((176 <= wordAsByteMass[j] && wordAsByteMass[j] <= 191) || (wordAsByteMass[j] >= 128 && wordAsByteMass[j] <= 143) || (wordAsByteMass[j] == 145))
+                       )
                     {
-                        if (
-                           (listUtf8[i] >= 208 && listUtf8[i] <= 209) &&
-                           ((176 <= listUtf8[j] && listUtf8[j] <= 191) || (listUtf8[j] >= 128 && listUtf8[j] <= 143) || (listUtf8[j] == 145))
-                           )
-                        { }
-
-                        else
-                        {
-                            getAfterBedCHois(item);
-                        }
-
-                        i++;
-                        j += 2;
+                    
                     }
+                    else
+                    {
+                        getAfterBedCHois(item);
+                    }
+
                 }
             }
-
 
             return word;
         }
@@ -298,111 +293,3 @@ namespace LearnMsSql
 
  */
 #endregion
-
-
-//public static string ExeminationRusWord(string rusWord, out string warningChar) // Наличие 2 параметра вообще на какой то кал похоже 
-//{
-//    string word = rusWord.ToLower();
-
-//    warningChar = string.Empty;
-
-//    byte[] listUtf8 = Encoding.Default.GetBytes(rusWord);
-
-//    char[] bak;
-
-//    int j = 1;
-
-//    foreach (char item in word)
-//    {
-//        bak = new char[item];
-
-//        byte[] wordAsByteMass = Encoding.Default.GetBytes(bak);
-
-//        if (wordAsByteMass.Length < 2)
-//        {
-//            if (wordAsByteMass[0] == 32)
-//            {
-
-//            }
-//            else
-//            {
-//                getAfterBedCHois(item);
-//            }
-//        }
-//        else
-//        {
-//            for (int i = 0; i < listUtf8.Length; i++)
-//            {
-//                if (
-//                   (listUtf8[i] >= 208 && listUtf8[i] <= 209) &&
-//                   ((176 <= listUtf8[j] && listUtf8[j] <= 191) || (listUtf8[j] >= 128 && listUtf8[j] <= 143) || (listUtf8[j] == 145))
-//                   )
-//                { }
-
-//                else
-//                {
-//                    getAfterBedCHois(item);
-//                }
-
-//                i++;
-//                j += 2;
-//            }
-//        }
-//    }
-
-
-//    return word;
-//}
-
-
-
-//  Сортировка польского по байтам
-//int j = 1;
-//string a = "ąćęłńóśźż";
-//string ff = "ąćęłńóśźż";
-//string str = "ąćęłńóśźż abcdefghijklmnopqrstuvwxyz";
-//string ba = "ę";
-//string warningString;
-//byte[] warningByte;
-//byte[] listUtf8 = Encoding.Default.GetBytes(str);
-//// 97 - 122
-//byte[] ErroneousChar;
-
-//foreach (char item in str)
-//{
-//    char[] massivItem = { item }; // создание переменных идет в теле метода 
-
-//    byte[] simvol = Encoding.Default.GetBytes(massivItem);
-
-//    if (simvol.Length < 2)
-//    {
-//        if (((simvol[0] >= 97) && (simvol[0] <= 122)) || (simvol[0] == 32))
-//        {
-
-//        }
-//        else
-//        {
-
-//            getAfterBedCHois(item);
-
-//        }
-//    }
-//    else
-//    {
-//        // Обязательно надо убдет переделать но это позже
-//        if (
-//            (massivItem[0] >= 195) && (massivItem[0] <= 197) ||
-//            ((massivItem[1] == 133) && (massivItem[1] == 135) && (massivItem[1] == 153) && (massivItem[1] == 130) && (massivItem[1] == 132) && (massivItem[1] == 179) && (massivItem[1] == 155) && (massivItem[1] == 186) && (massivItem[1] == 188))
-//            )
-//        {
-
-//        }
-//        else
-//        {
-
-//            getAfterBedCHois(item);
-
-//        }
-
-//    }
-//}
