@@ -21,7 +21,7 @@ namespace LearnMsSql
     #endregion
 
     internal class Program
-    {
+    { 
         // килир фича
         public static void ShowMenu()
         {
