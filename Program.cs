@@ -24,7 +24,6 @@ namespace LearnMsSql
     {
         public static void ShowMenu()
         {
-
             Console.WriteLine("1.Добавить слово");
             Console.WriteLine("2.Тренировка");
             Console.WriteLine("3.Редактировать "); 
