@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Protocols;
 using System.Text;
 
+
 namespace LearnMsSql
 {
 
@@ -18,23 +19,22 @@ namespace LearnMsSql
     // Можно попытаться подключить модуль для Авто опреда  яыкуа, При выводу неккоректного символа
 
     #region // Что надо сделать
-    
+
     #endregion
 
     internal class Program
     {
+
         public static void ShowMenu()
         {
-            Console.WriteLine("1.Добавить слово");
-            Console.WriteLine("2.Тренировка");
-            Console.WriteLine("3.Редактировать "); 
-            Console.WriteLine("4.Удалеине слова");
-            Console.WriteLine("5.Выход");
+            GetDelegate.CommandHandler comm = AddWord;
 
-            Console.Write(">");
+            Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            {
+                {"1.добавить слово", AddWord }
 
-            string choise = Console.ReadLine();
-            ParceInputMenuCHoise(choise);
+            };
+            MenuWork.MenuStart(Links);
 
         }
 
@@ -58,17 +58,24 @@ namespace LearnMsSql
             return 0;
         }
 
-
         static void Main(string[] args)
         {
 
-            string strr = "поedd";
-            Console.WriteLine(ExeminationRusWord(strr));
+            GetDelegate.CommandHandler comm = AddWord;
+
+            Dictionary <string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            {
+                {"1.добавить слово", AddWord }
+
+            };
+
+            MenuWork.MenuStart(Links);
+
         }
 
         public static void ExeminationPolWord (string item)
         {
-            item = null;
+            item = item.ToLower();
             string str = "ąćęłńóśźż abcdefghijklmnopqrstuvwxyz";
             int n = 0;
             bool bl = false;
@@ -116,7 +123,7 @@ namespace LearnMsSql
             }
         }
 
-        public static void ReadWord() // нужна обработка входных значений слов что бы туда попадали только слова
+        public static void AddWord() // нужна обработка входных значений слов что бы туда попадали только слова
         {                              // Если вдруг разхотелось слово добовлять !
             #region 
             Console.WriteLine("Для добавления нового слова в словарь вам необходимо ввести слова на русском и на польском");
@@ -139,8 +146,6 @@ namespace LearnMsSql
         public static string ExeminationRusWord(string rusWord) // Наличие 2 параметра вообще на какой то кал похоже 
         {
             string word = rusWord.ToLower();
-
-            // byte[] listUtf8 = Encoding.Default.GetBytes(rusWord);
 
             char[] bak = new char[1];
             int i = 0;
@@ -188,32 +193,22 @@ namespace LearnMsSql
 
         public static void getAfterBedCHois (char warningChar)
         {
-            Console.WriteLine($"Символ {warningChar} - является некорректным");
+            Console.Clear();
+
+
+
+            Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке");
 
             Console.WriteLine("Хотите добавить слово еще раз ?");
-            Console.WriteLine("1.Да");
-            Console.WriteLine("2.Нет");
 
-            string choise = Console.ReadLine(); 
-
-            int menuChoise = ParceInputMenuCHoise(choise);
-            
-            switch(menuChoise)
+            Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
             {
-                case 1:
-                    GetСhoiceMenu(menuChoise);
-                    break;
-                case 2:
-                    ShowMenu();
-                    break;
-                default:
-                    Console.WriteLine("Неверно выбранные пункты меню!");
+                {"1.Да", AddWord },
+                { "2.Нет", ShowMenu}
+            };
 
-                    getAfterBedCHois(warningChar);
+            MenuWork.MenuStart(Links);
 
-                    break;
-
-            }
         }
 
 
@@ -222,7 +217,7 @@ namespace LearnMsSql
             switch (menuChoice)
             {
                 case 1:
-                    ReadWord();
+                    AddWord();
                     break;
                 case 2:
                     break;
@@ -235,15 +230,6 @@ namespace LearnMsSql
                 default:
                     break;
             }
-        }
-
-        public static void EditCoupleOfWords()
-        {
-            // Слова могут попытаться начать искать и на русском и на польском 
-            // Слово на русском - записали - 
-            Console.WriteLine("");
-
-
         }
 
         public static void ToExit()
@@ -270,7 +256,7 @@ namespace LearnMsSql
 
             SqlCommand sqlCommand = new SqlCommand($"INSERT INTO [Table] (Rus_Name, Pol_Name) VALUES (N'{rusWord}', '{polWord}')", sqlConnection);
 
-            Console.WriteLine(" Запись - ", sqlCommand.ExecuteNonQuery());
+            Console.WriteLine($" Запись - {sqlCommand.ExecuteNonQuery()}");
 
             sqlConnection.Close();
 
