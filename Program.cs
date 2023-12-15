@@ -27,51 +27,41 @@ namespace LearnMsSql
 
         public static void ShowMenu()
         {
-            GetDelegate.CommandHandler comm = AddWord;
-
             Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
             {
-                {"1.добавить слово", AddWord }
+
+                {"1.добавить слово", AddWord },
+                { "5.Выход", ToExit}
 
             };
+
             MenuWork.MenuStart(Links);
 
         }
-        //фикст чего то 
 
 
-        public static int ParceInputMenuCHoise(string choise)
-        {
+        //public static int ParceInputMenuCHoise(string choise)
+        //{
 
-            int intChoise = 0;
+        //    int intChoise = 0;
 
-            if (int.TryParse(choise, out intChoise))   // Метод должен как то сам выбирать точку переход
-            {
-                return (intChoise);
-            }
-            else
-            {
-                Console.WriteLine("Неккоретно введенное значение! Необходимо ввести чесло соответствующее одному из пунктов меню");
+        //    if (int.TryParse(choise, out intChoise))   // Метод должен как то сам выбирать точку переход
+        //    {
+        //        return (intChoise);
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Неккоретно введенное значение! Необходимо ввести чесло соответствующее одному из пунктов меню");
 
-                ShowMenu();
+        //        ShowMenu();
 
-            }
+        //    }
 
-            return 0;
-        }
+        //    return 0;
+        //}
 
         static void Main(string[] args)
         {
-
-            GetDelegate.CommandHandler comm = AddWord;
-
-            Dictionary <string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
-            {
-                {"1.добавить слово", AddWord }
-
-            };
-
-            MenuWork.MenuStart(Links);
 
         }
 
@@ -132,14 +122,12 @@ namespace LearnMsSql
             Console.WriteLine("Введите слово на русском");
             Console.Write(">");
             string rusWord = Console.ReadLine();
-            ExeminationRusWord(rusWord); // Тут мы и остановились !!!!
+            ExeminationRusWord(rusWord); 
             Console.WriteLine("Введите слово на польском");
             Console.Write(">");
             string polWord = Console.ReadLine();
             ExeminationPolWord(polWord);
             Console.WriteLine($"Добавить новую пару слов: {rusWord} с переводом {polWord}?");
-            //Console.Write(">");
-            //string anwer = Console.ReadLine();
             #endregion
 
             DBModificatet.WriteWordInDB(rusWord, polWord);
@@ -197,8 +185,6 @@ namespace LearnMsSql
         {
             Console.Clear();
 
-
-
             Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке");
 
             Console.WriteLine("Хотите добавить слово еще раз ?");
@@ -211,27 +197,6 @@ namespace LearnMsSql
 
             MenuWork.MenuStart(Links);
 
-        }
-
-
-        public static void GetСhoiceMenu(int menuChoice )
-        {
-            switch (menuChoice)
-            {
-                case 1:
-                    AddWord();
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                default:
-                    break;
-            }
         }
 
         public static void ToExit()
