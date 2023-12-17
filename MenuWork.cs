@@ -14,6 +14,10 @@ namespace LearnMsSql
         {
             int size = Dic.Count;
 
+            int posX = Console.CursorLeft;
+
+            int posY = Console.CursorTop;
+
             Element[] elems = new Element[size];
 
             int counnter = 0;
@@ -32,6 +36,7 @@ namespace LearnMsSql
             while (true)
             {
                 menu.Draw();
+                Console.SetCursorPosition(posX, posY);
                 switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.UpArrow:
@@ -52,7 +57,6 @@ namespace LearnMsSql
         {
             public Element[] Elements { get; set; }
             public int Index { get; set; }
-
             public Menu(Element[] elems)
             {
                 this.Index = 0;
@@ -62,7 +66,7 @@ namespace LearnMsSql
 
             public void Draw()
             {
-                Console.Clear();
+              //  Console.Clear();
                 foreach (var element in Elements)
                 {
                     element.Print();
@@ -92,7 +96,6 @@ namespace LearnMsSql
         private class Element
         {
             public string Text { get; set; }
-
             public ConsoleColor SelectedForeColor { get; set; }
             public ConsoleColor SelectedBackColor { get; set; }
             public bool IsSelected { get; set; }

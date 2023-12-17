@@ -19,7 +19,7 @@ namespace LearnMsSql
     // Можно попытаться подключить модуль для Авто опреда  яыкуа, При выводу неккоректного символа
 
     #region // Что надо сделать
-
+    //
     #endregion
 
     internal class Program
@@ -34,7 +34,7 @@ namespace LearnMsSql
                 { "5.Выход", ToExit}
 
             };
-
+            string str = string.Empty;
             MenuWork.MenuStart(Links);
 
         }
@@ -62,7 +62,7 @@ namespace LearnMsSql
 
         static void Main(string[] args)
         {
-
+            ShowMenu();
         }
 
         public static void ExeminationPolWord (string item)
@@ -183,11 +183,7 @@ namespace LearnMsSql
 
         public static void getAfterBedCHois (char warningChar)
         {
-            Console.Clear();
-
-            Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке");
-
-            Console.WriteLine("Хотите добавить слово еще раз ?");
+            Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке.\n Хотите добавить слово еще раз ?");
 
             Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
             {
@@ -204,8 +200,6 @@ namespace LearnMsSql
             Environment.Exit(0);
 
         }
-
-
     }
 
     
