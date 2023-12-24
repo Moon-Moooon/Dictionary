@@ -4,6 +4,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Protocols;
 using System.Text;
+using System.Drawing;
 
 
 namespace LearnMsSql
@@ -17,13 +18,27 @@ namespace LearnMsSql
     // Прикольно можно сделать что значения в консоли не цифрами дрочить А ! перкход нажатием клавиши что автоматом лишает проблемы связанной с ошибкой ввода некорректных данных
     // Нужно разрешить пробел ставить в словах
     // Можно попытаться подключить модуль для Авто опреда  яыкуа, При выводу неккоректного символа
-
+    // По окончанию основого функцонала надо будет провести полный рефакторинг 
+    // какого черта методом Read разрешено пользоваться 1 раз а после окончания цикла все :(
+    // Ступенчатый цикл где конечное и начальное значение изменяется 
+    // Баг вывода меню если после большого набора меню вызывать маленькой
+    
     #region // Что надо сделать
-    //
+    //Поиск по слову 
+    // Необходимо полностью продумать отрисовку меню !
     #endregion
 
     internal class Program
     {
+        #region
+        /*
+            1.добавить слово
+            2.тренировка
+            3.Поиск и работа со словами 
+            4.выход
+
+         */
+        #endregion
 
         public static void ShowMenu()
         {
@@ -31,34 +46,129 @@ namespace LearnMsSql
             {
 
                 {"1.добавить слово", AddWord },
-                { "5.Выход", ToExit}
+                {"2.Поиск слова", readWord},
+                {"5.Выход", ToExit}
 
             };
-            string str = string.Empty;
-            MenuWork.MenuStart(Links);
+
+            MenuWork.Start start = new(Links);
 
         }
 
+        public static void SearchWordInDB()
+        {
+            Console.WriteLine("Поиск слова осуществлять на: ");
+            // Вызов менюшки 
+            // если вызов на русском -> обработать что это русский -> Формировать запрос в БД
+            // Поиск будет по не полному слвоу 
+            // Есть проблема с тем что вызывая меню выбора на каком языке искать нужно по факту 2 одинаковы реализации вызова проверки слов на язык
+            Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            {
 
-        //public static int ParceInputMenuCHoise(string choise)
-        //{
+                {"1.Поск на русском", readWord },
+                { "2.Поиск на польском", readWord}
 
-        //    int intChoise = 0;
+            };
 
-        //    if (int.TryParse(choise, out intChoise))   // Метод должен как то сам выбирать точку переход
-        //    {
-        //        return (intChoise);
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Неккоретно введенное значение! Необходимо ввести чесло соответствующее одному из пунктов меню");
+            MenuWork.MenuStart(Links);
+        }
 
-        //        ShowMenu();
+        public static void stub() 
+        { 
+            var Dicti = new Dictionary<string, GetDelegate.CommandHandler>()
+            { 
+                {"Заглушка",stub }
+            };
 
-        //    }
+            MenuWork.MenuStart(Dicti);
+        }
 
-        //    return 0;
-        //}
+        public static void readWord() // Не дописан 
+        {
+            Console.Write("Введите слово на русском\n >");
+            // string word = Console.ReadLine();
+            // ExeminationRusWord(word);
+            var Dicti = new Dictionary<string, GetDelegate.CommandHandler>();
+
+            //var DateList = new List<string>();
+
+            SqlDataReader Date = DBModificatet.SelectWord("к");
+            // Ступенчатый цикл где конечное и начальное значение изменяется 
+            int counRows = 0;
+
+
+            while (Date.Read())
+            {
+                counRows++;
+
+                object rusWord = Date.GetValue(0);
+
+                object polName = Date.GetValue(1);
+
+                string WordRow = $"{rusWord} - {polName}";
+
+                Dicti.Add(WordRow, stub);
+            }
+
+            MenuWork.MenuStart(Dicti);
+            // необходимо продумать навигацию меню уже с выданным словарем.
+            // допустим выбирая слово выходит подМеню под выбранным словом со сдвигом в право
+            // в под меню
+            // 1.редактировать
+            // 2.Удолить
+            // 3.Вернуться к словарю
+
+            //int sourceLeft;
+            //int sourceTop;
+
+            //void TextMoev(int line)
+            //{
+            //    int inX;
+
+            //    int inY;
+
+            //    int sourceHeight;
+
+            //    int targetTop;
+
+            //    WriteCutsPosic(out inX, out inY);
+
+            //    sourceHeight = inY - line;
+
+            //    targetTop = line + 1;
+
+            //    Console.MoveBufferArea(0, line, Console.BufferWidth, sourceHeight, 0, targetTop);
+
+            //    // Console.SetCursorPosition(0,line);
+            //}
+
+            //void ClearLine(int line)
+            //{
+            //    Console.MoveBufferArea(0, line, Console.BufferWidth, 4, 0, line + 1);
+            //    // Если трогать окно строки ползают и могут менять свое положение 
+            //}
+
+            //static void WriteCutsPosic(out int intX, out int intY)
+            //{
+            //    int inX = Console.CursorLeft;
+            //    intX = inX;
+            //    int inY = Console.CursorTop;
+            //    intY = inY;
+            //}
+
+            //Console.WriteLine("1111111111111111111111111111111111111111111111111111111111111111");
+            //Console.WriteLine("2222222222222222222222222222222222222222222222222222222222222222");
+            //Console.WriteLine("3333333333333333333333333333333333333333333333333333333333333333");
+            //Console.WriteLine("4444444444444444444444444444444444444444444444444444444444444444");
+            //Console.WriteLine("5555555555555555555555555555555555555555555555555555555555555555");
+            //Console.WriteLine("6555566666666666666666666666666666666666666666666666666666666666");
+            //Console.WriteLine("1777777777777777777777777777777777777777777777777777777777777777");
+
+            //TextMoev(1);
+
+            //ShowMenu();
+
+        }
 
         static void Main(string[] args)
         {
@@ -133,7 +243,7 @@ namespace LearnMsSql
             DBModificatet.WriteWordInDB(rusWord, polWord);
         }
 
-        public static string ExeminationRusWord(string rusWord) // Наличие 2 параметра вообще на какой то кал похоже 
+        public static string ExeminationRusWord(string rusWord) 
         {
             string word = rusWord.ToLower();
 
@@ -224,19 +334,15 @@ namespace LearnMsSql
 
         }
 
+       public static SqlDataReader SelectWord (string word)
+        {
+            sqlConnection.Open();
+
+            SqlCommand sqlCommand = new SqlCommand($"SELECT Rus_Name, Pol_Name FROM Words WHERE Rus_Name LIKE N'%{word}%'", sqlConnection);
+
+            return sqlCommand.ExecuteReader();
+
+            sqlConnection.Close();
+        }
     }
 }
-
-
-#region
-/*
- .будет меню
-    1.добавить слово
-    2.тренировка
-    3.удалить слово
-    4.выход из игры
-
-.Обработка н наличие Уже имеющихся слов ! как то можно сделать через бд
-
- */
-#endregion
