@@ -24,8 +24,9 @@ namespace LearnMsSql
     // Баг вывода меню если после большого набора меню вызывать маленькой
     
     #region // Что надо сделать
-    //Поиск по слову 
+    //Поиск по слову, доделать поиск как на русском так и на польском
     // Необходимо полностью продумать отрисовку меню !
+    // 
     #endregion
 
     internal class Program
@@ -51,7 +52,7 @@ namespace LearnMsSql
 
             };
 
-            MenuWork.Start start = new(Links);
+            MenuWork start = new(Links);
 
         }
 
@@ -70,7 +71,7 @@ namespace LearnMsSql
 
             };
 
-            MenuWork.MenuStart(Links);
+            MenuWork start = new(Links);
         }
 
         public static void stub() 
@@ -80,12 +81,12 @@ namespace LearnMsSql
                 {"Заглушка",stub }
             };
 
-            MenuWork.MenuStart(Dicti);
+            MenuWork start = new(Dicti);
         }
 
         public static void readWord() // Не дописан 
         {
-            Console.Write("Введите слово на русском\n >");
+            Console.WriteLine("Введите слово на русском\n >");
             // string word = Console.ReadLine();
             // ExeminationRusWord(word);
             var Dicti = new Dictionary<string, GetDelegate.CommandHandler>();
@@ -110,7 +111,7 @@ namespace LearnMsSql
                 Dicti.Add(WordRow, stub);
             }
 
-            MenuWork.MenuStart(Dicti);
+            MenuWork start = new(Dicti, false, 2); // Магическое число, это число (не индекс!!) строк
             // необходимо продумать навигацию меню уже с выданным словарем.
             // допустим выбирая слово выходит подМеню под выбранным словом со сдвигом в право
             // в под меню
@@ -170,9 +171,32 @@ namespace LearnMsSql
 
         }
 
+        public static void SubMenu()
+        {
+
+            Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            {
+
+                {"1.Редактировать", stub },
+                {"2.Удолить пару", stub},
+                {"3.Вернуться к словорю", stub},
+                {"4.Вернутсья к главному меню",stub }
+            };
+
+            MenuWork start = new(Links);
+        }
+
+
+
+        public static void RedactionWord()
+        {
+
+        }
+
+
         static void Main(string[] args)
         {
-            ShowMenu();
+            readWord();
         }
 
         public static void ExeminationPolWord (string item)
@@ -301,7 +325,7 @@ namespace LearnMsSql
                 { "2.Нет", ShowMenu}
             };
 
-            MenuWork.MenuStart(Links);
+            MenuWork start = new(Links);
 
         }
 

@@ -7,36 +7,47 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// Нужно переосмыслить подход к формированию меню
-// При нажатии Enter считывать как мето для открытия вложения при вызове словаря
-// Скорее всего надо будет МенюСтарт в классс превращать
+// Пока будет плохое решение - Значание bool которое будет указывать как чистить консоль по исполнению комманды будет хранится в каждом экземплярк элемента меню :(
+
+// Нужно переосмыслить подход к формированию меню !!!
+// При нажатии Enter считывать как меcто для открытия вложения при вызове словаря
 // Отказался от метода ингициализации меню потому что параметры можно установать по Дефолту! 
-// ++ В классе Старт в автосвойстве елементс при использовании метода внутреннего Добавляются элементы но ведб свойство это обертка поля массива и почему то не просит указать четко размер массива что довольно интересно и пока не очень понятно!!
-// Все хорошо ошибка есть
-// Плохо понимаю видимость переменных не зависимо от модификатора когда они вложенны в классы внутри других классов
+// index в классе меню уже означает положение полджение с верху 0 и внизу n
+
+
 namespace LearnMsSql
 {
     internal class MenuWork
     {
-        public static void MenuStart(Dictionary<string, GetDelegate.CommandHandler> Dic)
+        public static int size { get; set; }
+        int posX { get; set; }
+        int posY { get; set; }
+        int NumberOfLins { get; set; }
+        public bool ExecuteClear;
+        // static Element[] elems { get; set; }
+        public Dictionary<string, GetDelegate.CommandHandler> Dic { get; set; }
+        public MenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction) : this(Diction, true) { } // Нельзя указывать магисеское число !
+        public MenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear) : this(Diction, true, 0) { }
+        public MenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear, int NumberOfLins)
         {
-          //  bool ExecuteClear = eExecuteClear;
+            this.NumberOfLins = NumberOfLins;
+            this.Dic = Diction;
+            this.ExecuteClear = ExecuteClear;
+            posX = Console.CursorLeft;
+            posY = Console.CursorTop;
+            size = Dic.Count;
+            menuStart();
+        }
 
-            int size = Dic.Count;
-
-            int posX = Console.CursorLeft;
-
-            int posY = Console.CursorTop;
-
+        private void menuStart()
+        {
             Element[] elems = new Element[size];
-
             int counnter = 0;
-
             if (counnter < size)
             {
-                foreach (var item in Dic)
+                foreach (var item in this.Dic)
                 {
-                    elems[counnter] = new Element(item.Key, item.Value);
+                    elems[counnter] = new Element(item.Key, item.Value, ExecuteClear);
                     counnter++;
                 }
             }
@@ -57,6 +68,7 @@ namespace LearnMsSql
                         menu.SelectNext();
                         break;
                     case ConsoleKey.Enter:
+                        if(!ExecuteClear) { menu.SideForMenu(NumberOfLins); }
                         menu.ExecuteSelected();
                         break;
                     default: return;
@@ -64,64 +76,6 @@ namespace LearnMsSql
             }
         }
             
-        public class Start
-        {
-            public static int size { get; set; }
-            int posX { get; set; }
-            int posY { get; set; }
-
-            public bool StartExecuteClear = true;
-            // static Element[] elems { get; set; }
-            public Dictionary<string, GetDelegate.CommandHandler> Dic { get; set; }
-            public Start(Dictionary<string, GetDelegate.CommandHandler> Diction) : this(Diction, true) { }
-            public Start(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear)
-            {
-                this.Dic = Diction;
-                this.StartExecuteClear = ExecuteClear;
-                posX = Console.CursorLeft; 
-                posY = Console.CursorTop;
-                size = Dic.Count;
-                menuStart();
-            }
-            private void menuStart()
-            {
-                
-                Element[] elems = new Element[size];
-                int counnter = 0;
-                if (counnter < size)
-                {
-                    foreach (var item in this.Dic)
-                    {
-                        elems[counnter] = new Element(item.Key, item.Value);
-                        counnter++;
-                    }
-                }
-
-                Menu menu = new Menu(elems);
-                while (true)
-                {
-                    menu.Draw();
-
-                    Console.SetCursorPosition(posX, posY);
-
-                    switch (Console.ReadKey(true).Key)
-                    {
-                        case ConsoleKey.UpArrow:
-                            menu.SelectPrev();
-                            break;
-                        case ConsoleKey.DownArrow:
-                            menu.SelectNext();
-                            break;
-                        case ConsoleKey.Enter:
-                            menu.ExecuteSelected();
-                            break;
-                        default: return;
-                    }
-                }
-            }
-
-        }
-
         private class Menu
         {
             public Element[] Elements { get; set; }
@@ -134,17 +88,21 @@ namespace LearnMsSql
                 this.Elements = elems;
                 Elements[Index].IsSelected = true;
             }
-            public void SideForMenu() // Не продуманный до конца метод!
+            public void SideForMenu(int AddTop) // Не продуманный до конца метод!
             {
-                int intX;
+                // дял вычисления полной высоты нам нужно знать позицию гдебыло нажато Enter - эьо индексатор, а то что было напечатоно сверху это будет additionalTop
+                int intX = 0;
 
-                int intY;
+                int SorseTop = Index + AddTop + 1;
 
-                CursorMove.CursorPosit(out intX, out intY);
+                int TargetTop = SorseTop + 4; // магическое число - число на которое опускаем, пока хз как сюда передать кол.во комманд. Наверное когда будет метод с ними :)
 
-                CursorMove.TextMoev(intY);
-
-                Console.SetCursorPosition(intX, intY);
+                //CursorMove.CursorPosit(out intX, out intY);
+                int NumbRows = AddTop + Elements.Length - SorseTop;
+                CursorMove.TextMoev(NumbRows, SorseTop, TargetTop);
+                Console.SetCursorPosition(intX, SorseTop);
+                Program.SubMenu();
+               // Console.SetCursorPosition(intX, intY);
             }
             public void Draw()
             {
@@ -181,12 +139,13 @@ namespace LearnMsSql
             public ConsoleColor SelectedForeColor { get; set; }
             public ConsoleColor SelectedBackColor { get; set; }
             public bool IsSelected { get; set; }
-            public bool ExecuteClear { get; set; } // Недописано
+            public bool ExecuteClear { get; set; } 
 
             public GetDelegate.CommandHandler Command;
 
-            public Element(string text, GetDelegate.CommandHandler Comm)
+            public Element(string text, GetDelegate.CommandHandler Comm, bool ExExecuteClear)
             {
+                this.ExecuteClear = ExExecuteClear;
                 this.Command = Comm;
                 this.Text = text;
                 this.SelectedForeColor = ConsoleColor.Black;
@@ -208,7 +167,7 @@ namespace LearnMsSql
             public void Execute()
             {
                 if (Command == null) return;
-                if (StartExecuteClear) Console.Clear(); // когда будет вывод словоря и попыткавызвать вложенное меню, все упалзет!!!
+                if (ExecuteClear) Console.Clear();
                 Command.Invoke();
             }
         }

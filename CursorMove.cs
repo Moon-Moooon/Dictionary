@@ -16,25 +16,17 @@ namespace LearnMsSql
             intY = inY;
         }
 
-        public static void TextMoev(int line)
+        public static void TextMoev(int NumbRows, int SourceTop, int TargetTop)
         {
-            int inX;
-
-            int inY;
-
-            int sourceHeight;
-
-            int targetTop;
-
-            CursorPosit(out inX, out inY);
-
-            sourceHeight = inY - line;
-
-            targetTop = line + 1;
-
-            Console.MoveBufferArea(0, line, Console.BufferWidth, sourceHeight, 0, targetTop);
-
-            Console.SetCursorPosition(0, line);
+            Console.MoveBufferArea(0, SourceTop, Console.BufferWidth, NumbRows, 0, TargetTop);
+            // 1арг - крайняя левая точка
+            //2 - самая верхяя точка начала перемещения 
+            //3 общие число столбцов (ширина) - бурем по всей шерене буфера консоли 
+            //4 общее число строк при пемещ
+            // 5 крайний слева - куда перемещаем
+            //6 - самый верх - куда перемещ
+            //
+            // Console.SetCursorPosition(0, line);
         }
 
         public static void ClearLines(int top, int lower, int rows)
