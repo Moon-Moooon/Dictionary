@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearnMsSql", "LearnMsSql.csproj", "{99D74A3F-774B-4A56-85E8-C3B60AD49303}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPO", "..\TestPO\TestPO.csproj", "{7C9D3442-629E-41AD-BED2-5C33D0229019}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestNewMenu", "..\TestPO\TestNewMenu.csproj", "{7C9D3442-629E-41AD-BED2-5C33D0229019}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingIdea", "..\TestingIdea\TestingIdea.csproj", "{BCE99AC4-D4A1-406B-A2BC-EB7418BF0EAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7C9D3442-629E-41AD-BED2-5C33D0229019}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C9D3442-629E-41AD-BED2-5C33D0229019}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C9D3442-629E-41AD-BED2-5C33D0229019}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCE99AC4-D4A1-406B-A2BC-EB7418BF0EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCE99AC4-D4A1-406B-A2BC-EB7418BF0EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCE99AC4-D4A1-406B-A2BC-EB7418BF0EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCE99AC4-D4A1-406B-A2BC-EB7418BF0EAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

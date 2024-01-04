@@ -52,7 +52,7 @@ namespace LearnMsSql
 
             };
 
-            MenuWork start = new(Links);
+            StartMenuWork start = new(Links);
 
         }
 
@@ -71,7 +71,7 @@ namespace LearnMsSql
 
             };
 
-            MenuWork start = new(Links);
+            StartMenuWork start = new(Links);
         }
 
         public static void stub() 
@@ -81,20 +81,24 @@ namespace LearnMsSql
                 {"Заглушка",stub }
             };
 
-            MenuWork start = new(Dicti);
+            StartMenuWork start = new(Dicti);
         }
 
         public static void readWord() // Не дописан 
         {
+            // Интересно как это выглядит когда я переменную типа Object передаю форматированной стракой как stringt, скорее всего там под капотный боксинг :(
+            // Ступенчатый цикл где конечное и начальное значение изменяется 
             Console.WriteLine("Введите слово на русском\n >");
             // string word = Console.ReadLine();
             // ExeminationRusWord(word);
             var Dicti = new Dictionary<string, GetDelegate.CommandHandler>();
-
+            
             //var DateList = new List<string>();
 
             SqlDataReader Date = DBModificatet.SelectWord("к");
-            // Ступенчатый цикл где конечное и начальное значение изменяется 
+
+            List<Word> WordCollection = new List<Word>(); // Тест
+
             int counRows = 0;
 
 
@@ -109,65 +113,12 @@ namespace LearnMsSql
                 string WordRow = $"{rusWord} - {polName}";
 
                 Dicti.Add(WordRow, stub);
+
+                WordCollection.Add(new Word(0,$"{rusWord}", $"{polName}"));
             }
 
-            MenuWork start = new(Dicti, false, 2); // Магическое число, это число (не индекс!!) строк
-            // необходимо продумать навигацию меню уже с выданным словарем.
-            // допустим выбирая слово выходит подМеню под выбранным словом со сдвигом в право
-            // в под меню
-            // 1.редактировать
-            // 2.Удолить
-            // 3.Вернуться к словарю
-
-            //int sourceLeft;
-            //int sourceTop;
-
-            //void TextMoev(int line)
-            //{
-            //    int inX;
-
-            //    int inY;
-
-            //    int sourceHeight;
-
-            //    int targetTop;
-
-            //    WriteCutsPosic(out inX, out inY);
-
-            //    sourceHeight = inY - line;
-
-            //    targetTop = line + 1;
-
-            //    Console.MoveBufferArea(0, line, Console.BufferWidth, sourceHeight, 0, targetTop);
-
-            //    // Console.SetCursorPosition(0,line);
-            //}
-
-            //void ClearLine(int line)
-            //{
-            //    Console.MoveBufferArea(0, line, Console.BufferWidth, 4, 0, line + 1);
-            //    // Если трогать окно строки ползают и могут менять свое положение 
-            //}
-
-            //static void WriteCutsPosic(out int intX, out int intY)
-            //{
-            //    int inX = Console.CursorLeft;
-            //    intX = inX;
-            //    int inY = Console.CursorTop;
-            //    intY = inY;
-            //}
-
-            //Console.WriteLine("1111111111111111111111111111111111111111111111111111111111111111");
-            //Console.WriteLine("2222222222222222222222222222222222222222222222222222222222222222");
-            //Console.WriteLine("3333333333333333333333333333333333333333333333333333333333333333");
-            //Console.WriteLine("4444444444444444444444444444444444444444444444444444444444444444");
-            //Console.WriteLine("5555555555555555555555555555555555555555555555555555555555555555");
-            //Console.WriteLine("6555566666666666666666666666666666666666666666666666666666666666");
-            //Console.WriteLine("1777777777777777777777777777777777777777777777777777777777777777");
-
-            //TextMoev(1);
-
-            //ShowMenu();
+            StartMenuWork start = new(Dicti, false, 2, WordCollection); //!!!!!!!!!!!!!
+            // Магическое число, это число (не индекс!!) строк
 
         }
 
@@ -183,20 +134,71 @@ namespace LearnMsSql
                 {"4.Вернутсья к главному меню",stub }
             };
 
-            MenuWork start = new(Links);
+            StartMenuWork start = new(Links);
         }
 
 
 
-        public static void RedactionWord()
+        public static void RedactionWord(Word word)
         {
 
-        }
+            // word.Print();
+            // Надо передовать истинные ID слов из БД -> Но куда ?
+            // Пускай класс (Word) - где будет авто свойства ID руусс и полл
+            // получается когда мы прочитаем наши слова и будем передовать их в словарь с каждым словом должен быть связан и его объект -> для дальнейшей модификации слова
+            // У нас будет коллекция ввиде списка объекто, при выполнении выбора надо прочитать слово и затем пройтись по коллекции и с выбранным словом по айди редактировать -> вроде норм решение что бы не перегружать меню и его элементы -->
+            // -> А как это то реализовать ? -> пхд нужен DAtaSet
+            // При выполнении запроса в БД сразу будет браться массив с даными и как то передоваться в класс меню :( по другому пока не знаю как лучше сделать
 
+            //Теперь у элемента есть объект типа слово и что дальше -> надо еще перегруз где будет передача объекта класса и то что редактировалось
+
+            // принял класс слова -> вывел форматированную сьроку - 
+
+
+            // нет зацикливания будет, выход в меню метод по идее пока будет принемать только объект Слова
+
+            //GetDelegate.setStructDelegate item = new GetDelegate.setStructDelegate();
+
+            // item.editWord = word;
+
+            //Dictionary<string, GetDelegate.setStructDelegate> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            //{
+            //    {"1.Редактировать",  item },
+            //    {"2.Удолить пару", RedactionWord(word)},
+            //    {"3.Вернуться к словорю", Back()},
+            //    {"4.Вернутсья к главному меню",ShowMenu }
+            //};
+
+            //StartMenuWork start = new(Links);
+
+        }
 
         static void Main(string[] args)
         {
-            readWord();
+            //// 
+            //setStructDelegate item = new setStructDelegate();
+
+            //Word word = new(1,"2","3");
+            //item.editWord = RedactionWord;
+
+            //setStructDelegate item2 = new setStructDelegate();
+
+            //Word word2 = new(1, "2", "3");
+            //item2.CH = SubMenu;
+
+
+            //Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
+            //{
+            //    {"1.Редактировать",item},
+            //    {"2.Удолить пару",item2},
+            //    //{"3.Вернуться к словорю", Back()},
+            //    //{"4.Вернутсья к главному меню",ShowMenu }
+            //};
+
+            // StartMenuWork start = new(Links);
+
+            ShowMenu();
+
         }
 
         public static void ExeminationPolWord (string item)
@@ -249,8 +251,8 @@ namespace LearnMsSql
             }
         }
 
-        public static void AddWord() // нужна обработка входных значений слов что бы туда попадали только слова
-        {                              // Если вдруг разхотелось слово добовлять !
+        public static void AddWord() 
+        {                              
             #region 
             Console.WriteLine("Для добавления нового слова в словарь вам необходимо ввести слова на русском и на польском");
             Console.WriteLine("Введите слово на русском");
@@ -325,7 +327,7 @@ namespace LearnMsSql
                 { "2.Нет", ShowMenu}
             };
 
-            MenuWork start = new(Links);
+            StartMenuWork start = new(Links);
 
         }
 
@@ -333,40 +335,6 @@ namespace LearnMsSql
         {
             Environment.Exit(0);
 
-        }
-    }
-
-    
-
-    class DBModificatet
-    {
-        static string connectionString = ConfigurationManager.ConnectionStrings["DT"].ConnectionString;
-
-        static SqlConnection sqlConnection = new SqlConnection(connectionString);
-
-
-       public static void WriteWordInDB(string rusWord, string polWord)
-        {
-            sqlConnection.Open();
-
-            SqlCommand sqlCommand = new SqlCommand($"INSERT INTO [Table] (Rus_Name, Pol_Name) VALUES (N'{rusWord}', '{polWord}')", sqlConnection);
-
-            Console.WriteLine($" Запись - {sqlCommand.ExecuteNonQuery()}");
-
-            sqlConnection.Close();
-
-
-        }
-
-       public static SqlDataReader SelectWord (string word)
-        {
-            sqlConnection.Open();
-
-            SqlCommand sqlCommand = new SqlCommand($"SELECT Rus_Name, Pol_Name FROM Words WHERE Rus_Name LIKE N'%{word}%'", sqlConnection);
-
-            return sqlCommand.ExecuteReader();
-
-            sqlConnection.Close();
         }
     }
 }

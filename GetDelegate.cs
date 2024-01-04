@@ -6,8 +6,30 @@ using System.Threading.Tasks;
 
 namespace LearnMsSql
 {
-    internal class GetDelegate
+    // Необходимо вынести из класса делегаты, нет необходимости чтоб они были там + уменьшит строку вызова делегата 
+    // Возмодно стоит вынести структуру за пределы этого файла ?
+    public class GetDelegate
     {
         public delegate void CommandHandler();
+
+        public delegate Word WordDelegate(out string UpDate);
+
+        public delegate void EditWord(Word word);
+
+    }
+
+    public struct setStructDelegate
+    {
+        public delegate void CommandHandler();
+
+        public delegate Word WordDelegate(out string UpDate);
+
+        public delegate void EditWord(Word word);
+
+        public EditWord editWord;
+
+        public CommandHandler CH;
+        //public static editWord
+
     }
 }
