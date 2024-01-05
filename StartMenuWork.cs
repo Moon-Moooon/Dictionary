@@ -13,7 +13,7 @@ namespace LearnMsSql
     {
         public static int size { get; set; }
         public int NumberOfLins { get; set; } 
-        public bool ExecuteClear = true; // Это булева означает при Тру = чистится консоль при переходе к команде, фолс = выполняется особый сдвиг меню ивысов под меню для редлактирования словаря 
+        public bool ExecuteClear { get; set; } // Это булева означает при Тру = чистится консоль при переходе к команде, фолс = выполняется особый сдвиг меню ивысов под меню для редлактирования словаря 
         public Dictionary<string, T> Dic { get; set; } // Это обязхательная констурки без нею нет перехода по меню 
                                                        // public List<Word> WordCollection { get; set; } // Только при работе со словами - не обязательная
                                                        //  public TestStsrtMenuW() : this(null, 0) { } // из за передачи пустоты ломается 3 конструтор ибо работаем с нулем
@@ -62,6 +62,7 @@ namespace LearnMsSql
         public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction) : base(Diction) { }
         public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction, int NumberOfLins) :base(Diction, NumberOfLins) 
         {
+            base.ExecuteClear = true;
             // base.Dic = Diction;
             // base.NumberOfLins = NumberOfLins;
             // menuStart();
@@ -73,7 +74,7 @@ namespace LearnMsSql
             int counnter = 0;
             if (counnter < size)
             {
-                foreach (var item in this.Dic) // Плохо понимаю почему тут указано this вроде надо же указывать base раз это свойство из радительского класса - т.к. это наследник, то свойство Dic 
+                foreach (var item in this.Dic) // Плохо понимаю почему тут указано this вроде надо же указывать base раз это свойство из радительского класса - т.к. это наследник, то свойство Dic является и так его свойством!
                 {
                     elems[counnter] = new Element(item.Key, item.Value);
                     counnter++;
@@ -87,25 +88,28 @@ namespace LearnMsSql
     public class TestMenuStruct : TestStsrtMenuW<setStructDelegate>
     {
         public List<Word> WordCollection { get; set; }
-        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, bool ExecuteClear, int NumberOfLins, List<Word> WordCollection): base(Diction, NumberOfLins)
+        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, int NumberOfLins, List<Word> WordCollection): base(Diction, NumberOfLins)
         {
             this.WordCollection = WordCollection;
-            base.ExecuteClear = ExecuteClear;
+            base.ExecuteClear = false;  //ТУт передолвать не надо, а можно сразу самому установить
             menuStart();
         }
 
-        //public override void FillingElmens(ref Element[] elems)
-        //{
-        //    int counnter = 0;
-        //    if (counnter < size)
-        //    {
-        //        foreach (var item in this.Dic)
-        //        {
-        //           // elems[counnter] = new Element(item.Key, item.Value, ExecuteClear);
-        //            counnter++;
-        //        }
-        //    }
-        //}
+        public override Element[] FillingElmens()
+        {
+            Element[] elems = new Element[size];
+            int counnter = 0;
+            if (counnter < size)
+            {
+                foreach (var item in this.Dic) // Плохо понимаю почему тут указано this вроде надо же указывать base раз это свойство из радительского класса - т.к. это наследник, то свойство Dic является и так его свойством!
+                {
+                    elems[counnter] = new Element(item.Key, item.Value);
+                    counnter++;
+                }
+            }
+
+            return elems;
+        }
     }
 
     internal class StartMenuWork

@@ -187,7 +187,7 @@ namespace LearnMsSql
         public int posX { get; set; } 
         public int posY { get; set; }
         public int NumberOfLinsUP { get; set; }
-        public bool executeClear { get; set; } = true;
+        public bool executeClear { get; set; }
 
         public Menu(Element[] elems)
         {
@@ -257,7 +257,8 @@ namespace LearnMsSql
         Word ParamsOFWord { get; set; }
 
         public GetDelegate.CommandHandler Command;
-
+        setStructDelegate setStructDelegate;
+        public Element(string text, setStructDelegate setStructDelegate) : this(text, null) { this.setStructDelegate = setStructDelegate; }
         public Element(string text, GetDelegate.CommandHandler Comm) : this(text, Comm, null) { }
         public Element(string text, GetDelegate.CommandHandler Comm, Word ParamsOFWord)
         {

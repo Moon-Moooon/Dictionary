@@ -53,7 +53,8 @@ namespace LearnMsSql
             };
 
             // StartMenuWork start = new(Links);
-            MenuDefolt menuDefolt = new MenuDefolt(Links, 0);
+            // MenuDefolt menuDefolt = new MenuDefolt(Links, 0);
+
 
         }
 
@@ -142,7 +143,7 @@ namespace LearnMsSql
 
         public static void RedactionWord(Word word)
         {
-
+            Console.WriteLine("Redaction W");
             // word.Print();
             // Надо передовать истинные ID слов из БД -> Но куда ?
             // Пускай класс (Word) - где будет авто свойства ID руусс и полл
@@ -176,29 +177,30 @@ namespace LearnMsSql
 
         static void Main(string[] args)
         {
-            //// 
-            //setStructDelegate item = new setStructDelegate();
+            // 
+            setStructDelegate item = new setStructDelegate();
 
-            //Word word = new(1,"2","3");
-            //item.editWord = RedactionWord;
+            Word word = new(1, "2", "3");
+            item.editWord = RedactionWord;
 
-            //setStructDelegate item2 = new setStructDelegate();
+            setStructDelegate item2 = new setStructDelegate();
 
-            //Word word2 = new(1, "2", "3");
-            //item2.CH = SubMenu;
+            Word word2 = new(1, "2", "3");
+            item2.CH = SubMenu;
 
+            List<Word> list = new List<Word>();
 
-            //Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
-            //{
-            //    {"1.Редактировать",item},
-            //    {"2.Удолить пару",item2},
-            //    //{"3.Вернуться к словорю", Back()},
-            //    //{"4.Вернутсья к главному меню",ShowMenu }
-            //};
+            Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
+            {
+                {"1.Редактировать",item},
+                {"2.Удолить пару",item2},
+                //{"3.Вернуться к словорю", Back()},
+                //{"4.Вернутсья к главному меню",ShowMenu }
+            };
 
-            // StartMenuWork start = new(Links);
+            TestMenuStruct start = new(Links, 0, list);
 
-            ShowMenu();
+            //ShowMenu();
 
         }
 
