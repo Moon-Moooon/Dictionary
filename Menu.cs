@@ -240,7 +240,7 @@ namespace LearnMsSql
 
         public void ExecuteSelected() // Требует теста
         {
-            if (executeClear) Console.Clear();
+            if (!executeClear) Console.Clear();
             else SideForMenu(NumberOfLinsUP);
             Elements[Index].Execute();
         }
@@ -252,7 +252,6 @@ namespace LearnMsSql
         public ConsoleColor SelectedForeColor { get; set; }
         public ConsoleColor SelectedBackColor { get; set; }
         public bool IsSelected { get; set; }
-        // public bool ExecuteClear { get; set; } // Это надо будет потом убрать обязательно
 
         Word ParamsOFWord { get; set; }
 
@@ -263,7 +262,6 @@ namespace LearnMsSql
         public Element(string text, GetDelegate.CommandHandler Comm, Word ParamsOFWord)
         {
             this.ParamsOFWord = ParamsOFWord;
-            // this.ExecuteClear = ExExecuteClear;
             this.Command = Comm;
             this.Text = text;
             this.SelectedForeColor = ConsoleColor.Black;
@@ -285,7 +283,6 @@ namespace LearnMsSql
         public void Execute()
         {
             if (Command == null) return;
-            // if (ExecuteClear) Console.Clear();
             Command.Invoke();
         }
     }

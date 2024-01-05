@@ -41,6 +41,8 @@ namespace LearnMsSql
          */
         #endregion
 
+
+
         public static void ShowMenu()
         {
             Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
@@ -52,10 +54,8 @@ namespace LearnMsSql
 
             };
 
-            // StartMenuWork start = new(Links);
-            // MenuDefolt menuDefolt = new MenuDefolt(Links, 0);
-
-
+             StartMenuWork start = new(Links);
+            // MenuDefolt menuDefolt = new MenuDefolt(Links);
         }
 
         public static void SearchWordInDB()
@@ -198,10 +198,20 @@ namespace LearnMsSql
                 //{"4.Вернутсья к главному меню",ShowMenu }
             };
 
-            TestMenuStruct start = new(Links, 0, list);
+            // TestMenuStruct start = new(Links, list);
 
-            //ShowMenu();
 
+            Dictionary<string, GetDelegate.CommandHandler> Linkss = new Dictionary<string, GetDelegate.CommandHandler>()
+            {
+
+                {"1.добавить слово", AddWord },
+                {"2.Поиск слова", readWord},
+                {"3.Редактировать", SubMenu},
+                {"5.Выход", ToExit}
+
+            };
+
+            MenuDefolt menuDefolt = new(Linkss, true);
         }
 
         public static void ExeminationPolWord (string item)
