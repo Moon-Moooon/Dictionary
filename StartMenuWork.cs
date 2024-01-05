@@ -13,7 +13,7 @@ namespace LearnMsSql
     {
         public static int size { get; set; }
         public int NumberOfLins { get; set; } 
-        public bool ExecuteClear; // Это булева означает при Тру = чистится консоль при переходе к команде, фолс = выполняется особый сдвиг меню ивысов под меню для редлактирования словаря 
+        public bool ExecuteClear = true; // Это булева означает при Тру = чистится консоль при переходе к команде, фолс = выполняется особый сдвиг меню ивысов под меню для редлактирования словаря 
         public Dictionary<string, T> Dic { get; set; } // Это обязхательная констурки без нею нет перехода по меню 
                                                        // public List<Word> WordCollection { get; set; } // Только при работе со словами - не обязательная
                                                        //  public TestStsrtMenuW() : this(null, 0) { } // из за передачи пустоты ломается 3 конструтор ибо работаем с нулем
@@ -49,7 +49,6 @@ namespace LearnMsSql
                         menu.SelectNext();
                         break;
                     case ConsoleKey.Enter:
-                        menu.ExecuteClear(ExecuteClear); // !!!!!!!!!!!!!!!!!!!!!!
                         menu.ExecuteSelected();
                         break;
                     default: return;
@@ -74,10 +73,9 @@ namespace LearnMsSql
             int counnter = 0;
             if (counnter < size)
             {
-                foreach (var item in this.Dic) // Плохо понимаю почему тут указано this вроде надо же указывать base раз это свойство из радительского класса 
+                foreach (var item in this.Dic) // Плохо понимаю почему тут указано this вроде надо же указывать base раз это свойство из радительского класса - т.к. это наследник, то свойство Dic 
                 {
-                    elems[counnter] = new Element(item.Key, item.Value, ExecuteClear);
-                    Console.WriteLine("1");
+                    elems[counnter] = new Element(item.Key, item.Value);
                     counnter++;
                 }
             }
@@ -147,7 +145,7 @@ namespace LearnMsSql
                 foreach (var item in this.Dic)
                 {
                     //elems[counnter] = new Element(item.Key, item.Value, ExecuteClear, WordCollection[counnter]); // при отсутствии передачи колекции слов, заполняя констурктор вылетает ошибка
-                    elems[counnter] = new Element(item.Key, item.Value, ExecuteClear);
+                    elems[counnter] = new Element(item.Key, item.Value);
                     counnter++;
                 }
             }
@@ -168,7 +166,7 @@ namespace LearnMsSql
                         menu.SelectNext();
                         break;
                     case ConsoleKey.Enter:
-                        menu.ExecuteClear(ExecuteClear);
+                       // menu.ExecuteClear(ExecuteClear);
                         menu.ExecuteSelected();
                         break;
                     default: return;

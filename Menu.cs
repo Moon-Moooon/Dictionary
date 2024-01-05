@@ -187,6 +187,7 @@ namespace LearnMsSql
         public int posX { get; set; } 
         public int posY { get; set; }
         public int NumberOfLinsUP { get; set; }
+        public bool executeClear { get; set; } = true;
 
         public Menu(Element[] elems)
         {
@@ -214,13 +215,9 @@ namespace LearnMsSql
             // Console.SetCursorPosition(intX, intY);
         }
 
-        public void ExecuteClear(bool executeClear)
-        {
-            if(!executeClear) SideForMenu(NumberOfLinsUP);
-        }
         public void Draw()
         {
-            Console.SetCursorPosition(posX, posY); // Еще не проверено
+            Console.SetCursorPosition(posX, posY); // И забыл вообще зачем это !Еще не проверено !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             foreach (var element in Elements)
             {
                 element.Print();
@@ -241,8 +238,10 @@ namespace LearnMsSql
             Elements[--Index].IsSelected = true;
         }
 
-        public void ExecuteSelected()
+        public void ExecuteSelected() // Требует теста
         {
+            if (executeClear) Console.Clear();
+            else SideForMenu(NumberOfLinsUP);
             Elements[Index].Execute();
         }
     }
@@ -253,17 +252,17 @@ namespace LearnMsSql
         public ConsoleColor SelectedForeColor { get; set; }
         public ConsoleColor SelectedBackColor { get; set; }
         public bool IsSelected { get; set; }
-        public bool ExecuteClear { get; set; }
+        // public bool ExecuteClear { get; set; } // Это надо будет потом убрать обязательно
 
         Word ParamsOFWord { get; set; }
 
         public GetDelegate.CommandHandler Command;
 
-        public Element(string text, GetDelegate.CommandHandler Comm, bool ExExecuteClear) : this(text, Comm, ExExecuteClear, null) { }
-        public Element(string text, GetDelegate.CommandHandler Comm, bool ExExecuteClear, Word ParamsOFWord)
+        public Element(string text, GetDelegate.CommandHandler Comm) : this(text, Comm, null) { }
+        public Element(string text, GetDelegate.CommandHandler Comm, Word ParamsOFWord)
         {
             this.ParamsOFWord = ParamsOFWord;
-            this.ExecuteClear = ExExecuteClear;
+            // this.ExecuteClear = ExExecuteClear;
             this.Command = Comm;
             this.Text = text;
             this.SelectedForeColor = ConsoleColor.Black;
@@ -285,12 +284,17 @@ namespace LearnMsSql
         public void Execute()
         {
             if (Command == null) return;
-            if (ExecuteClear) Console.Clear();
+            // if (ExecuteClear) Console.Clear();
             Command.Invoke();
         }
     }
 
 }
+
+//public void ExecuteClear(bool executeClear)
+//{
+//    if(!executeClear) SideForMenu(NumberOfLinsUP);
+//}
 
 
 //// Переделка меню с помощью или интерфейса или разных путей наследования - композиция агрегаций - почему это проблема ->
