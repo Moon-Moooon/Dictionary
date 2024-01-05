@@ -52,7 +52,8 @@ namespace LearnMsSql
 
             };
 
-            StartMenuWork start = new(Links);
+            // StartMenuWork start = new(Links);
+            MenuDefolt menuDefolt = new MenuDefolt(Links, 0);
 
         }
 
