@@ -253,15 +253,17 @@ namespace LearnMsSql
         public ConsoleColor SelectedBackColor { get; set; }
         public bool IsSelected { get; set; }
 
-        Word ParamsOFWord { get; set; }
+        Word word { get; set; }
 
         public GetDelegate.CommandHandler Command;
+
         setStructDelegate setStructDelegate;
+
         public Element(string text, setStructDelegate setStructDelegate) : this(text, null) { this.setStructDelegate = setStructDelegate; }
         public Element(string text, GetDelegate.CommandHandler Comm) : this(text, Comm, null) { }
-        public Element(string text, GetDelegate.CommandHandler Comm, Word ParamsOFWord)
+        public Element(string text, GetDelegate.CommandHandler Comm, Word word)
         {
-            this.ParamsOFWord = ParamsOFWord;
+            this.word = word;
             this.Command = Comm;
             this.Text = text;
             this.SelectedForeColor = ConsoleColor.Black;
@@ -280,10 +282,10 @@ namespace LearnMsSql
             Console.ResetColor();
         }
 
-        public void Execute()
+        public void Execute() // Нужно переписать метод на испорлнение при наличии Структуры
         {
-            if (Command == null) return;
-            Command.Invoke();
+            if (Command == null) setStructDelegate.InvokeDeleg(word);  //  Хочу вызываю метод Стурктуры -Ю сам определяет какой делегат заполнен
+            else Command.Invoke();
         }
     }
 

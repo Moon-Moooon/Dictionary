@@ -198,20 +198,20 @@ namespace LearnMsSql
                 //{"4.Вернутсья к главному меню",ShowMenu }
             };
 
-            // TestMenuStruct start = new(Links, list);
+            TestMenuStruct start = new(Links, list);
 
 
-            Dictionary<string, GetDelegate.CommandHandler> Linkss = new Dictionary<string, GetDelegate.CommandHandler>()
-            {
+            //Dictionary<string, GetDelegate.CommandHandler> Linkss = new Dictionary<string, GetDelegate.CommandHandler>()
+            //{
 
-                {"1.добавить слово", AddWord },
-                {"2.Поиск слова", readWord},
-                {"3.Редактировать", SubMenu},
-                {"5.Выход", ToExit}
+            //    {"1.добавить слово", AddWord },
+            //    {"2.Поиск слова", readWord},
+            //    {"3.Редактировать", SubMenu},
+            //    {"5.Выход", ToExit}
 
-            };
+            //};
 
-            MenuDefolt menuDefolt = new(Linkss, true);
+            //MenuDefolt menuDefolt = new(Linkss, true);
         }
 
         public static void ExeminationPolWord (string item)

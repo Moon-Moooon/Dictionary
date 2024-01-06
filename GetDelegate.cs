@@ -22,14 +22,17 @@ namespace LearnMsSql
     {
         public delegate void CommandHandler();
 
-        public delegate Word WordDelegate(out string UpDate);
-
         public delegate void EditWord(Word word);
 
         public EditWord editWord;
 
         public CommandHandler CH;
-        //public static editWord
+
+        public void InvokeDeleg( Word word) //Тест
+        {
+            editWord?.Invoke(word);
+            CH?.Invoke();
+        }
 
     }
 }
