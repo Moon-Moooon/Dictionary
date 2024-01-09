@@ -177,7 +177,7 @@ namespace LearnMsSql
 
         static void Main(string[] args)
         {
-            // 
+            // 11111
             setStructDelegate item = new setStructDelegate();
 
             Word word = new(1, "2", "3");
