@@ -11,7 +11,6 @@ namespace LearnMsSql
 {
 
     /// <summary>
-    ///  Завтра - 1проверить тсполнение элекментов структуры 
     ///  2Написание первого метода
     ///  3Забыл ка кработает сдвиг меню, надо хорошо закоментирвоать и сделать сдвиг - сдвигом в сторону
     ///  4Вспомнить как вообще координаты сохраняются у базового меню - вообще ничего не помню
@@ -32,7 +31,7 @@ namespace LearnMsSql
             Dic = Diction;
             size = Dic.Count;
             this.NumberOfLins = NumberOfLins;
-            menuStart();
+            // menuStart(); - Не все параметры успевают установится, поэтому надо вписывать этот метод в конструтор производный
         }
         public virtual void menuStart()   //Надо убедитя можно ли так делать или нетЁ!!!!!!!!!!!!!!!!!!!!!!!!!!!
         {
@@ -73,7 +72,7 @@ namespace LearnMsSql
         {
             // base.Dic = Diction;
             // base.NumberOfLins = NumberOfLins;
-            // menuStart();
+             menuStart();
         }
 
         public override Element[] FillingElmens() 
@@ -111,7 +110,7 @@ namespace LearnMsSql
             {
                 foreach (var item in this.Dic) // Плохо понимаю почему тут указано this вроде надо же указывать base раз это свойство из радительского класса - т.к. это наследник, то свойство Dic является и так его свойством!
                 {
-                    elems[counnter] = new Element(item.Key, item.Value);
+                    elems[counnter] = new Element(item.Key, item.Value, WordCollection[counnter]);
                     counnter++;
                 }
             }

@@ -259,18 +259,21 @@ namespace LearnMsSql
 
         setStructDelegate setStructDelegate;
 
-        public Element(string text, setStructDelegate setStructDelegate) : this(text, null) { this.setStructDelegate = setStructDelegate; }
-        public Element(string text, GetDelegate.CommandHandler Comm) : this(text, Comm, null) { }
-        public Element(string text, GetDelegate.CommandHandler Comm, Word word)
+        public Element(string text, setStructDelegate setStructDelegate, Word word) : this(text, null) 
         {
-            this.word = word;
+            this.setStructDelegate = setStructDelegate;
+            this.word = word; 
+        }
+        public Element(string text, GetDelegate.CommandHandler Comm)
+        {
+            //this.word = word;
             this.Command = Comm;
             this.Text = text;
             this.SelectedForeColor = ConsoleColor.Black;
             this.SelectedBackColor = ConsoleColor.Gray;
             this.IsSelected = false;
         }
-
+        // public Element(string text, GetDelegate.CommandHandler Comm, Word word)
         public void Print()
         {
             if (this.IsSelected)
