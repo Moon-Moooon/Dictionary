@@ -38,14 +38,5 @@ namespace LearnMsSql
 
             sqlConnection.Close();
         }
-
-        public static void UpdateWord(string rusName, string polName, int IDWord) 
-        {
-            sqlConnection.Open();
-
-            SqlCommand sqlCommand = new SqlCommand($"UPDATE [Words] SET Rus_Name = {rusName}, Pol_Name = {polName} WHERE id = {IDWord}", sqlConnection);
-
-            sqlConnection.Close();
-        }
     }
 }

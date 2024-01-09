@@ -141,99 +141,37 @@ namespace LearnMsSql
 
 
 
-        public static void RedactionWord(Word word) // Рефакт!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! - Вроде норм работает 
+        public static void RedactionWord(Word word)
         {
-            string s = word.doubl();
-             
-            int inY = Console.CursorTop;
-            string polName;
-            string rusName;
+            Console.WriteLine("Redaction W");
+            // word.Print();
+            // Надо передовать истинные ID слов из БД -> Но куда ?
+            // Пускай класс (Word) - где будет авто свойства ID руусс и полл
+            // получается когда мы прочитаем наши слова и будем передовать их в словарь с каждым словом должен быть связан и его объект -> для дальнейшей модификации слова
+            // У нас будет коллекция ввиде списка объекто, при выполнении выбора надо прочитать слово и затем пройтись по коллекции и с выбранным словом по айди редактировать -> вроде норм решение что бы не перегружать меню и его элементы -->
+            // -> А как это то реализовать ? -> пхд нужен DAtaSet
+            // При выполнении запроса в БД сразу будет браться массив с даными и как то передоваться в класс меню :( по другому пока не знаю как лучше сделать
 
-            word.GetName(out rusName, out polName);
+            //Теперь у элемента есть объект типа слово и что дальше -> надо еще перегруз где будет передача объекта класса и то что редактировалось
 
-            string newPolName;
-            string newRusName;
+            // принял класс слова -> вывел форматированную сьроку - 
 
-            string p = polName;
-            string r = rusName;
-            int rightItnerval = r.Length + 3;
-            StringBuilder fullString = new($"{r} - {p}");
-            int pX = 0;
-            bool loop = true;
-            int inx =0;
-            Console.Write(fullString);
-            Console.SetCursorPosition(0, inY);
-            while (loop)
-            {
-                int maxLenght = rightItnerval + p.Length - 1;
-                switch (Console.ReadKey(true).Key) 
-                {
-                    case ConsoleKey.Enter:
-                        // Тут метод спрашивает а надо ли менять 
-                        loop = false;
-                        newPolName = p;
-                        newRusName = r;
-                        Message(r, p, word.IDword);
-                        break;
-                    case ConsoleKey.Backspace:
-                        if(inx >= rightItnerval) p = p.Remove(pX, 1);
-                        else r = r.Remove(inx, 1);
-                        Console.SetCursorPosition(0, inY);
-                        CursorMove.ClearLines(inY, inY, 1);
-                        Console.Write($"{r} - {p}");
-                        if (inx == r.Length)
-                        {
-                            inx--;
-                        }
-                        if ( inx < rightItnerval)
-                        {
-                            rightItnerval--;
-                        }
-                        if (inx == maxLenght)
-                        {
-                            inx--;
-                            pX--;
-                        }
-                        Console.SetCursorPosition(inx, inY);
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        if (inx == 0) break;
-                        if (inx == rightItnerval) inx = r.Length;
-                        if(inx > rightItnerval) pX--;
-                        inx--;
-                        Console.SetCursorPosition(inx, inY);
-                        break;
-                    case ConsoleKey.RightArrow:
-                        if(inx == maxLenght) break;
-                        inx++;
-                        if (inx == r.Length) inx = rightItnerval;
-                        if (inx > rightItnerval) pX++;
 
-                        Console.SetCursorPosition(inx, inY);
-                        break;
-                }
-            }
+            // нет зацикливания будет, выход в меню метод по идее пока будет принемать только объект Слова
 
-            static void Message(string newRusNAme, string newPolName, int IDword)
-            {
-                setStructDelegate item = new setStructDelegate(); // метод который заберает слово а затем пушит в БД
-                item.editWord =;///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                setStructDelegate item1 = new setStructDelegate(); // надо возвращать прошлое меню 
+            //GetDelegate.setStructDelegate item = new GetDelegate.setStructDelegate();
 
-                Console.WriteLine("Уверены что хотите сохранить изменения ?");
+            // item.editWord = word;
 
-                Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
-                {
-                    {"1.Да",item}, // Да - передача нового слова. new Word с передачей параметров 
-                    {"2.Нет",item1}, // нет - возвращение к меню слов.
-                };
-            }
-            //rf rf
-            static void CallUpdateWord(string newRusNAme, string newPolName, int IDword) //Нет теста 
-            {
-                DBModificatet.UpdateWord(newRusNAme, newPolName, IDword);
-            }
-            // Тут ужес помощью Выражений
+            //Dictionary<string, GetDelegate.setStructDelegate> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            //{
+            //    {"1.Редактировать",  item },
+            //    {"2.Удолить пару", RedactionWord(word)},
+            //    {"3.Вернуться к словорю", Back()},
+            //    {"4.Вернутсья к главному меню",ShowMenu }
+            //};
+
+            //StartMenuWork start = new(Links);
 
         }
 
@@ -242,7 +180,7 @@ namespace LearnMsSql
             // 
             setStructDelegate item = new setStructDelegate();
 
-            Word word = new(1, "Спать", "Spac");
+            Word word = new(1, "2", "3");
             item.editWord = RedactionWord;
 
             setStructDelegate item2 = new setStructDelegate();
@@ -251,8 +189,7 @@ namespace LearnMsSql
             item2.CH = SubMenu;
 
             List<Word> list = new List<Word>();
-            list.Add(word);
-            list.Add(word2);
+
             Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
             {
                 {"1.Редактировать",item},
