@@ -21,7 +21,19 @@ namespace LearnMsSql
 
         public void Print()
         {
-            Console.WriteLine($"ID{IDword} \n Русский вариант - {RusName} \n Польский вариант - {PolName}");
+            Console.WriteLine($"Русский вариант - Польский вариант \n{RusName} - {PolName}");
+        }
+
+        public string doubl()
+        {
+            string s = $"{RusName} - {PolName}";
+            return s ;
+        }
+
+        public void GetName(out string RusName, out string PolName )
+        {
+            PolName = this.PolName;
+            RusName = this.RusName;
         }
     }
 }
