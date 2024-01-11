@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static LearnMsSql.setStructDelegate;
+using static System.Collections.Specialized.BitVector32;
 
 namespace LearnMsSql
 {
@@ -15,17 +18,21 @@ namespace LearnMsSql
     ///  3Забыл ка кработает сдвиг меню, надо хорошо закоментирвоать и сделать сдвиг - сдвигом в сторону
     ///  4Вспомнить как вообще координаты сохраняются у базового меню - вообще ничего не помню
     ///  5.Желательна полная очистка файла с мню
+    ///  
+    
+    // Можно попробовать стек  
+
     public class TestStsrtMenuW<T> // Проще просто наследоваться и не делать его обстрактным
     {
         public static int size { get; set; }
         public int NumberOfLins { get; set; } // Это указывается только в тех случаях когда будет вызов подМеню
-        public bool ExecuteClear { get; set; } // Это булева означает при Тру = чистится консоль при переходе к команде, фолс = выполняется особый сдвиг меню ивысов под меню для редлактирования словаря 
+        public byte ExecuteClear { get; set; } // Это булева означает при Тру = чистится консоль при переходе к команде, фолс = выполняется особый сдвиг меню ивысов под меню для редлактирования словаря 
         public Dictionary<string, T> Dic { get; set; } // Это обязхательная констурки без нею нет перехода по меню 
 
         // public Element[] elems = new Element[size]; // При выполнение и переходе в этот клас перед инициализацией кеонструтора отрабатывает создание путого массива, что вызывает ошибки
-        public TestStsrtMenuW(Dictionary<string, T> Diction) : this(Diction, false) { }
-        public TestStsrtMenuW(Dictionary<string, T> Diction, bool ExecuteClear) : this(Diction, 0, ExecuteClear) { }
-        public TestStsrtMenuW(Dictionary<string, T> Diction, int NumberOfLins, bool ExecuteClear)
+        public TestStsrtMenuW(Dictionary<string, T> Diction) : this(Diction, 0) { }
+        public TestStsrtMenuW(Dictionary<string, T> Diction, byte ExecuteClear) : this(Diction, 0, ExecuteClear) { }
+        public TestStsrtMenuW(Dictionary<string, T> Diction, int NumberOfLins, byte ExecuteClear)
         {
             this.ExecuteClear = ExecuteClear;
             Dic = Diction;
@@ -67,8 +74,8 @@ namespace LearnMsSql
     public class MenuDefolt : TestStsrtMenuW<GetDelegate.CommandHandler>
     {
         public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction) : base(Diction) { }
-        public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear) : base(Diction, ExecuteClear) { }
-        public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction, int NumberOfLins, bool ExecuteClear) :base(Diction, NumberOfLins, ExecuteClear) 
+        public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction, byte ExecuteClear) : base(Diction, ExecuteClear) { }
+        public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction, int NumberOfLins, byte ExecuteClear) :base(Diction, NumberOfLins, ExecuteClear) 
         {
             // base.Dic = Diction;
             // base.NumberOfLins = NumberOfLins;
@@ -94,12 +101,20 @@ namespace LearnMsSql
      
     public class TestMenuStruct : TestStsrtMenuW<setStructDelegate>
     {
+        public TestMenuStruct BackMenu { get; set; }
         public List<Word> WordCollection { get; set; }
-        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, List<Word> WordCollection): base(Diction)
+        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, List<Word> WordCollection) : base(Diction, 3)
         {
             this.WordCollection = WordCollection;
-            base.ExecuteClear = false;  //ТУт передолвать не надо, а можно сразу самому установить
-            base.menuStart();
+            // base.ExecuteClear = 0;  //ТУт передолвать не надо, а можно сразу самому установить
+            menuStart();
+        }
+
+        public override void menuStart()   //Надо убедитя можно ли так делать или нетЁ!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        {
+            Element[] elems = FillingElmens(); // Программа понимает что надо реализовывать метод указанный в классе оюъекта инициализации !!!! (Над очетко понять как работает !)
+            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, executeClear = ExecuteClear, backmenu = Program.stac.Pop()};
+            SelectMenu(ref menu);
         }
 
         public override Element[] FillingElmens()
@@ -141,8 +156,6 @@ namespace LearnMsSql
             this.NumberOfLins = NumberOfLins;
             this.Dic = Diction;
             this.ExecuteClear = ExecuteClear;
-            // posX = Console.CursorLeft;
-            // posY = Console.CursorTop;
             size = Dic.Count;
             menuStart();
         }
@@ -161,8 +174,8 @@ namespace LearnMsSql
                 }
             }
 
-            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, executeClear = ExecuteClear };
-            while (true)
+            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins }; // executeClear = ExecuteClear
+            while (true)    
             {
                 menu.Draw();
 

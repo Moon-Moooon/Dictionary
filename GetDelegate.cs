@@ -18,42 +18,43 @@ namespace LearnMsSql
         public delegate void EditWord(Word word);
 
     }
-    
 
-    interface Isetstruct<T>
-    {
+    //interface Isetstruct
+    //{
+    //   // Action action { get; set; }
+    //    public void InvokeDeleg(Action action)
+    //    {
+    //        action?.Invoke();
+    //    }
+    //}
 
-    }
-
+    // Видимо надо переписать в элементе параметр -! делегат не просто указатель --- можно кудато диструкцию элемента делать  Но зачем?
+    // ed
+    // прослойка которая может попросить Элемент - а затем е=
     public struct setStructDelegate
     {
         public delegate void CommandHandler();
 
         public delegate void EditWord(Word word);
 
-        public delegate T GenericEditWord<T>(Word word);
-
         public delegate Dictionary<string, setStructDelegate> BackMenu();
 
-        public delegate void UpWord(string rusName, string polName, int IDWord);
-
-        public BackMenu menu;
+        public BackMenu backMenu;
 
         public EditWord editWord;
 
-        public GenericEditWord<string> GenericeditWord;
+        // public GenericEditWord<string> GenericeditWord;
 
         public CommandHandler CH;
 
-        public void InvokeDeleg( Word word) //слишком много надо передовать параметров при вызове. - Идиотизм 
-        {
-            menu?.Invoke();
-            editWord?.Invoke(word);
-            CH?.Invoke();
-            GenericeditWord?.Invoke(word);
-            // Up
-        }
 
+
+        public void InvokeDeleg(Element element)
+        {
+            backMenu?.Invoke(); // Не понимаю где меню должно хранится 
+            editWord?.Invoke(element.word);
+            CH?.Invoke();
+        }
 
         // 1.Обернуть реализацию струтуры в интерфейс с 1 методом 
         // В идеале надо добится что при создании объекта (пока что !) структуры и инициализации поля 1 или n полей - в объекте хранилось бы только заполненные поля и не было бы пустых

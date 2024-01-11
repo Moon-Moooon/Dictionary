@@ -187,8 +187,8 @@ namespace LearnMsSql
         public int posX { get; set; } 
         public int posY { get; set; }
         public int NumberOfLinsUP { get; set; }
-        public bool executeClear { get; set; }
-
+        public byte executeClear { get; set; } // Тестовый варинт для работы "Esc"
+        public TestMenuStruct backmenu { get; set; } // Происходит бесконченая инициализация когда передаю в конструктор --
         public Menu(Element[] elems)
         {
             this.Index = 0;
@@ -237,12 +237,18 @@ namespace LearnMsSql
             Elements[Index].IsSelected = false;
             Elements[--Index].IsSelected = true;
         }
-
+        // false, 0 - Cons.clear
+        // true, 2 -  SideForMenu
+        // 3 - Это будет вызов команды ESC тест
         public void ExecuteSelected() // Требует теста
         {
-            if (!executeClear) Console.Clear();
-            else SideForMenu(NumberOfLinsUP);
-            Elements[Index].Execute();
+            if (executeClear == 0 || executeClear == 3) Console.Clear();
+            if (executeClear == 2)SideForMenu(NumberOfLinsUP);
+            if (executeClear == 3) ;
+            Elements[Index].Execute(Elements[Index]); // Требует теста
+            //if (!executeClear) Console.Clear();
+            //else SideForMenu(NumberOfLinsUP);
+            //Elements[Index].Execute(Elements[Index]); // Требует теста
         }
     }
 
@@ -253,11 +259,11 @@ namespace LearnMsSql
         public ConsoleColor SelectedBackColor { get; set; }
         public bool IsSelected { get; set; }
 
-        Word word { get; set; }
+        public Word word { get; set; }
 
         public GetDelegate.CommandHandler Command;
 
-        setStructDelegate setStructDelegate;
+        public setStructDelegate setStructDelegate;
 
         public Element(string text, setStructDelegate setStructDelegate, Word word) : this(text, null) 
         {
@@ -285,9 +291,9 @@ namespace LearnMsSql
             Console.ResetColor();
         }
 
-        public void Execute() // Нужно переписать метод на испорлнение при наличии Структуры
+        public void Execute(Element element) // Нужно переписать метод на испорлнение при наличии Структуры
         {
-            if (Command == null) setStructDelegate.InvokeDeleg(word);  //  Хочу вызываю метод Стурктуры -Ю сам определяет какой делегат заполнен
+            if (Command == null) setStructDelegate.InvokeDeleg(element);  //  Хочу вызываю метод Стурктуры -Ю сам определяет какой делегат заполнен
             else Command.Invoke();
         }
     }

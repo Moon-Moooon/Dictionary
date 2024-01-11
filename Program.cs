@@ -5,7 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Protocols;
 using System.Text;
 using System.Drawing;
-
+using Microsoft.Identity.Client;
 
 namespace LearnMsSql
 {
@@ -22,13 +22,12 @@ namespace LearnMsSql
     // какого черта методом Read разрешено пользоваться 1 раз а после окончания цикла все :(
     // Ступенчатый цикл где конечное и начальное значение изменяется 
     // Баг вывода меню если после большого набора меню вызывать маленькой
-    
+
     #region // Что надо сделать
     //Поиск по слову, доделать поиск как на русском так и на польском
     // Необходимо полностью продумать отрисовку меню !
     // 
     #endregion
-
     internal class Program
     {
         #region
@@ -41,8 +40,18 @@ namespace LearnMsSql
          */
         #endregion
 
+        public static Stack<TestMenuStruct> stac = new Stack<TestMenuStruct>(6);
 
+        public delegate TestMenuStruct DelegMenu();
+        
+        public static void test1(Stack<TestMenuStruct> stac, TestMenuStruct menu)
+        {
 
+            stac.Push(menu);
+
+        }
+
+        // Все выше это тест
         public static void ShowMenu()
         {
             Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
@@ -114,10 +123,12 @@ namespace LearnMsSql
 
                 string WordRow = $"{rusWord} - {polName}";
 
-                Dicti.Add(WordRow, stub);
+                Dicti.Add(WordRow, SubMenu);
 
                 WordCollection.Add(new Word(0,$"{rusWord}", $"{polName}"));
             }
+
+            
 
             StartMenuWork start = new(Dicti, false, 2, WordCollection); //!!!!!!!!!!!!!
             // Магическое число, это число (не индекс!!) строк
@@ -126,6 +137,8 @@ namespace LearnMsSql
 
         public static void SubMenu()
         {
+
+           // TestMenuStruct linkRedaction = new();
 
             Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
             {
@@ -139,111 +152,12 @@ namespace LearnMsSql
             StartMenuWork start = new(Links);
         }
 
-
-
-        public static void RedactionWord(Word word) // Рефакт!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! - Вроде норм работает 
+        public static void TestMetod()
         {
-            string s = word.doubl();
-             
-            int inY = Console.CursorTop;
-            string polName;
-            string rusName;
-
-            word.GetName(out rusName, out polName);
-
-            string newPolName;
-            string newRusName;
-
-            string p = polName;
-            string r = rusName;
-            int rightItnerval = r.Length + 3;
-            StringBuilder fullString = new($"{r} - {p}");
-            int pX = 0;
-            bool loop = true;
-            int inx =0;
-            Console.Write(fullString);
-            Console.SetCursorPosition(0, inY);
-            while (loop)
-            {
-                int maxLenght = rightItnerval + p.Length - 1;
-                switch (Console.ReadKey(true).Key) 
-                {
-                    case ConsoleKey.Enter:
-                        // Тут метод спрашивает а надо ли менять 
-                        loop = false;
-                        newPolName = p;
-                        newRusName = r;
-                        Message(r, p, word.IDword);
-                        break;
-                    case ConsoleKey.Backspace:
-                        if(inx >= rightItnerval) p = p.Remove(pX, 1);
-                        else r = r.Remove(inx, 1);
-                        Console.SetCursorPosition(0, inY);
-                        CursorMove.ClearLines(inY, inY, 1);
-                        Console.Write($"{r} - {p}");
-                        if (inx == r.Length)
-                        {
-                            inx--;
-                        }
-                        if ( inx < rightItnerval)
-                        {
-                            rightItnerval--;
-                        }
-                        if (inx == maxLenght)
-                        {
-                            inx--;
-                            pX--;
-                        }
-                        Console.SetCursorPosition(inx, inY);
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        if (inx == 0) break;
-                        if (inx == rightItnerval) inx = r.Length;
-                        if(inx > rightItnerval) pX--;
-                        inx--;
-                        Console.SetCursorPosition(inx, inY);
-                        break;
-                    case ConsoleKey.RightArrow:
-                        if(inx == maxLenght) break;
-                        inx++;
-                        if (inx == r.Length) inx = rightItnerval;
-                        if (inx > rightItnerval) pX++;
-
-                        Console.SetCursorPosition(inx, inY);
-                        break;
-                }
-            }
-
-            static void Message(string newRusNAme, string newPolName, int IDword)
-            {
-                setStructDelegate item = new setStructDelegate(); // метод который заберает слово а затем пушит в БД
-                item.editWord =;///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                setStructDelegate item1 = new setStructDelegate(); // надо возвращать прошлое меню 
-
-                Console.WriteLine("Уверены что хотите сохранить изменения ?");
-
-                Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
-                {
-                    {"1.Да",item}, // Да - передача нового слова. new Word с передачей параметров 
-                    {"2.Нет",item1}, // нет - возвращение к меню слов.
-                };
-            }
-            //rf rf
-            static void CallUpdateWord(string newRusNAme, string newPolName, int IDword) //Нет теста 
-            {
-                DBModificatet.UpdateWord(newRusNAme, newPolName, IDword);
-            }
-            // Тут ужес помощью Выражений
-
-        }
-
-        static void Main(string[] args)
-        {
-            // 11111
             setStructDelegate item = new setStructDelegate();
 
             Word word = new(1, "Спать", "Spac");
-            item.editWord = RedactionWord;
+            item.editWord = Word.RedactionWord;
 
             setStructDelegate item2 = new setStructDelegate();
 
@@ -260,21 +174,12 @@ namespace LearnMsSql
                 //{"3.Вернуться к словорю", Back()},
                 //{"4.Вернутсья к главному меню",ShowMenu }
             };
+        }
 
-            TestMenuStruct start = new(Links, list);
 
-
-            //Dictionary<string, GetDelegate.CommandHandler> Linkss = new Dictionary<string, GetDelegate.CommandHandler>()
-            //{
-
-            //    {"1.добавить слово", AddWord },
-            //    {"2.Поиск слова", readWord},
-            //    {"3.Редактировать", SubMenu},
-            //    {"5.Выход", ToExit}
-
-            //};
-
-            //MenuDefolt menuDefolt = new(Linkss, true);
+        static void Main(string[] args)
+        {
+            ShowMenu();
         }
 
         public static void ExeminationPolWord (string item)
