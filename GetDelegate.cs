@@ -9,24 +9,8 @@ namespace LearnMsSql
 {
     // Необходимо вынести из класса делегаты, нет необходимости чтоб они были там + уменьшит строку вызова делегата 
     // Возмодно стоит вынести структуру за пределы этого файла ?
-    public class GetDelegate
-    {
-        public delegate void CommandHandler();
 
-        public delegate Word WordDelegate(out string UpDate);
-
-        public delegate void EditWord(Word word);
-
-    }
-
-    //interface Isetstruct
-    //{
-    //   // Action action { get; set; }
-    //    public void InvokeDeleg(Action action)
-    //    {
-    //        action?.Invoke();
-    //    }
-    //}
+    public delegate void CommandHandler();
 
     // Видимо надо переписать в элементе параметр -! делегат не просто указатель --- можно кудато диструкцию элемента делать  Но зачем?
     // ed

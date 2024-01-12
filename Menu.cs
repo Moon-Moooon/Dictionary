@@ -25,11 +25,11 @@ namespace LearnMsSql
 
         //public bool ExecuteClear;
         //// static Element[] elems { get; set; }
-        //public Dictionary<string, GetDelegate.CommandHandler> Dic { get; set; }
+        //public Dictionary<string, CommandHandler> Dic { get; set; }
         //public List<Word> WordCollection { get; set; }
-        //public MenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction) : this(Diction, true) { }
-        //public MenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear) : this(Diction, true, 0, null) { }
-        //public MenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear, int NumberOfLins, List<Word> WordCollection) // перегрузка не продумана
+        //public MenuWork(Dictionary<string, CommandHandler> Diction) : this(Diction, true) { }
+        //public MenuWork(Dictionary<string, CommandHandler> Diction, bool ExecuteClear) : this(Diction, true, 0, null) { }
+        //public MenuWork(Dictionary<string, CommandHandler> Diction, bool ExecuteClear, int NumberOfLins, List<Word> WordCollection) // перегрузка не продумана
         //{
         //    this.WordCollection = WordCollection;
         //    this.NumberOfLins = NumberOfLins;
@@ -146,9 +146,9 @@ namespace LearnMsSql
 
         //        Word ParamsOFWord { get; set; }
 
-        //        public GetDelegate.CommandHandler Command;
+        //        public CommandHandler Command;
 
-        //        public Element(string text, GetDelegate.CommandHandler Comm, bool ExExecuteClear, Word ParamsOFWord)
+        //        public Element(string text, CommandHandler Comm, bool ExExecuteClear, Word ParamsOFWord)
         //        {
         //            this.ParamsOFWord = ParamsOFWord;
         //            this.ExecuteClear = ExExecuteClear;
@@ -261,7 +261,7 @@ namespace LearnMsSql
 
         public Word word { get; set; }
 
-        public GetDelegate.CommandHandler Command;
+        public CommandHandler Command;
 
         public setStructDelegate setStructDelegate;
 
@@ -270,7 +270,7 @@ namespace LearnMsSql
             this.setStructDelegate = setStructDelegate;
             this.word = word; 
         }
-        public Element(string text, GetDelegate.CommandHandler Comm)
+        public Element(string text, CommandHandler Comm)
         {
             //this.word = word;
             this.Command = Comm;
@@ -279,7 +279,7 @@ namespace LearnMsSql
             this.SelectedBackColor = ConsoleColor.Gray;
             this.IsSelected = false;
         }
-        // public Element(string text, GetDelegate.CommandHandler Comm, Word word)
+        // public Element(string text, CommandHandler Comm, Word word)
         public void Print()
         {
             if (this.IsSelected)
@@ -315,11 +315,11 @@ namespace LearnMsSql
 
 //public bool ExecuteClear;
 //// static Element[] elems { get; set; }
-//public Dictionary<string, GetDelegate.CommandHandler> Dic { get; set; }
+//public Dictionary<string, CommandHandler> Dic { get; set; }
 //public  List<Word> WordCollection { get; set; }
-//public MenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction) : this(Diction, true) { }
-//public MenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear) : this(Diction, true, 0, null) { }
-//public MenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear, int NumberOfLins, List<Word> WordCollection) // перегрузка не продумана
+//public MenuWork(Dictionary<string, CommandHandler> Diction) : this(Diction, true) { }
+//public MenuWork(Dictionary<string, CommandHandler> Diction, bool ExecuteClear) : this(Diction, true, 0, null) { }
+//public MenuWork(Dictionary<string, CommandHandler> Diction, bool ExecuteClear, int NumberOfLins, List<Word> WordCollection) // перегрузка не продумана
 //{
 //    this.WordCollection = WordCollection;
 //    this.NumberOfLins = NumberOfLins;

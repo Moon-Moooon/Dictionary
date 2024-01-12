@@ -22,7 +22,7 @@ namespace LearnMsSql
     
     // Можно попробовать стек  
 
-    public class TestStsrtMenuW<T> // Проще просто наследоваться и не делать его обстрактным
+    public class MenuBase<T> // Проще просто наследоваться и не делать его обстрактным
     {
         public static int size { get; set; }
         public int NumberOfLins { get; set; } // Это указывается только в тех случаях когда будет вызов подМеню
@@ -30,9 +30,9 @@ namespace LearnMsSql
         public Dictionary<string, T> Dic { get; set; } // Это обязхательная констурки без нею нет перехода по меню 
 
         // public Element[] elems = new Element[size]; // При выполнение и переходе в этот клас перед инициализацией кеонструтора отрабатывает создание путого массива, что вызывает ошибки
-        public TestStsrtMenuW(Dictionary<string, T> Diction) : this(Diction, 0) { }
-        public TestStsrtMenuW(Dictionary<string, T> Diction, byte ExecuteClear) : this(Diction, 0, ExecuteClear) { }
-        public TestStsrtMenuW(Dictionary<string, T> Diction, int NumberOfLins, byte ExecuteClear)
+        public MenuBase(Dictionary<string, T> Diction) : this(Diction, 0) { }
+        public MenuBase(Dictionary<string, T> Diction, byte ExecuteClear) : this(Diction, 0, ExecuteClear) { }
+        public MenuBase(Dictionary<string, T> Diction, int NumberOfLins, byte ExecuteClear)
         {
             this.ExecuteClear = ExecuteClear;
             Dic = Diction;
@@ -71,11 +71,11 @@ namespace LearnMsSql
         }
     }
 
-    public class MenuDefolt : TestStsrtMenuW<GetDelegate.CommandHandler>
+    public class MenuDelegVoid : MenuBase<CommandHandler>
     {
-        public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction) : base(Diction) { }
-        public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction, byte ExecuteClear) : base(Diction, ExecuteClear) { }
-        public MenuDefolt(Dictionary<string, GetDelegate.CommandHandler> Diction, int NumberOfLins, byte ExecuteClear) :base(Diction, NumberOfLins, ExecuteClear) 
+        public MenuDelegVoid(Dictionary<string, CommandHandler> Diction) : base(Diction) { }
+        public MenuDelegVoid(Dictionary<string, CommandHandler> Diction, byte ExecuteClear) : base(Diction, ExecuteClear) { }
+        public MenuDelegVoid(Dictionary<string, CommandHandler> Diction, int NumberOfLins, byte ExecuteClear) :base(Diction, NumberOfLins, ExecuteClear) 
         {
             // base.Dic = Diction;
             // base.NumberOfLins = NumberOfLins;
@@ -99,21 +99,22 @@ namespace LearnMsSql
         }
     }
      
-    public class TestMenuStruct : TestStsrtMenuW<setStructDelegate>
+    public class TestMenuStruct : MenuBase<setStructDelegate>
     {
         public TestMenuStruct BackMenu { get; set; }
         public List<Word> WordCollection { get; set; }
-        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, List<Word> WordCollection) : base(Diction, 3)
+        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, List<Word> WordCollection, byte ExecuteClear) : this(Diction, WordCollection, 0, ExecuteClear) { }
+        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, List<Word> WordCollection, int NumberOfLins, byte ExecuteClear ) : base(Diction, NumberOfLins, ExecuteClear)
         {
             this.WordCollection = WordCollection;
-            // base.ExecuteClear = 0;  //ТУт передолвать не надо, а можно сразу самому установить
+            // base.ExecuteClear = 0;  //ТУт передолвать
             menuStart();
         }
 
-        public override void menuStart()   //Надо убедитя можно ли так делать или нетЁ!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        public override void menuStart()
         {
-            Element[] elems = FillingElmens(); // Программа понимает что надо реализовывать метод указанный в классе оюъекта инициализации !!!! (Над очетко понять как работает !)
-            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, executeClear = ExecuteClear, backmenu = Program.stac.Pop()};
+            Element[] elems = FillingElmens();  
+            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, executeClear = ExecuteClear};
             SelectMenu(ref menu);
         }
 
@@ -146,11 +147,11 @@ namespace LearnMsSql
 
         public bool ExecuteClear;
         // static Element[] elems { get; set; }
-        public Dictionary<string, GetDelegate.CommandHandler> Dic { get; set; }
+        public Dictionary<string, CommandHandler> Dic { get; set; }
         public List<Word> WordCollection { get; set; }
-        public StartMenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction) : this(Diction, true) { }
-        public StartMenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear) : this(Diction, true, 0, null) { }
-        public StartMenuWork(Dictionary<string, GetDelegate.CommandHandler> Diction, bool ExecuteClear, int NumberOfLins, List<Word> WordCollection) // перегрузка не продумана
+        public StartMenuWork(Dictionary<string, CommandHandler> Diction) : this(Diction, true) { }
+        public StartMenuWork(Dictionary<string, CommandHandler> Diction, bool ExecuteClear) : this(Diction, true, 0, null) { }
+        public StartMenuWork(Dictionary<string, CommandHandler> Diction, bool ExecuteClear, int NumberOfLins, List<Word> WordCollection) // перегрузка не продумана
         {
             this.WordCollection = WordCollection;
             this.NumberOfLins = NumberOfLins;

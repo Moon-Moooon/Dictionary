@@ -54,7 +54,7 @@ namespace LearnMsSql
         // Все выше это тест
         public static void ShowMenu()
         {
-            Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
             {
 
                 {"1.добавить слово", AddWord },
@@ -74,7 +74,7 @@ namespace LearnMsSql
             // если вызов на русском -> обработать что это русский -> Формировать запрос в БД
             // Поиск будет по не полному слвоу 
             // Есть проблема с тем что вызывая меню выбора на каком языке искать нужно по факту 2 одинаковы реализации вызова проверки слов на язык
-            Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
             {
 
                 {"1.Поск на русском", readWord },
@@ -87,7 +87,7 @@ namespace LearnMsSql
 
         public static void stub() 
         { 
-            var Dicti = new Dictionary<string, GetDelegate.CommandHandler>()
+            var Dicti = new Dictionary<string, CommandHandler>()
             { 
                 {"Заглушка",stub }
             };
@@ -102,7 +102,7 @@ namespace LearnMsSql
             Console.WriteLine("Введите слово на русском\n >");
             // string word = Console.ReadLine();
             // ExeminationRusWord(word);
-            var Dicti = new Dictionary<string, GetDelegate.CommandHandler>();
+            var Dicti = new Dictionary<string, CommandHandler>();
             
             //var DateList = new List<string>();
 
@@ -140,7 +140,7 @@ namespace LearnMsSql
 
            // TestMenuStruct linkRedaction = new();
 
-            Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
             {
 
                 {"1.Редактировать", stub },
@@ -302,7 +302,7 @@ namespace LearnMsSql
         {
             Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке.\n Хотите добавить слово еще раз ?");
 
-            Dictionary<string, GetDelegate.CommandHandler> Links = new Dictionary<string, GetDelegate.CommandHandler>()
+            Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
             {
                 {"1.Да", AddWord },
                 { "2.Нет", ShowMenu}
