@@ -19,7 +19,7 @@ namespace LearnMsSql
     ///  4Вспомнить как вообще координаты сохраняются у базового меню - вообще ничего не помню
     ///  5.Желательна полная очистка файла с мню
     ///  
-    
+    // При вызове конструтора родителя приходим к реализации Родительского СТардующегоконструктора а не наследника
     // Можно попробовать стек  
 
     public class MenuBase<T> // Проще просто наследоваться и не делать его обстрактным
@@ -38,16 +38,21 @@ namespace LearnMsSql
             Dic = Diction;
             size = Dic.Count;
             this.NumberOfLins = NumberOfLins;
-            // menuStart(); - Не все параметры успевают установится, поэтому надо вписывать этот метод в конструтор производный
+            menuStart();  //Не все параметры успевают установится, поэтому надо вписывать этот метод в конструтор производный 
         }
         public virtual void menuStart()   //Надо убедитя можно ли так делать или нетЁ!!!!!!!!!!!!!!!!!!!!!!!!!!!
         {
             Element[] elems = FillingElmens(); // Программа понимает что надо реализовывать метод указанный в классе оюъекта инициализации !!!! (Над очетко понять как работает !)
-            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, executeClear = ExecuteClear };
+            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, ExecuteClear = ExecuteClear };
             SelectMenu(ref menu);
         }
 
-        public virtual Element[] FillingElmens() { Element[] elems = new Element[size];return  elems;}
+        public virtual Element[] FillingElmens() 
+        {
+            Element[] elems = new Element[size];
+            
+            return  elems;
+        }
         
         public void SelectMenu(ref Menu menu) // Можно и это метод сделать виртуальными или каккой то отдельный сигмент (Происходящая очистка при выполнении нажатии) 
         {
@@ -73,13 +78,14 @@ namespace LearnMsSql
 
     public class MenuDelegVoid : MenuBase<CommandHandler>
     {
-        public MenuDelegVoid(Dictionary<string, CommandHandler> Diction) : base(Diction) { }
+        public List<Word> WordCollection { get; set; } // В обоих наследниках есть это свойство !!!!
         public MenuDelegVoid(Dictionary<string, CommandHandler> Diction, byte ExecuteClear) : base(Diction, ExecuteClear) { }
-        public MenuDelegVoid(Dictionary<string, CommandHandler> Diction, int NumberOfLins, byte ExecuteClear) :base(Diction, NumberOfLins, ExecuteClear) 
+        public MenuDelegVoid(Dictionary<string, CommandHandler> Diction, int NumberOfLins, byte ExecuteClear) : base(Diction, NumberOfLins, ExecuteClear) { }
+        public MenuDelegVoid(Dictionary<string, CommandHandler> Diction, byte ExecuteClear, List<Word> WordCollection) : this(Diction, 0, ExecuteClear, WordCollection) { }
+        public MenuDelegVoid(Dictionary<string, CommandHandler> Diction, int NumberOfLins, byte ExecuteClear, List<Word> WordCollection) : base(Diction, NumberOfLins, ExecuteClear)
         {
-            // base.Dic = Diction;
-            // base.NumberOfLins = NumberOfLins;
-             menuStart();
+            this.WordCollection = WordCollection;   
+            menuStart();
         }
 
         public override Element[] FillingElmens() 
@@ -103,20 +109,35 @@ namespace LearnMsSql
     {
         public TestMenuStruct BackMenu { get; set; }
         public List<Word> WordCollection { get; set; }
-        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, List<Word> WordCollection, byte ExecuteClear) : this(Diction, WordCollection, 0, ExecuteClear) { }
-        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, List<Word> WordCollection, int NumberOfLins, byte ExecuteClear ) : base(Diction, NumberOfLins, ExecuteClear)
+        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, byte ExecuteClear) :base(Diction, ExecuteClear) { }
+        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, byte ExecuteClear, int NumberOfLins) : base(Diction, NumberOfLins, ExecuteClear) { }
+        public TestMenuStruct(Dictionary<string, setStructDelegate> Diction, byte ExecuteClear, int NumberOfLins, List<Word> WordCollection) : base(Diction, NumberOfLins, ExecuteClear)
         {
             this.WordCollection = WordCollection;
             // base.ExecuteClear = 0;  //ТУт передолвать
             menuStart();
         }
 
+        // Проверку на наличие 
         public override void menuStart()
         {
-            Element[] elems = FillingElmens();  
-            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, executeClear = ExecuteClear};
+            
+            Element[] elems = FillingElmens();
+
+            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, ExecuteClear = ExecuteClear};
             SelectMenu(ref menu);
         }
+
+        //public Element[] ChoiserElem()
+        //{
+        //    if(WordCollection == null)
+        //    {
+        //        return 
+        //    }
+
+        //    return 
+        //}
+           
 
         public override Element[] FillingElmens()
         {
@@ -126,13 +147,30 @@ namespace LearnMsSql
             {
                 foreach (var item in this.Dic) // Плохо понимаю почему тут указано this вроде надо же указывать base раз это свойство из радительского класса - т.к. это наследник, то свойство Dic является и так его свойством!
                 {
+
                     elems[counnter] = new Element(item.Key, item.Value, WordCollection[counnter]);
                     counnter++;
                 }
             }
-
             return elems;
         }
+
+        //public Element[] FillingElmensWord()
+        //{
+        //    Element[] elems = new Element[size];
+        //    int counnter = 0;
+        //    if (counnter < size)
+        //    {
+        //        foreach (var item in this.Dic) // Плохо понимаю почему тут указано this вроде надо же указывать base раз это свойство из радительского класса - т.к. это наследник, то свойство Dic является и так его свойством!
+        //        {
+        //            elems[counnter] = new Element(item.Key, item.Value, WordCollection[counnter]);
+        //            counnter++;
+        //        }
+        //    }
+        //    return elems;
+        //}
+
+
     }
 
     internal class StartMenuWork
@@ -175,7 +213,7 @@ namespace LearnMsSql
                 }
             }
 
-            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins }; // executeClear = ExecuteClear
+            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins }; // ExecuteClear = ExecuteClear
             while (true)    
             {
                 menu.Draw();

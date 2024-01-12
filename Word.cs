@@ -42,8 +42,8 @@ namespace LearnMsSql
             PolName = this.PolName;
             RusName = this.RusName;
         }
-
-        public static void RedactionWord(Word word)
+        // Надо хорошо подумать как это лучше сделать !
+        public static void RedactionWord(Word word) // Тестовый вариант при полной сборке билда, Допустить вариант не передачи слова
         {
             int inY = Console.CursorTop;
             string p;
@@ -111,7 +111,7 @@ namespace LearnMsSql
                     {"2.Нет - недописан",link2}, // нет - возвращение к меню слов.
             };
             List<Word> words = new List<Word>();
-            TestMenuStruct test2 = new(Links, words); 
+            // TestMenuStruct test2 = new(Links, words); 
         }
 
         public static void CallUpdateWord(Word newWord)

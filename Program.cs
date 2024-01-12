@@ -23,6 +23,9 @@ namespace LearnMsSql
     // Ступенчатый цикл где конечное и начальное значение изменяется 
     // Баг вывода меню если после большого набора меню вызывать маленькой
 
+
+    // Разделе
+
     #region // Что надо сделать
     //Поиск по слову, доделать поиск как на русском так и на польском
     // Необходимо полностью продумать отрисовку меню !
@@ -112,8 +115,13 @@ namespace LearnMsSql
 
             int counRows = 0;
 
+            static setStructDelegate generateObjStruct() // Не используется
+            {
+                setStructDelegate word = new setStructDelegate();
+                return word;
+            }
 
-            while (Date.Read())
+            while (Date.Read()) 
             {
                 counRows++;
 
@@ -125,31 +133,33 @@ namespace LearnMsSql
 
                 Dicti.Add(WordRow, SubMenu);
 
-                WordCollection.Add(new Word(0,$"{rusWord}", $"{polName}"));
+                WordCollection.Add(new Word(0,$"{rusWord}", $"{polName}")); // Как происходит Неявный даункаст?
             }
 
             
-
-            StartMenuWork start = new(Dicti, false, 2, WordCollection); //!!!!!!!!!!!!!
-            // Магическое число, это число (не индекс!!) строк
-
+            // Чистить строку а затем выводим весб метод
+            MenuDelegVoid start = new(Dicti, 2, 2, WordCollection);
         }
 
-        public static void SubMenu()
+        public static void SubMenu() // не корректно происходит вложение под меню
         {
 
-           // TestMenuStruct linkRedaction = new();
+            // TestMenuStruct linkRedaction = new();
 
-            Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
+            setStructDelegate link1 = new setStructDelegate();
+            link1.editWord = Word.RedactionWord;
+            setStructDelegate link2 = new setStructDelegate();
+            link2.editWord = Word.RedactionWord;
+
+            Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
             {
-
-                {"1.Редактировать", stub },
-                {"2.Удолить пару", stub},
-                {"3.Вернуться к словорю", stub},
-                {"4.Вернутсья к главному меню",stub }
+                {"1.Редактировать", link1 },
+                {"2.Удолить пару", link2}
+               // {"3.Вернуться к словорю", stub},
+                //{"4.Вернутсья к главному меню",stub }
             };
 
-            StartMenuWork start = new(Links);
+            TestMenuStruct start = new(Links,2);
         }
 
         public static void TestMetod()

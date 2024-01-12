@@ -187,7 +187,7 @@ namespace LearnMsSql
         public int posX { get; set; } 
         public int posY { get; set; }
         public int NumberOfLinsUP { get; set; }
-        public byte executeClear { get; set; } // Тестовый варинт для работы "Esc"
+        public byte ExecuteClear { get; set; } // Тестовый варинт для работы "Esc"
         public TestMenuStruct backmenu { get; set; } // Происходит бесконченая инициализация когда передаю в конструктор --
         public Menu(Element[] elems)
         {
@@ -211,11 +211,11 @@ namespace LearnMsSql
             int NumbRows = AddTop + Elements.Length - SorseTop;
             CursorMove.TextMoev(NumbRows, SorseTop, TargetTop);
             Console.SetCursorPosition(intX, SorseTop);
-            Program.SubMenu();
+            //Program.SubMenu();
             // Console.SetCursorPosition(intX, intY);
         }
 
-        public void Draw()
+        public void Draw() // 
         {
             Console.SetCursorPosition(posX, posY); // И забыл вообще зачем это !Еще не проверено !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             foreach (var element in Elements)
@@ -242,39 +242,46 @@ namespace LearnMsSql
         // 3 - Это будет вызов команды ESC тест
         public void ExecuteSelected() // Требует теста
         {
-            if (executeClear == 0 || executeClear == 3) Console.Clear();
-            if (executeClear == 2)SideForMenu(NumberOfLinsUP);
-            if (executeClear == 3) ;
+            if (ExecuteClear == 0 || ExecuteClear == 3) Console.Clear();
+            if (ExecuteClear == 2)SideForMenu(NumberOfLinsUP);
+            if (ExecuteClear == 3) ;
             Elements[Index].Execute(Elements[Index]); // Требует теста
-            //if (!executeClear) Console.Clear();
+            //if (!ExecuteClear) Console.Clear();
             //else SideForMenu(NumberOfLinsUP);
             //Elements[Index].Execute(Elements[Index]); // Требует теста
         }
     }
 
+    // РАзделить отвентственность класс на Элемент который отвечает за технику отображения как части меню, и класс который будет отвественнен за логику !!!!!!!!!!!!!!!!!
     public class Element // Через диструктор можно мб ламать объект и получать его команду 
     {
-        public string Text { get; set; }
+        //инициализация объекта информации  InfarmationNode<T> // объект с текстом и свойством указателем на исполняемый метод
+        public string Text { get; set; } // --> Тут должен хранитсяобъект
         public ConsoleColor SelectedForeColor { get; set; }
         public ConsoleColor SelectedBackColor { get; set; }
         public bool IsSelected { get; set; }
 
         public Word word { get; set; }
 
-        public CommandHandler Command;
+        public CommandHandler Command { get; set; }
 
-        public setStructDelegate setStructDelegate;
-
-        public Element(string text, setStructDelegate setStructDelegate, Word word) : this(text, null) 
+        public setStructDelegate setStructDelegate; // Пока не юзается, или не прошло тест
+        public Element(string text, CommandHandler Comm) : this(text) 
+        {
+            this.Command = Comm; 
+        }
+        public Element(string text, setStructDelegate setStructDelegate) : this(text) 
+        {
+            this.setStructDelegate = setStructDelegate;  
+        }
+        public Element(string text, setStructDelegate setStructDelegate, Word word) : this(text) 
         {
             this.setStructDelegate = setStructDelegate;
             this.word = word; 
         }
-        public Element(string text, CommandHandler Comm)
+        public Element(string text)
         {
-            //this.word = word;
-            this.Command = Comm;
-            this.Text = text;
+            this.Text = text; // InformatioObject
             this.SelectedForeColor = ConsoleColor.Black;
             this.SelectedBackColor = ConsoleColor.Gray;
             this.IsSelected = false;
@@ -300,9 +307,9 @@ namespace LearnMsSql
 
 }
 
-//public void ExecuteClear(bool executeClear)
+//public void ExecuteClear(bool ExecuteClear)
 //{
-//    if(!executeClear) SideForMenu(NumberOfLinsUP);
+//    if(!ExecuteClear) SideForMenu(NumberOfLinsUP);
 //}
 
 
