@@ -99,19 +99,17 @@ namespace LearnMsSql
         }
         public static void Message(Word newWord) // Тест, лишние есть
         {
-            setStructDelegate link1 = new setStructDelegate();
-            link1.editWord = CallUpdateWord;
-            setStructDelegate link2 = new setStructDelegate(); 
             // link2.backMenu =  // Надо както передать сюда меню :(!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             Console.WriteLine("Уверены что хотите сохранить изменения ?");
 
-            Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
-            {
-                    {"1.Да",link1}, // Да - передача нового слова. new Word с передачей параметров 
-                    {"2.Нет - недописан",link2}, // нет - возвращение к меню слов.
-            };
-            List<Word> words = new List<Word>();
-            // TestMenuStruct test2 = new(Links, words); 
+            List<BaseInfNode> list = new List<BaseInfNode>();
+
+            NodeEditWord link1 = new("1.Да", newWord, CallUpdateWord);
+            list.Add(link1);
+            NodeEditWord link2 = new("2.Нет - недописан", newWord, Program.SubMenu);
+            list.Add(link2);
+
+
         }
 
         public static void CallUpdateWord(Word newWord)

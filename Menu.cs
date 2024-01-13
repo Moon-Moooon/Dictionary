@@ -188,7 +188,6 @@ namespace LearnMsSql
         public int posY { get; set; }
         public int NumberOfLinsUP { get; set; }
         public byte ExecuteClear { get; set; } // Тестовый варинт для работы "Esc"
-        public TestMenuStruct backmenu { get; set; } // Происходит бесконченая инициализация когда передаю в конструктор --
         public Menu(Element[] elems)
         {
             this.Index = 0;
@@ -246,18 +245,14 @@ namespace LearnMsSql
             if (ExecuteClear == 2)SideForMenu(NumberOfLinsUP);
             if (ExecuteClear == 3) ;
             Elements[Index].Execute(Elements[Index]); // Требует теста
-            //if (!ExecuteClear) Console.Clear();
-            //else SideForMenu(NumberOfLinsUP);
             //Elements[Index].Execute(Elements[Index]); // Требует теста
         }
     }
 
-    // РАзделить отвентственность класс на Элемент который отвечает за технику отображения как части меню, и класс который будет отвественнен за логику !!!!!!!!!!!!!!!!!
     public class Element // Через диструктор можно мб ламать объект и получать его команду 
     {
         //инициализация объекта информации  InfarmationNode<T> // объект с текстом и свойством указателем на исполняемый метод
         public BaseInfNode obj {  get; set; }
-        public string Text { get; set; } // --> Тут должен хранитсяобъект
         public ConsoleColor SelectedForeColor { get; set; }
         public ConsoleColor SelectedBackColor { get; set; }
         public bool IsSelected { get; set; }
@@ -266,28 +261,9 @@ namespace LearnMsSql
 
         public CommandHandler Command { get; set; }
 
-        public setStructDelegate setStructDelegate; // Пока не юзается, или не прошло тест
-
-        public Element(BaseInfNode obj, string text) : this(text)
+        public Element(BaseInfNode obj)
         {
-            this.obj = obj;
-        }
-        public Element(string text, CommandHandler Comm) : this(text) 
-        {
-            this.Command = Comm; 
-        }
-        public Element(string text, setStructDelegate setStructDelegate) : this(text) 
-        {
-            this.setStructDelegate = setStructDelegate;  
-        }
-        public Element(string text, setStructDelegate setStructDelegate, Word word) : this(text) 
-        {
-            this.setStructDelegate = setStructDelegate;
-            this.word = word; 
-        }
-        public Element(string text)
-        {
-            this.Text = text; // InformatioObject
+            this.obj = obj; // InformatioObject
             this.SelectedForeColor = ConsoleColor.Black;
             this.SelectedBackColor = ConsoleColor.Gray;
             this.IsSelected = false;
@@ -309,77 +285,9 @@ namespace LearnMsSql
             obj.InvokeDeleg();
             //if (obj is NodeEditWord nodeEW) nodeEW.InvokeDeleg(); 
             //if (obj is NodeCommandHandler nodeCH) nodeCH.InvokeDeleg();
-            // if (Command == null) setStructDelegate.InvokeDeleg(element);  //  Хочу вызываю метод Стурктуры -Ю сам определяет какой делегат заполнен
-            //else Command.Invoke();
+            
         }
     }
 
 }
 
-//public void ExecuteClear(bool ExecuteClear)
-//{
-//    if(!ExecuteClear) SideForMenu(NumberOfLinsUP);
-//}
-
-
-//// Переделка меню с помощью или интерфейса или разных путей наследования - композиция агрегаций - почему это проблема ->
-//// -> проблема универсальности делегата который должен быть как и с параметрами так и без в конструкторе
-//public static int size { get; set; }
-//int posX { get; set; }
-//int posY { get; set; }
-//int NumberOfLins { get; set; }
-
-//public bool ExecuteClear;
-//// static Element[] elems { get; set; }
-//public Dictionary<string, CommandHandler> Dic { get; set; }
-//public  List<Word> WordCollection { get; set; }
-//public MenuWork(Dictionary<string, CommandHandler> Diction) : this(Diction, true) { }
-//public MenuWork(Dictionary<string, CommandHandler> Diction, bool ExecuteClear) : this(Diction, true, 0, null) { }
-//public MenuWork(Dictionary<string, CommandHandler> Diction, bool ExecuteClear, int NumberOfLins, List<Word> WordCollection) // перегрузка не продумана
-//{
-//    this.WordCollection = WordCollection;
-//    this.NumberOfLins = NumberOfLins;
-//    this.Dic = Diction;
-//    this.ExecuteClear = ExecuteClear;
-//    posX = Console.CursorLeft;
-//    posY = Console.CursorTop;
-//    size = Dic.Count;
-//    menuStart();
-//}
-
-//private void menuStart()
-//{
-//    Element[] elems = new Element[size];
-//    int counnter = 0;
-//    if (counnter < size)
-//    {
-//        foreach (var item in this.Dic)
-//        {
-//            elems[counnter] = new Element(item.Key, item.Value, ExecuteClear, WordCollection[counnter]);
-//            counnter++;
-//        }
-//    }
-
-//    Menu menu = new Menu(elems);
-//    while (true)
-//    {
-//        menu.Draw();
-
-//        Console.SetCursorPosition(posX, posY);
-
-//        switch (Console.ReadKey(true).Key)
-//        {
-//            case ConsoleKey.UpArrow:
-//                menu.SelectPrev();
-//                break;
-//            case ConsoleKey.DownArrow:
-//                menu.SelectNext();
-//                break;
-//            case ConsoleKey.Enter:
-//                if(!ExecuteClear) { menu.SideForMenu(NumberOfLins); }
-//                menu.ExecuteSelected();
-//                break;
-//            default: return;
-//        }
-//    }
-//}

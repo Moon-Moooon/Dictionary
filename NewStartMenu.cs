@@ -34,7 +34,7 @@ namespace LearnMsSql
 
             for (int i = 0; i < size; i++) 
             {
-                elems[i] = new Element(list[i], "i");
+                elems[i] = new Element(list[i]);
             }
             return elems;
         }

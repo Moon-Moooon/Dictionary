@@ -60,11 +60,9 @@ namespace LearnMsSql
             
             Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
             {
-
                 {"1.добавить слово", AddWord },
                 {"2.Поиск слова", readWord},
                 {"5.Выход", ToExit}
-
             };
 
             // StartMenuWork start = new(Links);
@@ -91,25 +89,22 @@ namespace LearnMsSql
             // если вызов на русском -> обработать что это русский -> Формировать запрос в БД
             // Поиск будет по не полному слвоу 
             // Есть проблема с тем что вызывая меню выбора на каком языке искать нужно по факту 2 одинаковы реализации вызова проверки слов на язык
-            Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
-            {
+            
+            List<BaseInfNode> list = new List<BaseInfNode>();
+            NodeCommandHandler link1 = new("1.Поск на русском", readWord);
+            list.Add(link1);
+            NodeCommandHandler link2 = new("2.Поиск на польском", readWord);
+            list.Add(link2);
 
-                {"1.Поск на русском", readWord },
-                { "2.Поиск на польском", readWord}
-
-            };
-
-            StartMenuWork start = new(Links);
+            NewStartMenu menu = new(list, 0, 0);
         }
 
         public static void stub() 
         { 
-            var Dicti = new Dictionary<string, CommandHandler>()
-            { 
-                {"Заглушка",stub }
-            };
-
-            StartMenuWork start = new(Dicti);
+            List<BaseInfNode> list = new List<BaseInfNode>();
+            NodeCommandHandler link1 = new("Это заглушка :) ! А значит что то не дописано", stub);
+            list.Add(link1);
+            NewStartMenu menu = new(list,0,0);
         }
 
         public static void readWord() // Не дописан 
@@ -126,14 +121,9 @@ namespace LearnMsSql
             SqlDataReader Date = DBModificatet.SelectWord("к");
 
             List<Word> WordCollection = new List<Word>(); // Тест
-
+            List<BaseInfNode> list = new List<BaseInfNode>();
             int counRows = 0;
 
-            static setStructDelegate generateObjStruct() // Не используется
-            {
-                setStructDelegate word = new setStructDelegate();
-                return word;
-            }
 
             while (Date.Read()) 
             {
@@ -144,61 +134,28 @@ namespace LearnMsSql
                 object polName = Date.GetValue(1);
 
                 string WordRow = $"{rusWord} - {polName}";
-
-                Dicti.Add(WordRow, SubMenu);
-
-                WordCollection.Add(new Word(0,$"{rusWord}", $"{polName}")); // Как происходит Неявный даункаст?
+                Word word = new Word(0, $"{rusWord}", $"{polName}");
+                NodeEditWord newWord = new(WordRow, word, SubMenu); 
+                list.Add(newWord);
             }
 
-            
-            // Чистить строку а затем выводим весб метод
-            MenuDelegVoid start = new(Dicti, 2, 2, WordCollection);
+            NewStartMenu menu = new(list, 2, 2);
         }
 
-        public static void SubMenu() // не корректно происходит вложение под меню
+        public static void SubMenu(Word word) // не корректно происходит вложение под меню
         {
-
-            // TestMenuStruct linkRedaction = new();
-
-            setStructDelegate link1 = new setStructDelegate();
-            link1.editWord = Word.RedactionWord;
-            setStructDelegate link2 = new setStructDelegate();
-            link2.editWord = Word.RedactionWord;
-
-            Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
-            {
-                {"1.Редактировать", link1 },
-                {"2.Удолить пару", link2}
-               // {"3.Вернуться к словорю", stub},
-                //{"4.Вернутсья к главному меню",stub }
-            };
-
-            TestMenuStruct start = new(Links,2);
+            List<BaseInfNode> list = new List<BaseInfNode>();
+            NodeEditWord link1 = new("1.Редактировать", word, Word.RedactionWord);
+            list.Add(link1);
+            NodeCommandHandler link2 = new("2.Поиск на польском", readWord);
+            list.Add(link2);
+            NodeCommandHandler link3 = new("3.Вернуться к словорю", readWord);
+            list.Add(link3);
+            NodeCommandHandler link4 = new("4.Вернутсья к главному меню", readWord);
+            list.Add(link4);
+            NewStartMenu menu = new(list, 0, 2);
         }
 
-        public static void TestMetod()
-        {
-            setStructDelegate item = new setStructDelegate();
-
-            Word word = new(1, "Спать", "Spac");
-            item.editWord = Word.RedactionWord;
-
-            setStructDelegate item2 = new setStructDelegate();
-
-            Word word2 = new(1, "2", "3");
-            item2.CH = SubMenu;
-
-            List<Word> list = new List<Word>();
-            list.Add(word);
-            list.Add(word2);
-            Dictionary<string, setStructDelegate> Links = new Dictionary<string, setStructDelegate>()
-            {
-                {"1.Редактировать",item},
-                {"2.Удолить пару",item2},
-                //{"3.Вернуться к словорю", Back()},
-                //{"4.Вернутсья к главному меню",ShowMenu }
-            };
-        }
 
         static void Main(string[] args)
         {
@@ -331,9 +288,12 @@ namespace LearnMsSql
                 {"1.Да", AddWord },
                 { "2.Нет", ShowMenu}
             };
-
-            StartMenuWork start = new(Links);
-
+            List<BaseInfNode> list = new List<BaseInfNode>();
+            NodeCommandHandler link1 = new("1.Да", AddWord);
+            list.Add(link1);
+            NodeCommandHandler link2 = new("2.Нет", ShowMenu);
+            list.Add(link2);
+            NewStartMenu menu = new(list,0,0);
         }
 
         public static void ToExit()

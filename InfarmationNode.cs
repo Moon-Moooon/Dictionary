@@ -8,22 +8,17 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace LearnMsSql
 {
-    // дженериком при инициализации можно указывать тип данных
-    // Можно попробовать сделать Интерфейс с ЛямдаВыражением
 
     // Не всегда может получить что подойдет Виртуальный метод
     public class BaseInfNode
     {
-        public Type Type { get; set; }
         public BaseInfNode(string Text) 
         { 
             this.Text = Text;
         }
 
-        public string Text { get; set; }  // - Обязательное поле текста
-        public virtual void InvokeDeleg() { } // Стоит ли плодить столько разных вертуалок ?
-
-
+        public string Text { get; set; } 
+        public virtual void InvokeDeleg() { }
     }
 
     public class NodeEditWord : BaseInfNode
@@ -34,7 +29,6 @@ namespace LearnMsSql
         {
             this.word = word;
             this.metod = metod;
-            base.Type = typeof(NodeEditWord);
         }
 
         public override void InvokeDeleg()
@@ -43,18 +37,29 @@ namespace LearnMsSql
         }
     }
 
+    
     public class NodeCommandHandler : BaseInfNode
     {
         public Action metod { get; set; }
         public NodeCommandHandler(string Text, Action metod) : base(Text)
         {
             this.metod = metod;
-            base.Type = typeof(NodeCommandHandler);
         }
 
         public override void InvokeDeleg()
         {
             metod?.Invoke();
+        }
+    }
+
+    public class NodeSubMenu : NodeCommandHandler
+    {
+        public Word word { get; set; }
+        public Action metod { get; set; }
+        public NodeSubMenu(string Text, Word word, Action metod) : base(Text, metod)
+        {
+            this.metod = metod;
+            this.word = word;
         }
     }
 }
