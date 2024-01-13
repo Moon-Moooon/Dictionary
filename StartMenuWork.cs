@@ -148,7 +148,7 @@ namespace LearnMsSql
                 foreach (var item in this.Dic) // Плохо понимаю почему тут указано this вроде надо же указывать base раз это свойство из радительского класса - т.к. это наследник, то свойство Dic является и так его свойством!
                 {
 
-                    elems[counnter] = new Element(item.Key, item.Value, WordCollection[counnter]);
+                    elems[counnter] = new Element(item.Key, item.Value, WordCollection[counnter]); // Нужно реализовывать много разных заполнялок Элементов что оч плохо - Решение переписать архетектуру!!!!!!!!!!!!!!!!!!!
                     counnter++;
                 }
             }

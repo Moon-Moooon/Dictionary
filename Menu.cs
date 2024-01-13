@@ -256,6 +256,7 @@ namespace LearnMsSql
     public class Element // Через диструктор можно мб ламать объект и получать его команду 
     {
         //инициализация объекта информации  InfarmationNode<T> // объект с текстом и свойством указателем на исполняемый метод
+        public BaseInfNode obj {  get; set; }
         public string Text { get; set; } // --> Тут должен хранитсяобъект
         public ConsoleColor SelectedForeColor { get; set; }
         public ConsoleColor SelectedBackColor { get; set; }
@@ -266,6 +267,11 @@ namespace LearnMsSql
         public CommandHandler Command { get; set; }
 
         public setStructDelegate setStructDelegate; // Пока не юзается, или не прошло тест
+
+        public Element(BaseInfNode obj, string text) : this(text)
+        {
+            this.obj = obj;
+        }
         public Element(string text, CommandHandler Comm) : this(text) 
         {
             this.Command = Comm; 
@@ -294,14 +300,17 @@ namespace LearnMsSql
                 Console.BackgroundColor = this.SelectedBackColor;
                 Console.ForegroundColor = this.SelectedForeColor;
             }
-            Console.WriteLine(this.Text);
+            Console.WriteLine(obj.Text);
             Console.ResetColor();
         }
 
-        public void Execute(Element element) // Нужно переписать метод на испорлнение при наличии Структуры
+        public void Execute(Element element) // А как правильно даункастить
         {
-            if (Command == null) setStructDelegate.InvokeDeleg(element);  //  Хочу вызываю метод Стурктуры -Ю сам определяет какой делегат заполнен
-            else Command.Invoke();
+            obj.InvokeDeleg();
+            //if (obj is NodeEditWord nodeEW) nodeEW.InvokeDeleg(); 
+            //if (obj is NodeCommandHandler nodeCH) nodeCH.InvokeDeleg();
+            // if (Command == null) setStructDelegate.InvokeDeleg(element);  //  Хочу вызываю метод Стурктуры -Ю сам определяет какой делегат заполнен
+            //else Command.Invoke();
         }
     }
 

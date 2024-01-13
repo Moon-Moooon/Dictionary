@@ -8,7 +8,7 @@ using static LearnMsSql.setStructDelegate;
 namespace LearnMsSql
 {
     public delegate void CommandHandler();
-
+    public delegate void EditWord(Word word);
     // Видимо надо переписать в элементе параметр -! делегат не просто указатель --- можно кудато диструкцию элемента делать  Но зачем?
     // ed
     // прослойка которая может попросить Элемент - а затем е=

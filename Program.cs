@@ -43,20 +43,21 @@ namespace LearnMsSql
          */
         #endregion
 
-        public static Stack<TestMenuStruct> stac = new Stack<TestMenuStruct>(6);
+        //public static Stack<TestMenuStruct> stac = new Stack<TestMenuStruct>(6);
 
-        public delegate TestMenuStruct DelegMenu();
+        //public delegate TestMenuStruct DelegMenu();
         
-        public static void test1(Stack<TestMenuStruct> stac, TestMenuStruct menu)
-        {
+        //public static void test1(Stack<TestMenuStruct> stac, TestMenuStruct menu)
+        //{
 
-            stac.Push(menu);
+        //    stac.Push(menu);
 
-        }
+        //}
 
         // Все выше это тест
         public static void ShowMenu()
         {
+            
             Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
             {
 
@@ -66,8 +67,21 @@ namespace LearnMsSql
 
             };
 
-             StartMenuWork start = new(Links);
+            // StartMenuWork start = new(Links);
             // MenuDefolt menuDefolt = new MenuDefolt(Links);
+
+            List<BaseInfNode> listNode = new List<BaseInfNode>();
+
+            NodeCommandHandler link1 = new("1.добавить слово", AddWord); // Хранятся в списке с типо родителя как типы наследников !!!!!
+            listNode.Add(link1);
+            NodeCommandHandler link2 = new("2.Поиск слова", readWord);
+            listNode.Add(link2);
+            NodeCommandHandler link3 = new("5.Выход", ToExit);
+            listNode.Add(link3);
+
+            NewStartMenu start = new(listNode, 0, 0);
+            // Теперь надо как то передать
+            Console.ReadKey();
         }
 
         public static void SearchWordInDB()
@@ -186,10 +200,10 @@ namespace LearnMsSql
             };
         }
 
-
         static void Main(string[] args)
         {
             ShowMenu();
+
         }
 
         public static void ExeminationPolWord (string item)
