@@ -21,7 +21,7 @@ namespace LearnMsSql
             size = this.list.Count;
             menuStart();
         }
-        public virtual void menuStart()   //Надо убедитя можно ли так делать или нетЁ!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        public virtual void menuStart()
         {
             Element[] elems = FillingElmens(); // Программа понимает что надо реализовывать метод указанный в классе оюъекта инициализации !!!! (Над очетко понять как работает !)
             Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, ExecuteClear = ExecuteClear };
@@ -53,6 +53,9 @@ namespace LearnMsSql
                         break;
                     case ConsoleKey.Enter:
                         menu.ExecuteSelected();
+                        break;
+                    case ConsoleKey.Escape:
+                        MenuHistori.GotMenuHistore();
                         break;
                     default: return;
                 }

@@ -43,7 +43,7 @@ namespace LearnMsSql
             RusName = this.RusName;
         }
         // Надо хорошо подумать как это лучше сделать !
-        public static void RedactionWord(Word word) // Тестовый вариант при полной сборке билда, Допустить вариант не передачи слова
+        public static void RedactionWord(Word word) // Тестовый код
         {
             int inY = Console.CursorTop;
             string p;
@@ -93,23 +93,24 @@ namespace LearnMsSql
                         if (inx > rightItnerval) pX++;
                         Console.SetCursorPosition(inx, inY);
                         break;
+                    case ConsoleKey.Escape:
+                        MenuHistori.GotMenuHistore(); // Тест
+                        // Тут должен происходить откат до Слов 
+                        break;
                 }
             }
 
         }
-        public static void Message(Word newWord) // Тест, лишние есть
+        public static void Message(Word newWord) // Тест нужен
         {
-            // link2.backMenu =  // Надо както передать сюда меню :(!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             Console.WriteLine("Уверены что хотите сохранить изменения ?");
 
             List<BaseInfNode> list = new List<BaseInfNode>();
 
             NodeEditWord link1 = new("1.Да", newWord, CallUpdateWord);
             list.Add(link1);
-            NodeEditWord link2 = new("2.Нет - недописан", newWord, Program.SubMenu);
+            NodeEditWord link2 = new("2.Нет - недописан", newWord, RedactionWord);
             list.Add(link2);
-
-
         }
 
         public static void CallUpdateWord(Word newWord)

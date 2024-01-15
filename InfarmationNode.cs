@@ -8,6 +8,9 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace LearnMsSql
 {
+    public delegate void CommandHandler();
+
+    public delegate void EditWord(Word word);
 
     // Не всегда может получить что подойдет Виртуальный метод
     public class BaseInfNode
@@ -60,6 +63,35 @@ namespace LearnMsSql
         {
             this.metod = metod;
             this.word = word;
+        }
+    }
+
+    public class NodeMenuHistore // Тестовый вариант
+    {
+        public int NumberOfLins { get; }
+        public List<BaseInfNode> list { get; }
+        public byte ExecuteClear { get;}
+        public NodeMenuHistore(List<BaseInfNode> list, int NumberOfLins, byte ExecuteClear)
+        {
+            this.list = list;
+            this.NumberOfLins = NumberOfLins;
+            this.ExecuteClear = ExecuteClear;
+        }
+    }
+
+    public class NodeActionstring : BaseInfNode // Тест
+    {
+        public string toMetod { get;}
+        public Action<string> metod { get;}
+        public NodeActionstring(string text,string toMetod, Action<string> metod) : base(text)
+        {
+            this.metod = metod;
+            this.toMetod = toMetod;
+        }
+
+        public override void InvokeDeleg() 
+        {
+            metod?.Invoke(toMetod);
         }
     }
 }

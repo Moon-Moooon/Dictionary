@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace LearnMsSql
 {
-    public delegate void CommandHandler();
-
-    public delegate void EditWord(Word word);
-    
+    public class Frame
+    {
+        
+    }
 }

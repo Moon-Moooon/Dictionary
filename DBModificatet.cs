@@ -28,11 +28,12 @@ namespace LearnMsSql
 
         }
 
-        public static SqlDataReader SelectWord(string word)
+        public static SqlDataReader SelectWord(string word, string leng)
         {
+            string str = string.Empty;
             sqlConnection.Open();
-
-            SqlCommand sqlCommand = new SqlCommand($"SELECT Rus_Name, Pol_Name FROM Words WHERE Rus_Name LIKE N'%{word}%'", sqlConnection);
+            
+            SqlCommand sqlCommand = new SqlCommand(str = SelectLeng(leng,  word), sqlConnection);
 
             return sqlCommand.ExecuteReader();
 
@@ -46,6 +47,12 @@ namespace LearnMsSql
             SqlCommand sqlCommand = new SqlCommand($"UPDATE [Words] SET Rus_Name = {rusName}, Pol_Name = {polName} WHERE id = {IDWord}", sqlConnection);
 
             sqlConnection.Close();
+        }
+
+        public static string SelectLeng(string leng, string word)
+        {
+            if (leng == "rus") return $"SELECT Rus_Name, Pol_Name FROM Words WHERE Rus_Name LIKE N'%{word}%'";
+            else return $"SELECT Rus_Name, Pol_Name FROM Words WHERE Pol_Name LIKE N'%{word}%'";
         }
     }
 }

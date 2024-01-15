@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Protocols;
 using System.Text;
 using System.Drawing;
 using Microsoft.Identity.Client;
+using System.Collections.Generic;
 
 namespace LearnMsSql
 {
@@ -20,16 +21,16 @@ namespace LearnMsSql
     // Можно попытаться подключить модуль для Авто опреда  яыкуа, При выводу неккоректного символа
     // По окончанию основого функцонала надо будет провести полный рефакторинг 
     // какого черта методом Read разрешено пользоваться 1 раз а после окончания цикла все :(
-    // Ступенчатый цикл где конечное и начальное значение изменяется 
-    // Баг вывода меню если после большого набора меню вызывать маленькой
 
 
-    // Разделе
 
+
+
+    // Нужно будут сделать полный тест беков меню!
+    // Есть баг При выборе 1 пункта меню вниму ресует -- можно закостылить в Menu Histori
     #region // Что надо сделать
-    //Поиск по слову, доделать поиск как на русском так и на польском
-    // Необходимо полностью продумать отрисовку меню !
-    // 
+    // 1. Продумать и набросать пример работы кпонки esc, 
+    // 2. Доделать правильную курсорную навигнацию менюшки, убрать лишние читалки координат
     #endregion
     internal class Program
     {
@@ -42,58 +43,43 @@ namespace LearnMsSql
 
          */
         #endregion
-
-        //public static Stack<TestMenuStruct> stac = new Stack<TestMenuStruct>(6);
-
-        //public delegate TestMenuStruct DelegMenu();
-        
-        //public static void test1(Stack<TestMenuStruct> stac, TestMenuStruct menu)
-        //{
-
-        //    stac.Push(menu);
-
-        //}
-
         // Все выше это тест
         public static void ShowMenu()
         {
-            
-            Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
-            {
-                {"1.добавить слово", AddWord },
-                {"2.Поиск слова", readWord},
-                {"5.Выход", ToExit}
-            };
-
-            // StartMenuWork start = new(Links);
-            // MenuDefolt menuDefolt = new MenuDefolt(Links);
+            // Полная очистка Истории меню
+            MenuHistori.HistoriClear();
 
             List<BaseInfNode> listNode = new List<BaseInfNode>();
 
             NodeCommandHandler link1 = new("1.добавить слово", AddWord); // Хранятся в списке с типо родителя как типы наследников !!!!!
             listNode.Add(link1);
-            NodeCommandHandler link2 = new("2.Поиск слова", readWord);
+            NodeCommandHandler link2 = new("2.Поиск слова", SearchWordInDB);
             listNode.Add(link2);
-            NodeCommandHandler link3 = new("5.Выход", ToExit);
+            NodeCommandHandler link3 = new("3.Тренировка знаний", stub);
             listNode.Add(link3);
+            NodeCommandHandler link4 = new("4.Выход", ToExit);
+            listNode.Add(link4);
+
+            NodeMenuHistore menuHistori = new NodeMenuHistore(listNode, 0, 0);
+            MenuHistori.Add(menuHistori); // Тест
 
             NewStartMenu start = new(listNode, 0, 0);
-            // Теперь надо как то передать
+
             Console.ReadKey();
+
         }
 
         public static void SearchWordInDB()
         {
             Console.WriteLine("Поиск слова осуществлять на: ");
-            // Вызов менюшки 
             // если вызов на русском -> обработать что это русский -> Формировать запрос в БД
             // Поиск будет по не полному слвоу 
-            // Есть проблема с тем что вызывая меню выбора на каком языке искать нужно по факту 2 одинаковы реализации вызова проверки слов на язык
             
             List<BaseInfNode> list = new List<BaseInfNode>();
-            NodeCommandHandler link1 = new("1.Поск на русском", readWord);
+
+            NodeActionstring link1 = new("1.Поск на русском","rus" ,readWord); 
             list.Add(link1);
-            NodeCommandHandler link2 = new("2.Поиск на польском", readWord);
+            NodeActionstring link2 = new("2.Поиск на польском","pol", readWord);
             list.Add(link2);
 
             NewStartMenu menu = new(list, 0, 0);
@@ -107,24 +93,25 @@ namespace LearnMsSql
             NewStartMenu menu = new(list,0,0);
         }
 
-        public static void readWord() // Не дописан 
+        public static void readWord(string leng) // Не дописан -- стоит лучше продумать как к нему возвращаться и стоит ли вообще
         {
             // Интересно как это выглядит когда я переменную типа Object передаю форматированной стракой как stringt, скорее всего там под капотный боксинг :(
-            // Ступенчатый цикл где конечное и начальное значение изменяется 
             Console.WriteLine("Введите слово на русском\n >");
-            // string word = Console.ReadLine();
-            // ExeminationRusWord(word);
+
+            string stringSercch = Console.ReadLine();
+
+            if (leng =="rus") ExeminationRusWord(stringSercch); // говно, надо переделывать
+            else ExeminationRusWord(stringSercch);
+
             var Dicti = new Dictionary<string, CommandHandler>();
             
-            //var DateList = new List<string>();
+            SqlDataReader Date = DBModificatet.SelectWord(stringSercch, leng);
 
-            SqlDataReader Date = DBModificatet.SelectWord("к");
-
-            List<Word> WordCollection = new List<Word>(); // Тест
             List<BaseInfNode> list = new List<BaseInfNode>();
             int counRows = 0;
-
-
+            string x = string.Empty;
+            x = Console.ReadLine();
+            Console.WriteLine(x);
             while (Date.Read()) 
             {
                 counRows++;
@@ -138,7 +125,8 @@ namespace LearnMsSql
                 NodeEditWord newWord = new(WordRow, word, SubMenu); 
                 list.Add(newWord);
             }
-
+            NodeMenuHistore node = new(list, 2, 2); // Тест
+            
             NewStartMenu menu = new(list, 2, 2);
         }
 
@@ -147,20 +135,40 @@ namespace LearnMsSql
             List<BaseInfNode> list = new List<BaseInfNode>();
             NodeEditWord link1 = new("1.Редактировать", word, Word.RedactionWord);
             list.Add(link1);
-            NodeCommandHandler link2 = new("2.Поиск на польском", readWord);
+            NodeCommandHandler link2 = new("2.Поиск на польском", stub);
             list.Add(link2);
-            NodeCommandHandler link3 = new("3.Вернуться к словорю", readWord);
+            NodeCommandHandler link3 = new("3.Вернуться к словорю", stub);
             list.Add(link3);
-            NodeCommandHandler link4 = new("4.Вернутсья к главному меню", readWord);
+            NodeCommandHandler link4 = new("4.Вернутсья к главному меню", stub);
             list.Add(link4);
-            NewStartMenu menu = new(list, 0, 2);
+            NewStartMenu menu = new(list, 0, 0);
         }
 
+        public static void ChekESC()
+        {
+            bool w = true;
+            do
+            {
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Escape:
+                        Console.WriteLine(ConsoleKey.Escape);
+                        NodeMenuHistore MenuH = MenuHistori.GetMenu();
+                        NewStartMenu menu = new(MenuH.list, MenuH.NumberOfLins, MenuH.ExecuteClear);
+                        w = false;
+                        break;
+                    default:
+                        w = false;
+                        break;
+                }
+            }
+            while (w);
 
+           // return str;
+        }
         static void Main(string[] args)
         {
             ShowMenu();
-
         }
 
         public static void ExeminationPolWord (string item)
@@ -219,6 +227,7 @@ namespace LearnMsSql
             Console.WriteLine("Для добавления нового слова в словарь вам необходимо ввести слова на русском и на польском");
             Console.WriteLine("Введите слово на русском");
             Console.Write(">");
+            ChekESC();
             string rusWord = Console.ReadLine();
             ExeminationRusWord(rusWord); 
             Console.WriteLine("Введите слово на польском");
@@ -281,13 +290,8 @@ namespace LearnMsSql
 
         public static void getAfterBedCHois (char warningChar)
         {
-            Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке.\n Хотите добавить слово еще раз ?");
+            Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке.\n Хотите попробовать ?");
 
-            Dictionary<string, CommandHandler> Links = new Dictionary<string, CommandHandler>()
-            {
-                {"1.Да", AddWord },
-                { "2.Нет", ShowMenu}
-            };
             List<BaseInfNode> list = new List<BaseInfNode>();
             NodeCommandHandler link1 = new("1.Да", AddWord);
             list.Add(link1);
