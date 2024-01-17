@@ -68,14 +68,13 @@ namespace LearnMsSql
 
     public class NodeMenuHistore // Тестовый вариант
     {
-        public int NumberOfLins { get; }
+        public MenuSettengs setting { get; set;} 
         public List<BaseInfNode> list { get; }
-        public byte ExecuteClear { get;}
-        public NodeMenuHistore(List<BaseInfNode> list, int NumberOfLins, byte ExecuteClear)
+        public NodeMenuHistore(List<BaseInfNode> list) : this(list, null) { }
+        public NodeMenuHistore(List<BaseInfNode> list, MenuSettengs setting)
         {
             this.list = list;
-            this.NumberOfLins = NumberOfLins;
-            this.ExecuteClear = ExecuteClear;
+            this.setting = setting;
         }
     }
 

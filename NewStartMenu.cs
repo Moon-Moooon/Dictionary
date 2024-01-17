@@ -9,22 +9,26 @@ namespace LearnMsSql
     internal class NewStartMenu
     {
         public static int size { get; set; }
-        public int NumberOfLins { get; set; }
-        public byte ExecuteClear { get; set; }
+       // public int NumberOfLins { get; set; }
+        //public bool ExecuteClear { get; set; }
         List<BaseInfNode> list { get; set; }
-         
-        public NewStartMenu(List<BaseInfNode> list, int NumberOfLins, byte ExecuteClear)
+        MenuSettengs setting { get; set; } // Для проверки на нулл и устанвку тест
+        public NewStartMenu(List<BaseInfNode> list) : this(list,null) { }
+        public NewStartMenu(List<BaseInfNode> list, MenuSettengs setting)
         {
             this.list = list;
-            this.ExecuteClear = ExecuteClear;
-            this.NumberOfLins = NumberOfLins;
+            this.setting = setting;
+           // this.ExecuteClear = ExecuteClear;
+            //this.NumberOfLins = NumberOfLins;
             size = this.list.Count;
+            this.setting = setting;
             menuStart();
         }
         public virtual void menuStart()
         {
             Element[] elems = FillingElmens(); // Программа понимает что надо реализовывать метод указанный в классе оюъекта инициализации !!!! (Над очетко понять как работает !)
-            Menu menu = new Menu(elems) { NumberOfLinsUP = NumberOfLins, ExecuteClear = ExecuteClear };
+            setSetting(); // если передал пустой то генерится оыбчное настройки
+            Menu menu = new Menu(elems, setting); //{ NumberOfLinsUP = NumberOfLins, ExecuteClear = ExecuteClear };
             SelectMenu(ref menu);
         }
 
@@ -60,6 +64,11 @@ namespace LearnMsSql
                     default: return;
                 }
             }
+        }
+
+        public void setSetting()
+        {
+            setting??= new MenuSettingDefolt();
         }
     }
 }

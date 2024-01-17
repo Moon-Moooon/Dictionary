@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 namespace LearnMsSql
 {
     // Позволяет формировать последовательнсоть вызово методов, а затем возвращаться последовательно назад
-    internal class MenuHistori
+    public static class MenuHistori
     {
         static Stack<NodeMenuHistore> stac = new Stack<NodeMenuHistore>();
 
-        public delegate void editStac(NodeMenuHistore stac);
+        // public delegate void editStac(NodeMenuHistore stac);
 
-        public event editStac evenStack;
+        //public event editStac evenStack;
 
         // В какий то методах будет обработчик нажатия ESC -
         public static void Add(NodeMenuHistore menu)
@@ -29,15 +29,18 @@ namespace LearnMsSql
             stac.Clear();
         }
 
-        public static NodeMenuHistore GetMenu()
-        {
-            return stac.Peek();
-        }
-
         public static void GotMenuHistore()
         {
-            NodeMenuHistore menuH = stac.Peek();
-            NewStartMenu menu = new(menuH.list, menuH.NumberOfLins, menuH.ExecuteClear);
+            Console.Clear();    //Тест
+            NodeMenuHistore menuH;
+            if (stac.Count < 2) menuH = stac.Peek(); 
+            else menuH = stac.Pop();
+            NewStartMenu menu = new(menuH.list, menuH.setting);
+        }
+
+        public  static void voidForEach() 
+        {
+            Console.WriteLine(stac.Count);
         }
     }
 }

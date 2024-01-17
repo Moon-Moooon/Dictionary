@@ -47,7 +47,7 @@ namespace LearnMsSql
         public static void ShowMenu()
         {
             // Полная очистка Истории меню
-            MenuHistori.HistoriClear();
+          //  MenuHistori.HistoriClear();
 
             List<BaseInfNode> listNode = new List<BaseInfNode>();
 
@@ -60,12 +60,11 @@ namespace LearnMsSql
             NodeCommandHandler link4 = new("4.Выход", ToExit);
             listNode.Add(link4);
 
-            NodeMenuHistore menuHistori = new NodeMenuHistore(listNode, 0, 0);
-            MenuHistori.Add(menuHistori); // Тест
+           // NodeMenuHistore menuHistori = new NodeMenuHistore(listNode, 0, 0);
 
-            NewStartMenu start = new(listNode, 0, 0);
+            MenuHistori.Add(new(listNode)); // Тест
 
-            Console.ReadKey();
+            NewStartMenu start = new(listNode);
 
         }
 
@@ -82,7 +81,9 @@ namespace LearnMsSql
             NodeActionstring link2 = new("2.Поиск на польском","pol", readWord);
             list.Add(link2);
 
-            NewStartMenu menu = new(list, 0, 0);
+            MenuHistori.Add(new(list)); // Тест
+
+            NewStartMenu menu = new(list); //0,0
         }
 
         public static void stub() 
@@ -90,28 +91,29 @@ namespace LearnMsSql
             List<BaseInfNode> list = new List<BaseInfNode>();
             NodeCommandHandler link1 = new("Это заглушка :) ! А значит что то не дописано", stub);
             list.Add(link1);
-            NewStartMenu menu = new(list,0,0);
+
+           // MenuHistori.Add(new(list)); // Тест
+            
+            NewStartMenu menu = new(list); // 0,0
         }
 
         public static void readWord(string leng) // Не дописан -- стоит лучше продумать как к нему возвращаться и стоит ли вообще
         {
             // Интересно как это выглядит когда я переменную типа Object передаю форматированной стракой как stringt, скорее всего там под капотный боксинг :(
-            Console.WriteLine("Введите слово на русском\n >");
+            // А что если ничего не нашли ?
 
+            Console.WriteLine("Введите слово на русском\n >");
+            ChekESC(); // Проверка на ESC
             string stringSercch = Console.ReadLine();
 
-            if (leng =="rus") ExeminationRusWord(stringSercch); // говно, надо переделывать
+            if (leng =="rus") ExeminationRusWord(stringSercch); // говно, надо переделывать 
             else ExeminationRusWord(stringSercch);
 
-            var Dicti = new Dictionary<string, CommandHandler>();
             
-            SqlDataReader Date = DBModificatet.SelectWord(stringSercch, leng);
+            SqlDataReader Date = DBModificatet.SelectWord(stringSercch, leng); // А если запрос будет со словами 
 
             List<BaseInfNode> list = new List<BaseInfNode>();
             int counRows = 0;
-            string x = string.Empty;
-            x = Console.ReadLine();
-            Console.WriteLine(x);
             while (Date.Read()) 
             {
                 counRows++;
@@ -125,9 +127,10 @@ namespace LearnMsSql
                 NodeEditWord newWord = new(WordRow, word, SubMenu); 
                 list.Add(newWord);
             }
-            NodeMenuHistore node = new(list, 2, 2); // Тест
+
+            NodeMenuHistore node = new(list, new MenuSettingSunMenu()); // Тест, тут без строк
             
-            NewStartMenu menu = new(list, 2, 2);
+            NewStartMenu menu = new(list, new MenuSettingSunMenu(3));
         }
 
         public static void SubMenu(Word word) // не корректно происходит вложение под меню
@@ -135,16 +138,19 @@ namespace LearnMsSql
             List<BaseInfNode> list = new List<BaseInfNode>();
             NodeEditWord link1 = new("1.Редактировать", word, Word.RedactionWord);
             list.Add(link1);
-            NodeCommandHandler link2 = new("2.Поиск на польском", stub);
+            NodeCommandHandler link2 = new("2.Удолить", stub);
             list.Add(link2);
             NodeCommandHandler link3 = new("3.Вернуться к словорю", stub);
             list.Add(link3);
             NodeCommandHandler link4 = new("4.Вернутсья к главному меню", stub);
             list.Add(link4);
-            NewStartMenu menu = new(list, 0, 0);
-        }
 
-        public static void ChekESC()
+            NodeMenuHistore node = new(list); // Тест
+
+            NewStartMenu menu = new(list);
+        }
+        
+        public static void ChekESC() // Оччень плохое решение 
         {
             bool w = true;
             do
@@ -153,8 +159,7 @@ namespace LearnMsSql
                 {
                     case ConsoleKey.Escape:
                         Console.WriteLine(ConsoleKey.Escape);
-                        NodeMenuHistore MenuH = MenuHistori.GetMenu();
-                        NewStartMenu menu = new(MenuH.list, MenuH.NumberOfLins, MenuH.ExecuteClear);
+                        MenuHistori.GotMenuHistore();
                         w = false;
                         break;
                     default:
@@ -248,7 +253,7 @@ namespace LearnMsSql
             int i = 0;
             int j = 1;
 
-            foreach (char item in word)
+            foreach (char item in word) // 274 слишком хардкод
             {
                 bak[i] = item;
 
@@ -297,7 +302,10 @@ namespace LearnMsSql
             list.Add(link1);
             NodeCommandHandler link2 = new("2.Нет", ShowMenu);
             list.Add(link2);
-            NewStartMenu menu = new(list,0,0);
+
+            MenuHistori.Add(new(list));
+
+            NewStartMenu menu = new(list);
         }
 
         public static void ToExit()
