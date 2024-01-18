@@ -12,7 +12,6 @@ namespace LearnMsSql
 
     public delegate void EditWord(Word word);
 
-    // Не всегда может получить что подойдет Виртуальный метод
     public class BaseInfNode
     {
         public BaseInfNode(string Text) 
@@ -66,7 +65,7 @@ namespace LearnMsSql
         }
     }
 
-    public class NodeMenuHistore // Тестовый вариант
+    public class NodeMenuHistore
     {
         public MenuSettengs setting { get; set;} 
         public List<BaseInfNode> list { get; }
@@ -78,7 +77,7 @@ namespace LearnMsSql
         }
     }
 
-    public class NodeActionstring : BaseInfNode // Тест
+    public class NodeActionstring : BaseInfNode
     {
         public string toMetod { get;}
         public Action<string> metod { get;}

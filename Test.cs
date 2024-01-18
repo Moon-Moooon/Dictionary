@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace LearnMsSql
         //            Console.Write(t);
         //            while(r)
         //            {
-                    
+
         //            }
 
         //        }
@@ -42,7 +43,7 @@ namespace LearnMsSql
 
         //    if(readKeyResult.Key == ConsoleKey.Escape)
         //    {
-            
+
         //    }
         //    else
         //    {
@@ -98,5 +99,83 @@ namespace LearnMsSql
         //        }
         //        while (true);
         //    }
+
+
+        //        сам спросил — сам ответил.
+        //вообще я хотел, чтобы консоль при нажатии на клавишу создавала готовый аргумент вроде KeyEventArgs, который потом легче обработать.
+        //уже забыл про этот вопрос, случайно наткнулся на код в книжке Шилдта.
+
+        //// спасибо герберту шилдту за код
+        //// и за наше счастливое детство
+
+        //using System;
+        //using System.ComponentModel;
+
+        //// создаем класс для обработчика
+        //class myKeyEventArgs : HandledEventArgs
+        //    {
+        //        // нажатая кнопка
+        //        public ConsoleKeyInfo key;
+
+        //        public myKeyEventArgs(ConsoleKeyInfo _key)
+        //        {
+        //            key = _key;
+        //        }
+        //    }
+
+        //    // класс события
+        //    class KeyEvent
+        //    {
+        //        // событие нажатия
+        //        public event EventHandler<myKeyEventArgs> KeyPress;
+
+        //        // метод запуска события
+        //        public void OnKeyPress(ConsoleKeyInfo _key)
+        //        {
+        //            KeyPress(this, new myKeyEventArgs(_key));
+        //        }
+        //    }
+
+        //    // прога
+        //    class KeyEventDemo
+        //    {
+        //        static void Main()
+        //        {
+        //            // объект события
+        //            KeyEvent kevt = new KeyEvent();
+
+        //            // кнопа
+        //            ConsoleKeyInfo key;
+
+        //            // обработчик
+        //            kevt.KeyPress += (sender, e) =>
+        //            {
+        //                // отслеживает нажатый альт
+        //                if (e.key.Modifiers == ConsoleModifiers.Alt)
+        //                    Console.WriteLine(" ALT! ");
+
+        //                // и позволяет вводить только цифры и точку
+        //                char ch = e.key.KeyChar;
+        //                if (!char.IsDigit(ch) && ch != '.')
+        //                {
+        //                    e.Handled = true;
+        //                }
+        //                else Console.WriteLine(" нажато: " + ch);
+        //            };
+
+        //            Console.WriteLine("вводи символы, друг");
+        //            // пока точку не нажмешь
+        //            do
+        //            {
+        //                // нажатая не отображается
+        //                key = Console.ReadKey(true);
+        //                // событие произошло
+        //                kevt.OnKeyPress(key);
+        //            }
+        //            while (key.KeyChar != '.');
+        //        }
+        //    }
+
+        //}
     }
 }

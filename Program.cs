@@ -27,10 +27,8 @@ namespace LearnMsSql
 
 
     // Нужно будут сделать полный тест беков меню!
-    // Есть баг При выборе 1 пункта меню вниму ресует -- можно закостылить в Menu Histori
     #region // Что надо сделать
-    // 1. Продумать и набросать пример работы кпонки esc, 
-    // 2. Доделать правильную курсорную навигнацию менюшки, убрать лишние читалки координат
+    // 1. Нужно будет переделать в методе readWord - передачу параметра языка который будет искаться 
     #endregion
     internal class Program
     {
@@ -47,7 +45,6 @@ namespace LearnMsSql
         public static void ShowMenu()
         {
             // Полная очистка Истории меню
-          //  MenuHistori.HistoriClear();
 
             List<BaseInfNode> listNode = new List<BaseInfNode>();
 
@@ -59,8 +56,6 @@ namespace LearnMsSql
             listNode.Add(link3);
             NodeCommandHandler link4 = new("4.Выход", ToExit);
             listNode.Add(link4);
-
-           // NodeMenuHistore menuHistori = new NodeMenuHistore(listNode, 0, 0);
 
             MenuHistori.Add(new(listNode)); // Тест
 
@@ -103,12 +98,11 @@ namespace LearnMsSql
             // А что если ничего не нашли ?
 
             Console.WriteLine("Введите слово на русском\n >");
-            ChekESC(); // Проверка на ESC
-            string stringSercch = Console.ReadLine();
+            // ChekESC(); // Проверка на ESC
+            string stringSercch = MyConsole.MyReadLine();
 
             if (leng =="rus") ExeminationRusWord(stringSercch); // говно, надо переделывать 
             else ExeminationRusWord(stringSercch);
-
             
             SqlDataReader Date = DBModificatet.SelectWord(stringSercch, leng); // А если запрос будет со словами 
 
@@ -173,7 +167,11 @@ namespace LearnMsSql
         }
         static void Main(string[] args)
         {
-            ShowMenu();
+            //string yyy = MyConsole.MyReadLine();
+            // ShowMenu();
+            Word word = new(1, "Жопич", "Jopich");
+            Word.RedactionWord(word);
+            Console.ReadKey();
         }
 
         public static void ExeminationPolWord (string item)
@@ -232,12 +230,12 @@ namespace LearnMsSql
             Console.WriteLine("Для добавления нового слова в словарь вам необходимо ввести слова на русском и на польском");
             Console.WriteLine("Введите слово на русском");
             Console.Write(">");
-            ChekESC();
-            string rusWord = Console.ReadLine();
+           // ChekESC();
+            string rusWord = MyConsole.MyReadLine();
             ExeminationRusWord(rusWord); 
             Console.WriteLine("Введите слово на польском");
             Console.Write(">");
-            string polWord = Console.ReadLine();
+            string polWord = MyConsole.MyReadLine();
             ExeminationPolWord(polWord);
             Console.WriteLine($"Добавить новую пару слов: {rusWord} с переводом {polWord}?");
             #endregion
