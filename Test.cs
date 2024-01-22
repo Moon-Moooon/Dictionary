@@ -177,5 +177,166 @@ namespace LearnMsSql
         //    }
 
         //}
+
+        //public static void ChekESC() // Оччень плохое решение 
+        //{
+        //    bool w = true;
+        //    do
+        //    {
+        //        switch (Console.ReadKey(true).Key)
+        //        {
+        //            case ConsoleKey.Escape:
+        //                Console.WriteLine(ConsoleKey.Escape);
+        //                MenuHistori.GotMenuHistore();
+        //                w = false;
+        //                break;
+        //            default:
+        //                w = false;
+        //                break;
+        //        }
+        //    }
+        //    while (w);
+
+        //    // return str;
+        //}
+
+
+        //public static void RedactionWord(Word word) // Нельзя вводить вообще ничего же - бред!
+        //{
+        //    int inY = Console.CursorTop;
+        //    string p;
+        //    string r;
+        //    word.GetName(out r, out p);
+        //    int maxLenght;
+        //    int rightItnerval;
+        //    int pX = 0;
+        //    int inx = 0;
+
+        //    int inR = 0;
+        //    int inP = 0;
+        //    int curX = 0;
+        //    // bool loop = true;
+        //    StringBuilder fullString = new($"{r} - {p}");
+        //    Console.Write(fullString);
+        //    Console.SetCursorPosition(0, inY);
+        //    while (true)
+        //    {
+        //        Console.SetCursorPosition(inx, inY);
+        //        rightItnerval = r.Length + 3; // переработать
+        //        maxLenght = rightItnerval + p.Length - 1; //-
+        //        switch (Console.ReadKey(true).Key)
+        //        {
+        //            case ConsoleKey.Enter:
+        //                //loop = false;
+        //                Word newWord = new(word.IDword, p, r);
+        //                Message(newWord);
+        //                break;
+        //            case ConsoleKey.Backspace:
+        //                if (inx == 0) break;
+        //                else
+        //                {
+        //                    inx--;
+        //                    if (inx >= rightItnerval) p = p.Remove(pX, 1);
+        //                    else r = r.Remove(inx, 1);
+        //                }
+
+        //                //if (inx >= rightItnerval) p = p.Remove(pX, 1);
+        //                //else r = r.Remove(inx, 1);
+        //                Console.SetCursorPosition(0, inY);
+        //                CursorMove.ClearLines(inY, inY, 1);
+        //                Console.Write($"{r} - {p}");
+        //                //if (inx == r.Length || inx == maxLenght) inx--; // -
+        //                //if (inx == maxLenght) pX--; // -
+        //                //Console.SetCursorPosition(inx, inY);
+        //                break;
+        //            case ConsoleKey.LeftArrow:
+        //                if (inx == 0) break; // if inR == 0 break 
+        //                if (inx == rightItnerval) inx = r.Length; // if inP == 0 { inR - 3}
+        //                if (inx > rightItnerval) pX--;
+        //                inx--;
+        //                //Console.SetCursorPosition(inx, inY);
+        //                break;
+        //            case ConsoleKey.RightArrow:
+        //                if (inx == maxLenght) break; // inP == p.lenght break
+        //                inx++;                       // if inR == r.lenght, {inR + 3, }
+        //                                             // if inR > r.lenght inP++
+        //                if (inx == r.Length) inx = rightItnerval;
+        //                if (inx > rightItnerval) pX++;
+
+        //                break;
+        //            case ConsoleKey.Escape:
+        //                MenuHistori.GotMenuHistore(); // Тест
+        //                                              // Тут должен происходить откат до Слов 
+        //                break;
+        //        }
+        //    }
+
+        //}
+
+        //class myKeyEventArgs : HandledEventArgs
+        //{
+        //    // нажатая кнопка
+        //    public ConsoleKeyInfo key;
+
+        //    public myKeyEventArgs(ConsoleKeyInfo _key)
+        //    {
+        //        key = _key;
+        //    }
+        //}
+
+        //// класс события
+        //class KeyEvent
+        //{
+        //    // событие нажатия
+        //    public event EventHandler<myKeyEventArgs> KeyPress;
+
+        //    // метод запуска события
+        //    public void OnKeyPress(ConsoleKeyInfo _key)
+        //    {
+        //        KeyPress(this, new myKeyEventArgs(_key));
+        //    }
+        //}
+
+        //// прога
+        //class KeyEventDemo
+        //{
+        //    static void Main()
+        //    {
+        //        // объект события
+        //        KeyEvent kevt = new KeyEvent();
+
+        //        // кнопа
+        //        ConsoleKeyInfo key;
+
+        //        // обработчик
+        //        kevt.KeyPress += (sender, e) =>
+        //        {
+        //            // отслеживает нажатый альт
+        //            if (e.key.Modifiers == ConsoleModifiers.Alt)
+        //                Console.WriteLine(" ALT! ");
+
+        //            // и позволяет вводить только цифры и точку
+        //            char ch = e.key.KeyChar;
+        //            Console.WriteLine(char.IsDigit(ch));
+        //            if (!char.IsDigit(ch) && ch != '.')
+        //            {
+        //                // e.Handled = true;
+        //            }
+        //            else Console.WriteLine(" нажато: " + ch);
+        //        };
+
+        //        Console.WriteLine("вводи символы, друг");
+        //        // пока точку не нажмешь
+        //        do
+        //        {
+        //            // нажатая не отображается
+        //            key = Console.ReadKey(true);
+        //            // событие произошло
+        //            kevt.OnKeyPress(key);
+        //        }
+        //        while (key.KeyChar != '.');
+        //    }
+        //}
+
     }
 }

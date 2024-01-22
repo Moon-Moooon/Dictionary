@@ -11,8 +11,8 @@ namespace LearnMsSql
     public delegate void CommandHandler();
 
     public delegate void EditWord(Word word);
-
-    public class BaseInfNode
+    // -- Можно будет попробовать качественно все это переработать
+    public class BaseInfNode // Ради прикола это можно перерделать в интерфейс
     {
         public BaseInfNode(string Text) 
         { 

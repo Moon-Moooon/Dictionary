@@ -32,13 +32,6 @@ namespace LearnMsSql
         {
         
         }
-        //{
-        //    //posX = Console.CursorLeft; 
-        //    //posY = Console.CursorTop;
-        //    //base.ExecuteClear = ExecuteClear;
-        //    //base.NumberOfLinsUP = NumberOfLinsUP;
-        //}
-
         public override void SetCursorElem()
         {
             Console.SetCursorPosition(posX, posY);
@@ -51,10 +44,7 @@ namespace LearnMsSql
         public MenuSettingSunMenu(int NumberOfLinsUP) :this(NumberOfLinsUP, false) { }
         public MenuSettingSunMenu(int NumberOfLinsUP, bool ExecuteClear) : base(NumberOfLinsUP, ExecuteClear)
         {
-            //posX = Console.CursorLeft;
-            //posY = Console.CursorTop;
-            //base.NumberOfLinsUP = NumberOfLinsUP;
-            //base.ExecuteClear = ExecuteClear;
+                        
         }
 
         public override void SetCursorElem()

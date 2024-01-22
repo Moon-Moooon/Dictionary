@@ -7,6 +7,7 @@ using System.Text;
 using System.Drawing;
 using Microsoft.Identity.Client;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace LearnMsSql
 {
@@ -21,11 +22,14 @@ namespace LearnMsSql
     // Можно попытаться подключить модуль для Авто опреда  яыкуа, При выводу неккоректного символа
     // По окончанию основого функцонала надо будет провести полный рефакторинг 
     // какого черта методом Read разрешено пользоваться 1 раз а после окончания цикла все :(
+    // Что бы потреница Бдшкам можно добавить еще 1 таблицу которая будет связана с основной по ID, что то вроде талицы рейтинков пар
+    // Можно поучится работать со множеством базз, др база хранит словарь с другим словарем и подключаетс для дальнейшей раболты при выборе конкретного языка.
 
 
 
-
-
+    // можно ивентом делать обработку всех проверок регулярок 
+    // Регулярками также может быть необходимо проверять входные слова что бы нельзя было ввести совсем туфту !
+    // Нужно продумать как лучше группирвоать менюшки
     // Нужно будут сделать полный тест беков меню!
     #region // Что надо сделать
     // 1. Нужно будет переделать в методе readWord - передачу параметра языка который будет искаться 
@@ -87,8 +91,6 @@ namespace LearnMsSql
             NodeCommandHandler link1 = new("Это заглушка :) ! А значит что то не дописано", stub);
             list.Add(link1);
 
-           // MenuHistori.Add(new(list)); // Тест
-            
             NewStartMenu menu = new(list); // 0,0
         }
 
@@ -130,7 +132,7 @@ namespace LearnMsSql
         public static void SubMenu(Word word) // не корректно происходит вложение под меню
         {
             List<BaseInfNode> list = new List<BaseInfNode>();
-            NodeEditWord link1 = new("1.Редактировать", word, Word.RedactionWord);
+            NodeEditWord link1 = new("1.Редактировать", word, RedactionWord.Redaction);
             list.Add(link1);
             NodeCommandHandler link2 = new("2.Удолить", stub);
             list.Add(link2);
@@ -144,34 +146,18 @@ namespace LearnMsSql
             NewStartMenu menu = new(list);
         }
         
-        public static void ChekESC() // Оччень плохое решение 
-        {
-            bool w = true;
-            do
-            {
-                switch (Console.ReadKey(true).Key)
-                {
-                    case ConsoleKey.Escape:
-                        Console.WriteLine(ConsoleKey.Escape);
-                        MenuHistori.GotMenuHistore();
-                        w = false;
-                        break;
-                    default:
-                        w = false;
-                        break;
-                }
-            }
-            while (w);
-
-           // return str;
-        }
         static void Main(string[] args)
         {
             //string yyy = MyConsole.MyReadLine();
-            // ShowMenu();
-            Word word = new(1, "Жопич", "Jopich");
-            Word.RedactionWord(word);
-            Console.ReadKey();
+            //ShowMenu();
+            Word word = new(1, "                ", "    Jopi  ch");
+            //RedactionWord.Redaction(word);
+            //Console.ReadKey();
+
+            string line = "  qwe  q    ww ";
+            word = ChecLinesOn.Go(word);
+
+            Console.WriteLine(line);
         }
 
         public static void ExeminationPolWord (string item)
@@ -230,7 +216,6 @@ namespace LearnMsSql
             Console.WriteLine("Для добавления нового слова в словарь вам необходимо ввести слова на русском и на польском");
             Console.WriteLine("Введите слово на русском");
             Console.Write(">");
-           // ChekESC();
             string rusWord = MyConsole.MyReadLine();
             ExeminationRusWord(rusWord); 
             Console.WriteLine("Введите слово на польском");
@@ -267,6 +252,7 @@ namespace LearnMsSql
                     }
                     else
                     {
+                        Console.Clear();
                         getAfterBedCHois(item);
                     }
                 }
@@ -282,6 +268,7 @@ namespace LearnMsSql
                     }
                     else
                     {
+                        Console.Clear();
                         getAfterBedCHois(item);
                     }
 
@@ -296,14 +283,14 @@ namespace LearnMsSql
             Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке.\n Хотите попробовать ?");
 
             List<BaseInfNode> list = new List<BaseInfNode>();
-            NodeCommandHandler link1 = new("1.Да", AddWord);
+            NodeCommandHandler link1 = new("1.Да", AddWord); // Проблема!
             list.Add(link1);
             NodeCommandHandler link2 = new("2.Нет", ShowMenu);
             list.Add(link2);
 
-            MenuHistori.Add(new(list));
+            MenuHistori.Add(new(list, new MenuSettingDefolt(2))); // Тут вообщето есть строка лол
 
-            NewStartMenu menu = new(list);
+            NewStartMenu menu = new(list, new MenuSettingDefolt(2));
         }
 
         public static void ToExit()

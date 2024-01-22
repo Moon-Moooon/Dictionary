@@ -9,7 +9,7 @@ namespace LearnMsSql
 {
     public static class MyConsole
     {
-        public static string  MyReadLine() // Нужен серьезный тест
+        public static string  MyReadLine()
         {
             // Есть какая то странная пробелма при попытке записать ConsoleKeyInfo myKey.KeyChar в char
 
@@ -17,7 +17,7 @@ namespace LearnMsSql
             string str = "";
             string ch = string.Empty ;
             int count = 0;
-            ConsoleKeyInfo myKey; // Я очень плохо понимаю эту струтуру 
+            ConsoleKeyInfo myKey; 
             Console.SetCursorPosition(0, inY);
             while (true)
             {
