@@ -12,16 +12,9 @@ namespace LearnMsSql
     {
         static Stack<NodeMenuHistore> stac = new Stack<NodeMenuHistore>();
 
-        // public delegate void editStac(NodeMenuHistore stac);
-
-        //public event editStac evenStack;
-
-        // В какий то методах будет обработчик нажатия ESC -
         public static void Add(NodeMenuHistore menu)
         {
-
             stac.Push(menu);
-
         }
 
         public static void HistoriClear() 
@@ -31,7 +24,7 @@ namespace LearnMsSql
 
         public static void GotMenuHistore()
         {
-            Console.Clear();    //Тест
+            Console.Clear(); 
             NodeMenuHistore menuH;
             if (stac.Count < 2) menuH = stac.Peek(); 
             else menuH = stac.Pop();

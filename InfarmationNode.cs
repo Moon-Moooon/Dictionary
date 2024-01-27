@@ -10,15 +10,21 @@ namespace LearnMsSql
 {
     public delegate void CommandHandler();
 
+    interface IBaseNode // А вот надо ли 
+    {
+        public void InvokeDeleg();
+    }
+
     public delegate void EditWord(Word word);
     // -- Можно будет попробовать качественно все это переработать
-    public class BaseInfNode // Ради прикола это можно перерделать в интерфейс
+    // Ради прикола это можно перерделать в интерфейс-
+    public class BaseInfNode: IBaseNode
     {
         public BaseInfNode(string Text) 
         { 
             this.Text = Text;
         }
-
+        
         public string Text { get; set; } 
         public virtual void InvokeDeleg() { }
     }
@@ -92,4 +98,24 @@ namespace LearnMsSql
             metod?.Invoke(toMetod);
         }
     }
+
+    public class NodeAction2string : BaseInfNode
+    {
+        string rusName { get;}
+        string polName { get; }
+        public Action<string, string> metod { get;}
+
+        public NodeAction2string(string text,string rusName, string polName, Action<string, string> metod):base(text)
+        {
+            this.rusName = rusName;
+            this.polName = polName;
+            this.metod = metod;
+        }
+
+        public override void InvokeDeleg()
+        {
+            metod?.Invoke(rusName, polName);
+        }
+    }
+
 }

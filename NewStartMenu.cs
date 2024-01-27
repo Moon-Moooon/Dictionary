@@ -8,9 +8,7 @@ namespace LearnMsSql
 {
     internal class NewStartMenu
     {
-        public static int size { get; set; }
-       // public int NumberOfLins { get; set; }
-        //public bool ExecuteClear { get; set; }
+        static int size { get; set; }
         List<BaseInfNode> list { get; set; }
         MenuSettengs setting { get; set; } // Для проверки на нулл и устанвку тест
         public NewStartMenu(List<BaseInfNode> list) : this(list,null) { }
@@ -18,8 +16,6 @@ namespace LearnMsSql
         {
             this.list = list;
             this.setting = setting;
-           // this.ExecuteClear = ExecuteClear;
-            //this.NumberOfLins = NumberOfLins;
             size = this.list.Count;
             this.setting = setting;
             menuStart();
@@ -28,7 +24,7 @@ namespace LearnMsSql
         {
             Element[] elems = FillingElmens(); // Программа понимает что надо реализовывать метод указанный в классе оюъекта инициализации !!!! (Над очетко понять как работает !)
             setSetting(); // если передал пустой то генерится оыбчное настройки
-            Menu menu = new Menu(elems, setting); //{ NumberOfLinsUP = NumberOfLins, ExecuteClear = ExecuteClear };
+            Menu menu = new Menu(elems, setting);
             SelectMenu(ref menu);
         }
 

@@ -44,9 +44,15 @@ namespace LearnMsSql
 
         public void Draw()
         {
-            setting.SetCursorElem(); // Установка курсора чтобы меню реовалось на заданном месте
+            setting.SetCursorMenu();
+            int counter = 0;
+
             foreach (var element in Elements)
             {
+                // Установка курсора чтобы меню реовалось на заданном месте
+                setting.SetCursorElem(counter);
+                counter++;
+
                 element.Print();
             }
             MenuHistori.voidForEach(); // Для теста
@@ -95,13 +101,14 @@ namespace LearnMsSql
                 Console.BackgroundColor = this.SelectedBackColor;
                 Console.ForegroundColor = this.SelectedForeColor;
             }
+
             Console.WriteLine(obj.Text);
             
             Console.ResetColor();
 
         }
 
-        public void Execute() // А как правильно даункастить
+        public void Execute()
         {
             obj.InvokeDeleg();
         }

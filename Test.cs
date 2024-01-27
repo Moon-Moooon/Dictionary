@@ -10,7 +10,49 @@ namespace LearnMsSql
     internal class Test
     {
 
+        //public class MyClass
+        //{
+        //    public static void main(String args[])
+        //    {
+        //        Product first = new Builder().setNums(1).build();
+        //        Product second = new Builder().setOne(true).build();
+        //        Product three = new Builder().setNums(1).setOne(true).build();
+        //    }
+        //}
 
+        //public class Product()
+        //{
+        //    public int nums = 0;
+        //    public boolean one = false;
+        //    public boolean two = false;
+        //    public boolean three = true;
+        //}
+
+        //public class Builder()
+        //{
+        //    Product localProduct;
+        //    public Builder()
+        //    {
+        //        localProduct = new Product();
+        //    }
+
+        //    public Builder setNums(int nums)
+        //    {
+        //        localProduct.nums = nums;
+        //        return this;
+        //    }
+
+        //    public Builder setOne(boolean one)
+        //    {
+        //        localProduct.one = one;
+        //        return this;
+        //    }
+
+        //    public Product build()
+        //    {
+        //        return localProduct;
+        //    }
+        //}
 
 
 

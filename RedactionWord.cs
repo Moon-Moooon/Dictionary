@@ -11,6 +11,9 @@ namespace LearnMsSql
     {
         public static void Redaction(Word word) // Нельзя вводить вообще ничего же - бред!
         {
+            // Установка куда надо
+            //Console.SetCursorPosition(4, );
+            // нужна будет потом првоерка не будет ли перезаписи
             int inY = Console.CursorTop;
             string p;
             string r;
@@ -23,27 +26,29 @@ namespace LearnMsSql
             StringBuilder fullString = new($"{r} - {p}");
             Console.Write(fullString);
             Console.SetCursorPosition(0, inY);
+
             ConsoleKeyInfo myKey;
+
             while (true)
             {
-
                 delete = curs - RightSide;
                 maxLenght = RightSide + p.Length;
                 RightSide = r.Length + 3;
+
                 Console.SetCursorPosition(curs, inY);
 
                 myKey = Console.ReadKey(true);
+
                 switch (myKey.Key)
                 {
-                    case ConsoleKey.Enter: // нужна обработка на случай если введут 1 только пробел в 1 из слови отправят
-
+                    case ConsoleKey.Enter:
 
                         Word newWord = new(word.IDword, p, r);
-                        Message(newWord);
-
+                        pressEnter(newWord);
 
                         break;
                     case ConsoleKey.Backspace:
+
                         if (curs == 0) break;
                         if (delete == 0) break;
                         else
@@ -60,24 +65,32 @@ namespace LearnMsSql
                         Console.SetCursorPosition(0, inY);
                         CursorMove.ClearLines(inY, inY, 1);
                         Console.Write($"{r} - {p}");
+
                         break;
                     case ConsoleKey.LeftArrow:
+
                         if (curs == 0) break;
                         if (curs == RightSide) curs = r.Length + 1;
                         curs--;
+
                         break;
                     case ConsoleKey.RightArrow:
+
                         if (curs == maxLenght) break;
                         if (curs == r.Length) curs = RightSide - 1;
                         curs++;
 
                         break;
                     case ConsoleKey.Escape:
+
                         MenuHistori.GotMenuHistore();
+
                         break;
                     default:
+
                         CursorMove.ClearLines(inY, inY, 1);
                         Console.SetCursorPosition(0, inY);
+
                         string ch = string.Empty;
                         ch += myKey.KeyChar;
                         if (curs > r.Length)
@@ -94,40 +107,10 @@ namespace LearnMsSql
 
         }
 
-        public static void CheckWord(Word word)
+        private static void pressEnter(Word word)
         {
-            string rusName;
-            string polName;
-
-            word.GetName(out rusName, out polName);
-
-            string[] lines = new string[] { rusName, polName};
-
-            //foreach (string line in lines)
-            //{
-            //    ChecLinesOn.Go(line);
-            //}
-            
-            //if ( line == " ") // через регулярки можно 
-            //{
-            //    Console.WriteLine($"Слово - {e.Line} пустое");
-
-            //    List<BaseInfNode> list = new List<BaseInfNode>();
-            //    NodeCommandHandler link1 = new("1.Редактирвоать еще раз", Add); // Проблема!
-            //    list.Add(link1);
-            //    NodeCommandHandler link2 = new("2.Главное меню", ShowMenu);
-            //    list.Add(link2);
-
-            //    MenuHistori.Add(new(list, new MenuSettingDefolt(2))); // Тут вообщето есть строка лол
-
-            //    NewStartMenu menu = new(list, new MenuSettingDefolt(2));
-            //}
-
-
-            //foreach (string line in lines)
-            //{
-            //    ChecLinesOn.Go(line);
-            //}
+            word = ChecLinesOn.Go(word);
+            Message(word);
         }
 
         public static void Message(Word newWord) // подобные методы вообще можно универсовализать
@@ -144,10 +127,9 @@ namespace LearnMsSql
 
         public static void CallUpdateWord(Word newWord)
         {
-            int IDword;
-            string newRusName;
-            string newPolName;
-            newWord.GetInfo(out IDword, out newRusName, out newPolName);
+            int IDword = newWord.IDword;
+            string newRusName = newWord.RusName;
+            string newPolName = newWord.PolName;
 
             DBModificatet.UpdateWord(newRusName, newPolName, IDword);
         }

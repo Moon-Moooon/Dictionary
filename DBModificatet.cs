@@ -19,7 +19,7 @@ namespace LearnMsSql
         {
             sqlConnection.Open();
 
-            SqlCommand sqlCommand = new SqlCommand($"INSERT INTO [Table] (Rus_Name, Pol_Name) VALUES (N'{rusWord}', '{polWord}')", sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand($"INSERT INTO [Words] (Rus_Name, Pol_Name) VALUES (N'{rusWord}', '{polWord}')", sqlConnection);
 
             Console.WriteLine($" Запись - {sqlCommand.ExecuteNonQuery()}");
 
@@ -51,8 +51,8 @@ namespace LearnMsSql
 
         public static string SelectLeng(string leng, string word)
         {
-            if (leng == "rus") return $"SELECT Rus_Name, Pol_Name FROM Words WHERE Rus_Name LIKE N'%{word}%'";
-            else return $"SELECT Rus_Name, Pol_Name FROM Words WHERE Pol_Name LIKE N'%{word}%'";
+            if (leng == "rus") return $"SELECT Id, Rus_Name, Pol_Name FROM Words WHERE Rus_Name LIKE N'%{word}%'";
+            else return $"SELECT Id, Rus_Name, Pol_Name FROM Words WHERE Pol_Name LIKE N'%{word}%'";
         }
     }
 }
