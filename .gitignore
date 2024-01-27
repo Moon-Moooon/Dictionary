@@ -362,3 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Database1_log.ldf
+/Database1.mdf
+/Database1.mdf
+/Database1_log.ldf
+/Database1_log.ldf
