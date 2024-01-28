@@ -71,7 +71,7 @@ namespace LearnMsSql
         }
     }
 
-    public class NodeMenuHistore
+    public class NodeMenuHistore //
     {
         public MenuSettengs setting { get; set;} 
         public List<BaseInfNode> list { get; }
@@ -116,6 +116,14 @@ namespace LearnMsSql
         {
             metod?.Invoke(rusName, polName);
         }
+
+        //public class NodeEmpty :BaseInfNode
+        //{
+        //    public NodeEmpty():base("empty")
+        //    {
+
+        //    }
+        //}
     }
 
 }

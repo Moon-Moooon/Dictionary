@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static LearnMsSql.NodeAction2string;
 
 namespace LearnMsSql
 {
@@ -41,7 +42,7 @@ namespace LearnMsSql
                         BackspaceGO(count, str, inY,out str, out count);
                         break;
                     case ConsoleKey.Escape:
-
+                        GotEmptyNode();
                         MenuHistori.GotMenuHistore();
                         break;
                     default:
@@ -92,6 +93,13 @@ namespace LearnMsSql
             count++;
             outCount = count;
             Console.Write(outStr);
+        }
+        static void GotEmptyNode()
+        {
+            List<BaseInfNode> list = new List<BaseInfNode>();
+
+            NodeMenuHistore menu = new(list);
+            MenuHistori.Add(menu);
         }
     }
 }

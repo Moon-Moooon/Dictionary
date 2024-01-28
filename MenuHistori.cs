@@ -21,13 +21,18 @@ namespace LearnMsSql
         {
             stac.Clear();
         }
-
+        // Решено что всегда что то будет записыаться в стек
         public static void GotMenuHistore()
         {
             Console.Clear(); 
             NodeMenuHistore menuH;
-            if (stac.Count < 2) menuH = stac.Peek(); 
-            else menuH = stac.Pop();
+            if (stac.Count == 1) menuH = stac.Peek();
+            else 
+            {
+                stac.Pop();
+                if (stac.Count == 1) menuH = stac.Peek();
+                else menuH = stac.Pop(); 
+            }
             NewStartMenu menu = new(menuH.list, menuH.setting);
         }
 

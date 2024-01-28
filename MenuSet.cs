@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace LearnMsSql
 {
@@ -11,12 +11,11 @@ namespace LearnMsSql
     {
         public static void ShowMenu()
         {
-            // Полная очистка Истории меню
             MenuHistori.HistoriClear(); // Не уверен что это красиво, *1
 
             List<BaseInfNode> listNode = new List<BaseInfNode>();
 
-            NodeCommandHandler link1 = new("1.добавить слово", AddWord); // Хранятся в списке с типо родителя как типы наследников !!!!!
+            NodeCommandHandler link1 = new("1.добавить слово", AddWord);
             listNode.Add(link1);
             NodeCommandHandler link2 = new("2.Поиск слова", SearchWordInDB);
             listNode.Add(link2);
@@ -30,7 +29,6 @@ namespace LearnMsSql
             MenuSettings menuSettings = new MenuSettingBullider().Build();
 
             NewStartMenu start = new(listNode);
-
         }
 
         public static void SearchWordInDB()
@@ -44,7 +42,8 @@ namespace LearnMsSql
             NodeActionstring link2 = new("2.Поиск на польском", "pol", readWord);
             list.Add(link2);
 
-           // MenuHistori.Add(new(list)); // Тест
+            MenuHistori.Add(new(list)); 
+            // При возвращении и новому поиску есть ошибка! т.к. Не закрыт поток вещания при вызове sqlReader
 
             NewStartMenu menu = new(list); //0,0
         }
@@ -60,45 +59,46 @@ namespace LearnMsSql
 
         // большая пролема что при возвращении объекта типа DateRider мы не оканчиваем sqlConnection
         // из за чего мы не можем зана возвращаючь по новигации ESC делать новый запрос на поиск
+        // аПодобная реализация хороший вариант чтоб при декомпиляции можно было увидеть какие преобразования происходят когда вместо соответ типа переменные слова пичем в object
         public static void readWord(string leng) // Не дописан -- стоит лучше продумать как к нему возвращаться и стоит ли вообще
         {
+
             // Интересно как это выглядит когда я переменную типа Object передаю форматированной стракой как stringt, скорее всего там под капотный боксинг :(
-            // А что если ничего не нашли ?
-            // а почему я ID не читаю
-            Console.Write("Введите слово на русском\n >");
-            // ChekESC(); // Проверка на ESC
+            Console.Write($"Введите слово на {leng}\n >");
             string stringSercch = MyConsole.MyReadLine();
             Console.WriteLine();
             if (leng == "rus") ExeminationRusWord(stringSercch); // говно, надо переделывать 
-            else ExeminationRusWord(stringSercch);
+            else ExeminationPolWord(stringSercch);
+
 
             SqlDataReader Date = DBModificatet.SelectWord(stringSercch, leng); // А если запрос будет со словами 
-            List <Word> wordToHistor;
-            List<BaseInfNode> list = new List<BaseInfNode>();
+            List<BaseInfNode> list = new();
             int counRows = 0;
-            
+
+            if (!Date.HasRows) 
+            {
+                Date.Close();
+                BulShiiiit(stringSercch);
+                // Надо что то вводить если нет символов   
+            }
             while (Date.Read())
             {
                 counRows++;
-                // Через DAte можно видимо сразу вызывать конкретный тип данных ?
-                // нужно будет потестить по времени исполнения 
                 int idWord = Date.GetInt32(0);
 
                 string rusWord = Date.GetString(1);
 
                 string polName = Date.GetString(2);
 
-                // object idWord = Date.GetValue(2);
                 string WordRow = $"{rusWord} - {polName}";
-                Word word = new Word(0, $"{rusWord}", $"{polName}");
+                Word word = new Word(idWord, rusWord, polName);
                 NodeEditWord newWord = new(WordRow, word, SubMenu);
                 list.Add(newWord);
             }
             Date.Close(); // необходимо закрыть для корректной работы 
-            NodeMenuHistore node = new(list, new MenuSettingDefolt(0, false, false)); // Тест, тут без строк
-            MenuHistori.Add(node);
-            //Node
-            NodeMenuHistore node1 = 
+
+            NodeMenuHistore fullMetod = new(list, new MenuSettingDefolt(0, false, false)); // Тест, тут без строк
+            MenuHistori.Add(fullMetod);
 
             NewStartMenu menu = new(list, new MenuSettingDefolt(2, false, false));
         }
@@ -119,6 +119,22 @@ namespace LearnMsSql
 
             NewStartMenu menu = new(list,new MenuSettingDefolt(0, true, true));
         }
+
+        public static void BulShiiiit(string str)
+        {
+            Console.WriteLine($"Слов со стракой '{str}' - небыло найдено.\n Хотите попробовать ?");
+
+            List<BaseInfNode> list = new List<BaseInfNode>();
+            NodeCommandHandler link1 = new("1.Да", SearchWordInDB); // Проблема!
+            list.Add(link1);
+            NodeCommandHandler link2 = new("2.Нет", ShowMenu);
+            list.Add(link2);
+
+            //MenuHistori.Add(new(list, new MenuSettingDefolt(2))); // Тут вообщето есть строка лол
+            // Нужгодописать настройку
+            NewStartMenu menu = new(list, new MenuSettingDefolt(2));
+        }
+
 
         public static void ExeminationPolWord(string item)
         {
@@ -231,10 +247,13 @@ namespace LearnMsSql
                 else
                 {
 
-                    if (
-                       (wordAsByteMass[i] >= 208 && wordAsByteMass[i] <= 209) &&
-                       ((176 <= wordAsByteMass[j] && wordAsByteMass[j] <= 191) || (wordAsByteMass[j] >= 128 && wordAsByteMass[j] <= 143) || (wordAsByteMass[j] == 145))
-                       )
+                    if
+                       ((wordAsByteMass[i] >= 208 && wordAsByteMass[i] <= 209) &&
+
+                       ((176 <= wordAsByteMass[j] && wordAsByteMass[j] <= 191) || 
+                       (wordAsByteMass[j] >= 128 && wordAsByteMass[j] <= 143) || 
+                       (wordAsByteMass[j] == 145)
+                       ))
                     {
 
                     }
@@ -246,7 +265,6 @@ namespace LearnMsSql
 
                 }
             }
-
             //return word;
         }
 
@@ -255,7 +273,7 @@ namespace LearnMsSql
             Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке.\n Хотите попробовать ?");
 
             List<BaseInfNode> list = new List<BaseInfNode>();
-            NodeCommandHandler link1 = new("1.Да", AddWord); // Проблема!
+            NodeCommandHandler link1 = new("1.Да", SearchWordInDB); // Проблема!
             list.Add(link1);
             NodeCommandHandler link2 = new("2.Нет", ShowMenu);
             list.Add(link2);

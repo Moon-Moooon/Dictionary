@@ -31,12 +31,6 @@ namespace LearnMsSql
             RusName = this.RusName;
         }
 
-        //public void GetInfo(out int IDWord,out string RusName, out string PolName)
-        //{
-        //    IDWord = this.IDword;
-        //    PolName = this.PolName;
-        //    RusName = this.RusName;
-        //}
     }
 }
 
