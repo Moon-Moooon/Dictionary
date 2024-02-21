@@ -8,6 +8,7 @@ using System.Drawing;
 using Microsoft.Identity.Client;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using LearnMsSql.MainFils;
 
 namespace LearnMsSql
 {
@@ -35,6 +36,8 @@ namespace LearnMsSql
     // 3. Потом начинать переделывать конект через Entity fraemwork
     // 4. Можно копирование слова переписат ькрасиво черезе интерфейс копирования
 
+    // 1. Переписать на регулярки проверки языка ?
+    // 2. Мб через рефликсию можно будет сделать из методов меню более прикольные
     #endregion
 
     internal class Program
@@ -43,12 +46,12 @@ namespace LearnMsSql
         static void Main(string[] args)
         {
             MenuSet.ShowMenu();
-            Word word = new(1, "                ", "    Jopi  ch");
+           // Word word = new(1, "                ", "    Jopi  ch");
             //RedactionWord.Redaction(word);
             //Console.ReadKey();
 
             string line = "  qwe  q    ww ";
-            word = ChecLinesOn.Go(word);
+            //word = ChecLinesOn.Go(word);
 
             Console.WriteLine(line);
         }

@@ -1,37 +1,13 @@
-﻿using LearnMsSql;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LearnMsSql
+namespace LearnMsSql;
+
+public partial class Word
 {
-    public class Word
-    {
-        public int IDword { get; private set; }
-        public string RusName { get; private set; }
-        public string PolName { get; private set; }
+    public int Id { get; set; }
 
-        public Word(int IDword, string RusName, string PolName)
-        {
-            this.IDword = IDword;
-            this.RusName = RusName;
-            this.PolName = PolName;
-        }
+    public string? RusName { get; set; }
 
-        public void Print()
-        {
-            Console.WriteLine($"Русский вариант - Польский вариант \n{RusName} - {PolName}");
-        }
-
-        public void GetName(out string RusName, out string PolName )
-        {
-            PolName = this.PolName;
-            RusName = this.RusName;
-        }
-
-    }
+    public string? PolName { get; set; }
 }
-
-
