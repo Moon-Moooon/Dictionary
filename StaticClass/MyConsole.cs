@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Slovar.Abstracts;
 // using static LearnMsSql.MainFils.NodeAction2string;
 
-namespace LearnMsSql.MainFils
+namespace Slovar.StaticClass
 {
     public static class MyConsole
     {

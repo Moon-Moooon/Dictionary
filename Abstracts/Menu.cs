@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using Slovar.StaticClass;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,14 +13,14 @@ using System.Threading.Tasks;
 // При нажатии Enter считывать как меcто для открытия вложения при вызове словаря
 // index в классе меню уже означает положение полджение с верху 0 и внизу n
 // Нужно в меню сделать очистку при выполнении команды
-namespace LearnMsSql.MainFils
+namespace Slovar.Abstracts
 {
     public class Menu
     {
         public Element[] Elements { get; set; }
-        public MenuSettengs setting { get; }
+        MenuSettings setting { get; }
         public int Index { get; set; }
-        public Menu(Element[] elems, MenuSettengs setting)
+        internal Menu(Element[] elems, MenuSettings setting)
         {
             this.setting = setting;
             Index = 0;
@@ -74,7 +75,7 @@ namespace LearnMsSql.MainFils
         public void ExecuteSelected() // Требует теста
         {
             if (setting.ExecuteClear) Console.Clear();
-            else SideForMenu(setting.NumberOfLinsUP);
+            else SideForMenu(setting.NumberOfLinsUp);
             Elements[Index].Execute(); // Требует теста
         }
     }

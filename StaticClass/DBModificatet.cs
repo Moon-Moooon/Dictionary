@@ -1,19 +1,16 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LearnMsSql.MainFils
+namespace Slovar.StaticClass
 {
     internal class DBModificatet
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["DT"].ConnectionString;
-
+        
         static SqlConnection sqlConnection = new SqlConnection(connectionString);
-
+        
+        const string a = "";
 
         public static void WriteWordInDB(string rusWord, string polWord)
         {
@@ -24,10 +21,8 @@ namespace LearnMsSql.MainFils
             Console.WriteLine($" Запись - {sqlCommand.ExecuteNonQuery()}");
 
             sqlConnection.Close();
-
-
         }
-
+            
         public static SqlDataReader SelectWord(string word, string leng)
         {
             string str = string.Empty;
@@ -39,7 +34,7 @@ namespace LearnMsSql.MainFils
 
             sqlConnection.Close();
         }
-
+        
         public static void UpdateWord(string rusName, string polName, int IDWord)
         {
             sqlConnection.Open();

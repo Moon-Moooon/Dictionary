@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LearnMsSql.MainFils
+namespace Slovar.StaticClass
 {
     public static class CursorMove
     {

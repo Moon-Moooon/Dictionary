@@ -3,36 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Slovar.StaticClass;
 
-namespace LearnMsSql.MainFils
+namespace Slovar.Abstracts
 {
     internal class NewStartMenu
     {
-        static int size { get; set; }
+        // static int size { get; set; }
         List<BaseInfNode> list { get; set; }
-        MenuSettengs setting { get; set; } // Для проверки на нулл и устанвку тест
+        MenuSettings setting { get; set; }
         public NewStartMenu(List<BaseInfNode> list) : this(list, null) { }
-        public NewStartMenu(List<BaseInfNode> list, MenuSettengs setting)
+        public NewStartMenu(List<BaseInfNode> list, MenuSettings setting)
         {
             this.list = list;
             this.setting = setting;
-            size = this.list.Count;
+            //size = this.list.Count;
             this.setting = setting;
             menuStart();
         }
-        public virtual void menuStart()
+        public void menuStart()
         {
-            Element[] elems = FillingElmens(); // Программа понимает что надо реализовывать метод указанный в классе оюъекта инициализации !!!! (Над очетко понять как работает !)
+            Element[] elems = FillingElmens();
+            // Программа понимает что надо реализовывать метод указанный в классе оюъекта инициализации !!!! (Над очетко понять как работает !)
             setSetting(); // если передал пустой то генерится оыбчное настройки
             Menu menu = new Menu(elems, setting);
             SelectMenu(ref menu);
         }
 
-        public virtual Element[] FillingElmens()
+        public Element[] FillingElmens()
         {
-            Element[] elems = new Element[size];
+            Element[] elems = new Element[list.Count];
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 elems[i] = new Element(list[i]);
             }
@@ -64,7 +66,7 @@ namespace LearnMsSql.MainFils
 
         public void setSetting()
         {
-            setting ??= new MenuSettingDefolt();
+            setting ??= new MenuSettings();
         }
     }
 }

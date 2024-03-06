@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Slovar.Abstracts;
 
-namespace LearnMsSql.MainFils
+namespace Slovar.StaticClass
 {
     // Позволяет формировать последовательнсоть вызово методов, а затем возвращаться последовательно назад
     public static class MenuHistori

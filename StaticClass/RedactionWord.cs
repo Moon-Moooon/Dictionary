@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Slovar.Abstracts;
 
-namespace LearnMsSql.MainFils
+namespace Slovar.StaticClass
 {
     public class RedactionWord // название должно быть редактирование пары 
     {
@@ -44,9 +45,11 @@ namespace LearnMsSql.MainFils
                     case ConsoleKey.Enter:
 
                         Word newWord = new(word.IDword, p, r);
+
                         pressEnter(newWord);
 
                         break;
+
                     case ConsoleKey.Backspace:
 
                         if (curs == 0) break;
@@ -104,7 +107,6 @@ namespace LearnMsSql.MainFils
                         break;
                 }
             }
-
         }
 
         private static void pressEnter(Word word)
@@ -119,9 +121,9 @@ namespace LearnMsSql.MainFils
 
             List<BaseInfNode> list = new List<BaseInfNode>();
 
-            NodeEditWord link1 = new("1.Да", newWord, CallUpdateWord);
+            NodeAction<Word> link1 = new("1.Да", newWord, CallUpdateWord);
             list.Add(link1);
-            NodeEditWord link2 = new("2.Нет - недописан", newWord, Redaction);
+            NodeAction<Word> link2 = new("2.Нет - недописан", newWord, Redaction);
             list.Add(link2);
         }
 
