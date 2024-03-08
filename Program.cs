@@ -67,8 +67,8 @@ namespace Slovar
             /// ListDictionarityes.json
             /// ListLengs.json
 
-            // Json.CraftLenguagesJson();
-            // Settings.WriteSetupDictionary();
+            Json.CraftLenguagesJson();
+            Settings.WriteSetupDictionary();
             //MenuSet.ShowMenu();
                 
         }
