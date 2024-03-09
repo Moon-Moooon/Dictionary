@@ -16,34 +16,37 @@ public static class Settings
         
             _SetupDictionary = value;
 
-            var setDic = Json.GetSetDictionarity();
+            var setDic = Json.GetSetDictionary();
             setDic.SetIsNow = value;
-            Json.SaveSetDictionarity(setDic);
+            Json.SaveSetDictionary(setDic);
         }
     }
 
     public static void WriteSetupDictionary()
     {
         var jsonFile = File.Exists("ListDictionarityes.json");
-
+        
         switch (jsonFile)
         {
             case true:
-                var a = Json.GetSetDictionarity();
-
-                if (CheckOnBad(a.SetIsNow))
+                var sett = Json.GetSetDictionary();
+                
+                CheckLengAndNumCoup(sett);
+                    
+                if (CheckOnBad(sett.SetIsNow))
                 {
-                    MenuDictionaritys.MyDictionarity();
+                    MenuDictionaritys.Go();
                 }
-                        // снизу мб не надо
-                _SetupDictionary = a.SetIsNow;
+                
+                _SetupDictionary = sett.SetIsNow;
                 MenuSet.ShowMenu();
                 break;
 
             case false:
                 SetDictionarites set = new();
-                Json.SaveSetDictionarity(set);
-                MenuDictionaritys.MyDictionarity();
+                Json.SaveSetDictionary(set);
+                CheckLengAndNumCoup(set);
+                MenuDictionaritys.Go();
                 break;
         }
     }
@@ -59,5 +62,23 @@ public static class Settings
         }
 
         return false;
+    }
+
+    public static void CheckLengAndNumCoup(SetDictionarites set )
+    {
+        var listLengs = Json.GetListLenguages();
+        
+        var t = set.LengAndNumCoup;
+
+        for (int i = 0; i < listLengs.Count; i++)
+        {
+            if (!(set.LengAndNumCoup.ContainsKey(listLengs[i])))  
+            {
+                set.LengAndNumCoup.Add(listLengs[i],0);
+            }
+        }
+        
+        
+        Json.SaveSetDictionary(set);
     }
 }

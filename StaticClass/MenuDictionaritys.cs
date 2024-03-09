@@ -4,155 +4,184 @@ using Slovar.UserJson;
 
 namespace Slovar.StaticClass;
 
-
-// Прототип
 public class MenuDictionaritys
 {
-    private static SetDictionarites? setDic; 
+    private SetDictionarites? setDic;
 
-    static MenuDictionaritys()
+    private List<string> listLengs;
+    
+    // Нужно для того, если мы захотим снова начать созадавать слорб будем 
+    private List<string> listLengsFull;
+
+    // Число образованных пар у каждого языка
+    private Dictionary<string, byte> LengAndNumCoup ;
+
+    private string[] coup = new string [2];
+
+    private readonly byte CuontLenguages;
+    
+    public MenuDictionaritys()
     {
-        setDic = Json.GetSetDictionarity();
+        setDic = Json.GetSetDictionary();
+        listLengsFull = Json.GetListLenguages();
+        LengAndNumCoup = setDic.LengAndNumCoup;
+        CuontLenguages = (byte)listLengsFull.Count;
+        forStartWork();
+
+    }
+
+    public static void Go()
+    {
+        MenuDictionaritys a = new MenuDictionaritys();
     }
     
-    //2
-    private static List<BaseInfNode> CraftListDictionarity()
+    private void forStartWork()
     {
-        List<BaseInfNode> list = new();
-
-        SetDictionarites set = Json.GetSetDictionarity();
-
-        foreach (var val in set.ListDictionarites)
-        {
-            list.Add(new NodeAction($"1.Словарь {val[0]}-{val[1]}", () =>
-            {
-                SubMenuForDicti(val);
-            }));
-        }
-        
-        return list;
+        listLengs = lengsCanCreateCoup();
+        MyDictionarity();
     }
     
     //1
-    public static void MyDictionarity()
+    private void MyDictionarity()
     {
-        //SetDictionarites setdic = Json.GetSetDictionarity();
-        
         List<BaseInfNode> list = new List<BaseInfNode>()
         {
             new NodeAction("1.Добавить словарь", addNewDictionarity),
-            // а тут должны выводитиься список уже имеющихся словарей
+        };
+        
+        list.AddRange(CraftListDictionarity());
+        
+        NewStartMenu start = new NewStartMenu(list);
+    }
+
+    //2
+    private  List<BaseInfNode> CraftListDictionarity()
+    {
+        List<BaseInfNode> list = new();
+
+        foreach (var val in setDic.ListDictionarites)
+        {
+            list.Add(new NodeAction($"Словарь {val[0]}-{val[1]}", () => { SubMenuForDicti(val); }));
+        }
+
+        return list;
+    }
+
+    //3
+    private  void addNewDictionarity()
+    {
+        List<BaseInfNode> list = new();
+
+        if (listLengs.Count == 0) {HaveMaxCountDicti();}
+        
+        foreach (string leng in listLengs)
+        {
+            list.Add(new NodeAction<string>($"{leng}", leng, select));
+        }
+        
+        NewStartMenu start = new NewStartMenu(list);
+    }
+    
+    private void HaveMaxCountDicti()
+    {
+        List<BaseInfNode> l = new List<BaseInfNode>()
+        {
+            new NodeAction("1.Все возможные словари созданы", MyDictionarity)
         };
 
-        list.AddRange(CraftListDictionarity());
-
-        
-        NewStartMenu start = new NewStartMenu(list);
+        NewStartMenu n = new NewStartMenu(l);
     }
     
-    // 3
-    public static void addNewDictionarity()
+    // Очень не красиво, но пока нет времени сразу написать красиво.
+    private void select(string leng)
     {
-        var nameLengs = JsonConvert.DeserializeObject<ListLengs>(File.ReadAllText("ListLengs.json")).Lengs;
-        
-        List<BaseInfNode> list = new(1);
-
-        string[] mas = new string[2];
-        
-        foreach (string leng in nameLengs)
+        if (coup[0] == null)
         {
-            list.Add(new NodeAction($"{leng}" ,()=>
-            {
-                
-                nameLengs.Remove(leng);
-                mas[0] = leng;
-                list.Clear();
-                nameLengs = coupDontHaveWith(leng);            
-                next();
-                
-            }));
+            listLengs.Remove(leng);
+            coup[0] = leng;
+            coupDontHaveWith(leng);
+            addNewDictionarity();
         }
-        
-        
-        NewStartMenu start = new NewStartMenu(list);
-        
-         void next()
+        else
         {
-            // Анализ наличевствования пар с выбранным языком, что бы не порождать лишние пары
-            foreach (string leng in nameLengs)
-            {
-                // на месте ноды метод выбора для связывания
-                list.Add(new NodeAction($"{leng}", () =>
-                {
-                    mas[1] = leng;
-                    setDic.ListDictionarites.Add(mas);
-                    MyDictionarity();
-                }));
-            }
+            coup[1] = leng;
+            setDic.ListDictionarites.Add(new []{coup[0], coup[1]});
             
-            NewStartMenu startt = new NewStartMenu(list);
-        }
-         
-        
-        List<string> coupDontHaveWith(string lengName)
-        {
-            var outListLengs = nameLengs;
+            //Добавляем инкриминатор того что у нас добавилась пара
+            incrementNumCoup(true, coup);
+            coup[0] = null; coup[1] = null;
+            forStartWork();
             
-            foreach (var value in setDic.ListDictionarites )
-            {
-                var b = value.Except(new []{lengName}).ToList();
-                if (b.Count < 2) outListLengs.Remove(b[0]);
-            }
-
-            return outListLengs;
         }
     }
 
-    public List<string> coupDontHaveWith(string lengName)
+    private void coupDontHaveWith(string lengName)
     {
-        var outListLengs = nameLengs;
-            
-        foreach (var value in setDic.ListDictionarites )
+        var outListLengs = listLengs;
+
+        foreach (var value in setDic.ListDictionarites)
         {
-            var b = value.Except(new []{lengName}).ToList();
+            var b = value.Except(new[] { lengName }).ToList();
             if (b.Count < 2) outListLengs.Remove(b[0]);
         }
-
-        return outListLengs;
+        
+        listLengs = outListLengs;
     }
-    
-    
-    private static void SubMenuForDicti(string[] dicti )
+
+    private void SubMenuForDicti(string[] dicti)
     {
         // 
         List<BaseInfNode> list = new List<BaseInfNode>()
         {
-            new NodeAction("1.Установить словарь",()=>
-            {
-                Settings.SetupDictionary = dicti;
-                Json.SaveSetDictionarity(setDic);
-                setDic = null;
-                MenuSet.ShowMenu();
-            }),
-            new NodeAction("2.Удолить словарь" , () =>
-            {
-                DeleteDicti(dicti);
-                MyDictionarity();
-            })
+            new NodeAction<string[]>("1.Установить словарь", dicti, setDicti),
+            new NodeAction<string[]>("2.Удолить словарь", dicti, DeleteDicti)
         };
 
+        
         NewStartMenu s = new NewStartMenu(list);
     }
-        
-    // Также необходимо удаление слов и пар в БД при удалении словоря
-    private static void DeleteDicti(string[] dicti )
+
+    private void setDicti(string[] dicti)
     {
-        SetDictionarites file = Json.GetSetDictionarity();
-        // Требует теста
-        
-        var rlist = file.ListDictionarites.Where(i => !(i.Contains( dicti[0]) && i.Contains( dicti[1])) );
-        Json.SaveSetDictionarity(file);
-        MyDictionarity(); 
+        Settings.SetupDictionary = dicti;
+        setDic.SetIsNow = dicti;
+        Json.SaveSetDictionary(setDic);
+        MenuSet.ShowMenu();
     }
-    
+
+    // Также необходимо удаление слов и пар в БД при удалении словоря
+    private void DeleteDicti(string[] dicti)
+    {
+        // удоляют пару в свойстве класса
+        setDic.ListDictionarites = setDic.ListDictionarites
+            .Where(i => !(i
+                .Contains(dicti[0]) && i
+                .Contains(dicti[1])))
+            .ToList();
+        
+        // -1 к тому что у языков есть пара
+        incrementNumCoup(false, dicti);
+        
+        forStartWork();
+    }
+
+    private void incrementNumCoup(bool sum, string [] cp)
+    {
+        for (int i = 0; i < cp.Length; i++)
+        {
+            if (sum) {LengAndNumCoup[cp[i]]++;}
+            else{LengAndNumCoup[cp[i]]--;}
+        }
+    }
+
+    private List<string> lengsCanCreateCoup()
+    {
+        var t =  LengAndNumCoup
+                // -1 потому, что количество возможных уникальных пар равно числу языков - 1 
+            .Where(l => l.Value < CuontLenguages - 1)
+            .Select( c => c.Key)
+            .ToList();
+        
+        return t; 
+    }
 }

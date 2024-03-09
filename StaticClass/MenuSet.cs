@@ -13,11 +13,9 @@ namespace Slovar.StaticClass
         {
             MenuHistori.HistoriClear(); // Не уверен что это красиво, *1
 
-            var setDic = JsonConvert.DeserializeObject<SetDictionarites>(File.ReadAllText("ListDictionarityes.json"));
-            
             List<BaseInfNode> listNode = new List<BaseInfNode>()
             {
-                new NodeAction($"1.Изменить словарь, сейчас установлен {Settings.SetupDictionary[0]}-{Settings.SetupDictionary[1]} " ,MenuDictionaritys.MyDictionarity),
+                new NodeAction($"1.Изменить словарь, сейчас установлен {Settings.SetupDictionary[0]}-{Settings.SetupDictionary[1]} ",  MenuDictionaritys.Go),
                 // Нужна проверка состояния снизу
                 new NodeAction("2.Поиск слова", SearchWordInDB),
                 new NodeAction("3.Тренировка знаний", stub),

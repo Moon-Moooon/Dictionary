@@ -9,7 +9,7 @@ namespace Slovar.UserJson;
 public static class Json
 {
     // недописан
-    public static SetDictionarites GetSetDictionarity()
+    public static SetDictionarites GetSetDictionary()
     {
         var file = File.ReadAllText("ListDictionarityes.json");
 
@@ -18,12 +18,23 @@ public static class Json
         return set;
     }
 
-    public static void SaveSetDictionarity(SetDictionarites set)
+    public static void SaveSetDictionary(SetDictionarites set)
     {
         var file = JsonConvert.SerializeObject(set);
         
         File.WriteAllText("ListDictionarityes.json",file);
     }
+    
+    public static List<string> GetListLenguages()
+    {
+        var file = File.ReadAllText("ListLengs.json");
+
+        List<string> set = JsonConvert.DeserializeObject<ListLengs>(file).Lengs;
+
+        return set;
+    }
+    
+    
     
     // При запуске программы нужно вызывать
     public static void CraftLenguagesJson()
