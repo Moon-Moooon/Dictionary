@@ -51,7 +51,7 @@ public static class Settings
         }
     }
 
-    public static bool CheckOnBad(string[] dicti)
+    private static bool CheckOnBad(string[] dicti)
     {
         if (dicti is null ||
             (dicti.Length != 2) ||
@@ -64,7 +64,7 @@ public static class Settings
         return false;
     }
 
-    public static void CheckLengAndNumCoup(SetDictionarites set )
+    private static void CheckLengAndNumCoup(SetDictionarites set )
     {
         var listLengs = Json.GetListLenguages();
         

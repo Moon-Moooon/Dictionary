@@ -1,9 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using Newtonsoft.Json;
 using Slovar.Abstracts;
 using Slovar.Lenguages;
 using Slovar.UserJson;
+using Slovar.Entity;
 
 namespace Slovar.StaticClass
 {
@@ -16,10 +16,11 @@ namespace Slovar.StaticClass
             List<BaseInfNode> listNode = new List<BaseInfNode>()
             {
                 new NodeAction($"1.Изменить словарь, сейчас установлен {Settings.SetupDictionary[0]}-{Settings.SetupDictionary[1]} ",  MenuDictionaritys.Go),
+                new NodeAction("2.Добавить слово", AddWord),
                 // Нужна проверка состояния снизу
-                new NodeAction("2.Поиск слова", SearchWordInDB),
-                new NodeAction("3.Тренировка знаний", stub),
-                new NodeAction("4.Выход", ToExit)
+                new NodeAction("3.Поиск слова", SearchWordInDB),
+                new NodeAction("4.Тренировка знаний", stub),
+                new NodeAction("5.Выход", ToExit)
                 
             };
 
@@ -28,29 +29,36 @@ namespace Slovar.StaticClass
             MenuSettings menuSettings = new MenuSettingBullider().Build();
 
             NewStartMenu start = new(listNode);
+            
         }
 
         public static void SearchWordInDB()
         {
-            Console.WriteLine("Поиск слова осуществлять на: ");
+            var listLengs =  Json.GetListLenguages();
 
-            List<BaseInfNode> list = new List<BaseInfNode>()
+            List<BaseInfNode> list = new List<BaseInfNode>();
+            
+            for (int i = 0; i < listLengs.Count; i++)
             {
-                new NodeAction<string>("1.Поск на русском", "rus", readWord),
-                new NodeAction<string>("2.Поиск на польском", "pol", readWord)
-            };
-
+                list.Add(new NodeAction<string>($"1.Поиск по языку{listLengs[i]}", listLengs[i], TestToDb));
+            }
+            
             MenuHistori.Add(new(list));
             // При возвращении и новому поиску есть ошибка! т.к. Не закрыт поток вещания при вызове sqlReader
-
+            
             NewStartMenu menu = new(list);
         }
 
+        public static void TestToDb(string s)
+        {
+            
+        }
+        
         public static void stub()
         {
             List<BaseInfNode> list = new List<BaseInfNode>()
             {
-                new NodeAction("Это заглушка :) ! А значит что то не дописано", stub)
+                new NodeAction("Это заглушка :) ! А значит что то не дописано", ShowMenu)
             };
 
             NewStartMenu menu = new(list);
@@ -60,54 +68,53 @@ namespace Slovar.StaticClass
         // из за чего мы не можем зана возвращаючь по новигации ESC делать новый запрос на поиск
         // аПодобная реализация хороший вариант чтоб при декомпиляции можно было увидеть какие преобразования происходят когда вместо соответ типа переменные слова пичем в object
 
-        public static void readWord(string leng) // Не дописан -- стоит лучше продумать как к нему возвращаться и стоит ли вообще
-        {
-            // Интересно как это выглядит когда я переменную типа Object передаю форматированной стракой как stringt, скорее всего там под капотный боксинг :(
-            Console.Write($"Введите слово на {leng}\n >");
-            string stringSercch = MyConsole.MyReadLine();
-            Console.WriteLine();
-            if (leng == "rus") ReviewLengs.ExeminationRusWord(stringSercch); // говно, надо переделывать 
-            else ReviewLengs.ExeminationPolWord(stringSercch);
-
-
-            SqlDataReader Date = DBModificatet.SelectWord(stringSercch, leng); // А если запрос будет со словами 
-            List<BaseInfNode> list = new();
-            int counRows = 0;
-
-            if (!Date.HasRows)
-            {
-                Date.Close();
-                BulShiiiit(stringSercch);
-                // Надо что то вводить если нет символов   
-            }
-
-            while (Date.Read())
-            {
-                counRows++;
-                int idWord = Date.GetInt32(0);
-
-                string rusWord = Date.GetString(1);
-
-                string polName = Date.GetString(2);
-
-                string WordRow = $"{rusWord} - {polName}";
-                Word word = new Word(idWord, rusWord, polName);
-                NodeAction<Word> newWord = new(WordRow, word, SubMenu);
-                list.Add(newWord);
-            }
-
-            Date.Close(); // необходимо закрыть для корректной работы 
-
-            NodeMenuHistore fullMetod = new(list, new MenuSettingBullider()
-                .ExecuteClear(false)
-                .Build()); // Тест, тут без строк
-            MenuHistori.Add(fullMetod);
-
-            NewStartMenu menu = new(list, new MenuSettingBullider()
-                .NumberOfLinsUp(2)
-                .ExecuteClear(false)
-                .Build());
-        }
+        // public static void readWord(string leng) // Не дописан -- стоит лучше продумать как к нему возвращаться и стоит ли вообще
+        // {
+        //     // Интересно как это выглядит когда я переменную типа Object передаю форматированной стракой как stringt, скорее всего там под капотный боксинг :(
+        //     Console.Write($"Введите слово на {leng}\n >");
+        //     string stringSercch = MyConsole.MyReadLine();
+        //     Console.WriteLine();
+        //     if (leng == "rus") ReviewLengs.ExeminationRusWord(stringSercch); // говно, надо переделывать 
+        //     else ReviewLengs.ExeminationPolWord(stringSercch);
+        //
+        //     SqlDataReader Date = DBModificatet.SelectWord(stringSercch, leng); // А если запрос будет со словами 
+        //     List<BaseInfNode> list = new();
+        //     int counRows = 0;
+        //
+        //     if (!Date.HasRows)
+        //     {
+        //         Date.Close();
+        //         BulShiiiit(stringSercch);
+        //         // Надо что то вводить если нет символов   
+        //     }
+        //
+        //     while (Date.Read())
+        //     {
+        //         counRows++;
+        //         int idWord = Date.GetInt32(0);
+        //
+        //         string rusWord = Date.GetString(1);
+        //
+        //         string polName = Date.GetString(2);
+        //
+        //         string WordRow = $"{rusWord} - {polName}";
+        //         Word word = new Word(idWord, rusWord, polName);
+        //         NodeAction<Word> newWord = new(WordRow, word, SubMenu);
+        //         list.Add(newWord);
+        //     }
+        //
+        //     Date.Close(); // необходимо закрыть для корректной работы 
+        //
+        //     NodeMenuHistore fullMetod = new(list, new MenuSettingBullider()
+        //         .ExecuteClear(false)
+        //         .Build()); // Тест, тут без строк
+        //     MenuHistori.Add(fullMetod);
+        //
+        //     NewStartMenu menu = new(list, new MenuSettingBullider()
+        //         .NumberOfLinsUp(2)
+        //         .ExecuteClear(false)
+        //         .Build());
+        // }
 
         public static void SubMenu(Word word) // не корректно происходит вложение под меню
         {
@@ -154,28 +161,30 @@ namespace Slovar.StaticClass
 
         public static void AddWord()
         {
-            string rusWord;
-            string polWord;
+            string firstWord;
+            string secondWord;
 
             #region
 
             Console.WriteLine(
-                "Для добавления нового слова в словарь вам необходимо ввести слова на русском и на польском");
-            Console.WriteLine("Введите слово на русском");
-            rusWord = MyConsole.MyReadLine();
-            ReviewLengs.ExeminationRusWord(rusWord);
+                $"Для добавления нового слова в словарь вам необходимо ввести слова на {Settings.SetupDictionary[0]} и на {Settings.SetupDictionary[1]}");
+            Console.WriteLine($"Введите слово на {Settings.SetupDictionary[0]}");
+            firstWord = MyConsole.MyReadLine();
+            ReviewLengs.Go(firstWord, Settings.SetupDictionary[0]);
 
             Console.WriteLine("");
-            Console.WriteLine("Введите слово на польском");
-            polWord = MyConsole.MyReadLine();
-            ReviewLengs.ExeminationPolWord(polWord);
+            Console.WriteLine($"Введите слово на {Settings.SetupDictionary[1]}");
+            secondWord = MyConsole.MyReadLine();
+            ReviewLengs.Go(secondWord, Settings.SetupDictionary[1]);
 
             Console.WriteLine("");
-            Console.WriteLine($"Добавить новую пару слов: '{rusWord}' с переводом '{polWord}'?");
-
+            Console.WriteLine($"Добавить новую пару слов: '{firstWord}' с переводом '{secondWord}'?");
+            
+            // работает до сюда :) 
+            
             List<BaseInfNode> list = new List<BaseInfNode>()
             {
-                new NodeAction<string, string>("1.Да", rusWord, polWord, AddWordInDB),
+              //  new NodeAction<string, string>("1.Да", firstWord, secondWord, AddCoupInDb),
                 new NodeAction("2.Нет", ShowMenu)
             };
 
@@ -186,29 +195,28 @@ namespace Slovar.StaticClass
             #endregion
         }
 
-        public static void AddWordInDB(string rusWord, string polWord)
+        public static void AddCoupInDb()
         {
-            DBModificatet.WriteWordInDB(rusWord, polWord);
+            
         }
-
-
-        public static void getAfterBedCHois(char warningChar)
-        {
-            Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке." +
-                              $"\n Хотите попробовать ?");
-
-            List<BaseInfNode> list = new List<BaseInfNode>()
-            {
-                new NodeAction("1.Да", SearchWordInDB),
-                new NodeAction("2.Нет", ShowMenu)
-            };
-
-            //MenuHistori.Add(new(list, new MenuSettingDefolt(2))); // Тут вообщето есть строка лол
-
-            NewStartMenu menu = new(list, new MenuSettingBullider()
-                .NumberOfLinsUp(2)
-                .Build());
-        }
+        
+        // public static void getAfterBedCHois(char warningChar)
+        // {
+        //     Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке." +
+        //                       $"\n Хотите попробовать ?");
+        //
+        //     List<BaseInfNode> list = new List<BaseInfNode>()
+        //     {
+        //         new NodeAction("1.Да", SearchWordInDB),
+        //         new NodeAction("2.Нет", ShowMenu)
+        //     };
+        //
+        //     //MenuHistori.Add(new(list, new MenuSettingDefolt(2))); // Тут вообщето есть строка лол
+        //
+        //     NewStartMenu menu = new(list, new MenuSettingBullider()
+        //         .NumberOfLinsUp(2)
+        //         .Build());
+        // }
 
         public static void ToMenu(string line, Word word)
         {
