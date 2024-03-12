@@ -19,11 +19,10 @@ public class MenuDictionaritys
     private string[] coup = new string [2];
 
     private readonly byte CuontLenguages;
-    
     public MenuDictionaritys()
     {
         setDic = Json.GetSetDictionary();
-        listLengsFull = Json.GetListLenguages();
+        listLengsFull = Json.GetListLenguages().Lengs;
         LengAndNumCoup = setDic.LengAndNumCoup;
         CuontLenguages = (byte)listLengsFull.Count;
         forStartWork();

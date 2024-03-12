@@ -66,7 +66,7 @@ public static class Settings
 
     private static void CheckLengAndNumCoup(SetDictionarites set )
     {
-        var listLengs = Json.GetListLenguages();
+        var listLengs = Json.GetListLenguages().Lengs;
         
         var t = set.LengAndNumCoup;
 

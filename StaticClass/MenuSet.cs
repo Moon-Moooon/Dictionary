@@ -16,8 +16,8 @@ namespace Slovar.StaticClass
             List<BaseInfNode> listNode = new List<BaseInfNode>()
             {
                 new NodeAction($"1.Изменить словарь, сейчас установлен {Settings.SetupDictionary[0]}-{Settings.SetupDictionary[1]} ",  MenuDictionaritys.Go),
-                new NodeAction("2.Добавить слово", AddWord),
-                // Нужна проверка состояния снизу
+                // необходим полный тест
+                new NodeAction("2.Добавить слово", MenuAddCoup.AddWord),
                 new NodeAction("3.Поиск слова", SearchWordInDB),
                 new NodeAction("4.Тренировка знаний", stub),
                 new NodeAction("5.Выход", ToExit)
@@ -34,7 +34,7 @@ namespace Slovar.StaticClass
 
         public static void SearchWordInDB()
         {
-            var listLengs =  Json.GetListLenguages();
+            var listLengs =  Json.GetListLenguages().Lengs;
 
             List<BaseInfNode> list = new List<BaseInfNode>();
             
@@ -159,65 +159,47 @@ namespace Slovar.StaticClass
                 .Build());
         }
 
-        public static void AddWord()
-        {
-            string firstWord;
-            string secondWord;
-
-            #region
-
-            Console.WriteLine(
-                $"Для добавления нового слова в словарь вам необходимо ввести слова на {Settings.SetupDictionary[0]} и на {Settings.SetupDictionary[1]}");
-            Console.WriteLine($"Введите слово на {Settings.SetupDictionary[0]}");
-            firstWord = MyConsole.MyReadLine();
-            ReviewLengs.Go(firstWord, Settings.SetupDictionary[0]);
-
-            Console.WriteLine("");
-            Console.WriteLine($"Введите слово на {Settings.SetupDictionary[1]}");
-            secondWord = MyConsole.MyReadLine();
-            ReviewLengs.Go(secondWord, Settings.SetupDictionary[1]);
-
-            Console.WriteLine("");
-            Console.WriteLine($"Добавить новую пару слов: '{firstWord}' с переводом '{secondWord}'?");
-            
-            // работает до сюда :) 
-            
-            List<BaseInfNode> list = new List<BaseInfNode>()
-            {
-              //  new NodeAction<string, string>("1.Да", firstWord, secondWord, AddCoupInDb),
-                new NodeAction("2.Нет", ShowMenu)
-            };
-
-            NewStartMenu menu = new(list, new MenuSettingBullider()
-                .NumberOfLinsUp(6)
-                .Build());
-
-            #endregion
-        }
+        // public static void AddWord()
+        // {
+        //     string firstWord;
+        //     string secondWord;
+        //
+        //     #region
+        //
+        //     Console.WriteLine(
+        //         $"Для добавления нового слова в словарь вам необходимо ввести слова на {Settings.SetupDictionary[0]} и на {Settings.SetupDictionary[1]}");
+        //     Console.WriteLine($"Введите слово на {Settings.SetupDictionary[0]}");
+        //     firstWord = MyConsole.MyReadLine();
+        //     ReviewLengs.Go(firstWord, Settings.SetupDictionary[0]);
+        //
+        //     Console.WriteLine("");
+        //     Console.WriteLine($"Введите слово на {Settings.SetupDictionary[1]}");
+        //     secondWord = MyConsole.MyReadLine();
+        //     ReviewLengs.Go(secondWord, Settings.SetupDictionary[1]);
+        //
+        //     Console.WriteLine("");
+        //     Console.WriteLine($"Добавить новую пару слов: '{firstWord}' с переводом '{secondWord}'?");
+        //     
+        //     // работает до сюда :) 
+        //     
+        //     List<BaseInfNode> list = new List<BaseInfNode>()
+        //     {
+        //       //  new NodeAction<string, string>("1.Да", firstWord, secondWord, AddCoupInDb),
+        //         new NodeAction("2.Нет", ShowMenu)
+        //     };
+        //
+        //     NewStartMenu menu = new(list, new MenuSettingBullider()
+        //         .NumberOfLinsUp(6)
+        //         .Build());
+        //
+        //     #endregion
+        // }
 
         public static void AddCoupInDb()
         {
             
         }
         
-        // public static void getAfterBedCHois(char warningChar)
-        // {
-        //     Console.WriteLine($"Символ {warningChar} - является некорректным или не на соответствующем языке." +
-        //                       $"\n Хотите попробовать ?");
-        //
-        //     List<BaseInfNode> list = new List<BaseInfNode>()
-        //     {
-        //         new NodeAction("1.Да", SearchWordInDB),
-        //         new NodeAction("2.Нет", ShowMenu)
-        //     };
-        //
-        //     //MenuHistori.Add(new(list, new MenuSettingDefolt(2))); // Тут вообщето есть строка лол
-        //
-        //     NewStartMenu menu = new(list, new MenuSettingBullider()
-        //         .NumberOfLinsUp(2)
-        //         .Build());
-        // }
-
         public static void ToMenu(string line, Word word)
         {
             Console.WriteLine($"Слово -  '{line}'  пустое");

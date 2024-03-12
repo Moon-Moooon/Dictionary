@@ -1,5 +1,5 @@
-using System.Net;
 using System.Reflection;
+using System.Text;
 using Newtonsoft.Json;
 using Slovar.Abstracts;
 using Slovar.Entity;
@@ -25,16 +25,14 @@ public static class Json
         File.WriteAllText("ListDictionarityes.json",file);
     }
     
-    public static List<string> GetListLenguages()
+    public static ListLengs GetListLenguages()
     {
         var file = File.ReadAllText("ListLengs.json");
 
-        List<string> set = JsonConvert.DeserializeObject<ListLengs>(file).Lengs;
+        ListLengs set = JsonConvert.DeserializeObject<ListLengs>(file);
 
         return set;
     }
-    
-    
     
     // При запуске программы нужно вызывать
     public static void CraftLenguagesJson()
@@ -43,6 +41,11 @@ public static class Json
         {
             Lengs = getListLengs().Select(i => i.Name).ToList()
         };
+        
+        Assembly a =  Assembly.Load("DbContextAndAPI");
+
+        lengs.AssembleName = a.GetName().Name;
+        lengs.pathToLengs = getPathToClassLengs(a); 
         
         var obj = JsonConvert.SerializeObject(lengs);
         
@@ -56,5 +59,24 @@ public static class Json
             .Where(t => t.GetCustomAttribute<IsLanguageAttribute>() != null);
 
         return Sborkaa;
+    }
+
+    public static string getPathToClassLengs(Assembly a)
+    {
+        var b = a.GetTypes()
+            .First(t => t
+                .GetCustomAttribute<IsLanguageAttribute>() != null).FullName
+            .Split(".");
+
+        StringBuilder sb = new StringBuilder();
+            
+        for (int i = 0; i < b.Length - 1; i++)
+        {
+            sb.Append(b[i]).Append(".");
+        }
+
+         string pathToLengs = sb.ToString();
+
+         return pathToLengs;
     }
 }

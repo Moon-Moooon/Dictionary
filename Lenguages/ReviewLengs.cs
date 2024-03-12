@@ -42,7 +42,6 @@ public class ReviewLengs
     {
         // Стринг Билдер
         StringBuilder b = new StringBuilder(lengsPattern[leng] + punctuation);
-        //var o = lengsPattern[leng] + punctuation;
         return b.ToString();
     }
     
@@ -51,7 +50,7 @@ public class ReviewLengs
 
         pattern = @$"^[ {pattern}]+$";
         
-        if (!(Regex.IsMatch(input, pattern)))
+        if (!(Regex.IsMatch(input, pattern, RegexOptions.IgnoreCase)))
         {
             Asc();
         }

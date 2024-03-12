@@ -133,7 +133,7 @@ namespace Slovar.StaticClass
             string newRusName = newWord.RusName;
             string newPolName = newWord.PolName;
 
-            DBModificatet.UpdateWord(newRusName, newPolName, IDword);
+          //  DBModificatet.UpdateWord(newRusName, newPolName, IDword);
         }
 
     }
